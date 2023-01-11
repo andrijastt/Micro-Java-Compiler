@@ -75,13 +75,13 @@ ConstDecl ::= (SignleConstDecl) CONST Type:constType Const SEMI;
 
 Const ::= (Const) IDENT:constName ASSIGN Const
 
-ConstVal ::= (ConstVal) NUMBER
+ConstVal ::= (INtVal) NUMBER
 		|
-		(ConstVal) APOS CHAR APOS /* TODO i u flex CHAR */
+		(CharVal) APOS CHAR APOS /* TODO i u flex CHAR */
 		|
-		(ConstVal) TRUE
+		(TrueVal) TRUE
 		|
-		(ConstVal) FALSE
+		(FalseVal) FALSE
 		;
 
 VarDeclList ::= (VarDeclarations) VarDeclList VarDecl
@@ -89,9 +89,9 @@ VarDeclList ::= (VarDeclarations) VarDeclList VarDecl
 			(NoVarDecl) /* epsilon */
 			;
 
-VarDecl ::= (VarDecl) Type:varType IDENT:varName SEMI
+VarDecl ::= (VarDeclNoBrackets) Type:varType IDENT:varName SEMI
 		|
-		(VarDecl) Type:varType IDENT:varName LBRACKET RBRACKET SEMI
+		(VarDeclBrackets) Type:varType IDENT:varName LBRACKET RBRACKET SEMI
 		;
 
 
