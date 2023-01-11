@@ -44,6 +44,7 @@ import java_cup.runtime.Symbol;
 "while"   	{ return new_symbol(sym.WHILE, yytext()); }
 "break"   	{ return new_symbol(sym.BREAK, yytext()); }
 "continue"  { return new_symbol(sym.CONTINUE, yytext()); }
+"new"  		{ return new_symbol(sym.NEW, yytext()); }
 
 "print" 	{ return new_symbol(sym.PRINT, yytext()); }
 "read" 		{ return new_symbol(sym.READ, yytext()); }
@@ -87,8 +88,8 @@ import java_cup.runtime.Symbol;
 "=>"		{ return new_symbol(sym.POINTER_LIKE, yytext()); }
 "'"			{ return new_symbol(sym.APOS, yytext()); }
 
-"true"		{ return new_symbol(sym.TRUE, yytext()); }
-"false"		{ return new_symbol(sym.FALSE, yytext()); }
+"true"		{ return new_symbol(sym.TRUE, true); }
+"false"		{ return new_symbol(sym.FALSE, false); }
 
 <YYINITIAL> "//" 		     { yybegin(COMMENT); }
 <COMMENT> .      { yybegin(COMMENT); }
