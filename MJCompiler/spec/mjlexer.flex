@@ -88,6 +88,7 @@ import java_cup.runtime.Symbol;
 "=>"		{ return new_symbol(sym.POINTER_LIKE, yytext()); }
 "'"			{ return new_symbol(sym.APOS, yytext()); }
 
+'.'			{ return new_symbol(sym.CHAR, yytext()); }
 "true"		{ return new_symbol(sym.TRUE, true); }
 "false"		{ return new_symbol(sym.FALSE, false); }
 

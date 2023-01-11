@@ -47,7 +47,7 @@ scan with {:
 terminal PROG, CONST, CLASS, IF, ELSE, WHILE, BREAK, CONTINUE, NEW;
 terminal PRINT, READ, RETURN, VOID, EXTENDS, FOREACH;
 terminal TRUE, FALSE;
-terminal APOS;
+terminal APOS, CHAR;
 terminal Integer NUMBER;
 terminal String IDENT;
 terminal PLUS, MINUS, MULTIPLY, DIVISION, MOD;
@@ -57,19 +57,43 @@ terminal SEMI, DOUBLE_DOT, COMMA, DOT;
 terminal LPAREN, RPAREN, LBRACKET, RBRACKET, LBRACE, RBRACE;
 terminal POINTER_LIKE;
 
-nonterminal Program, VarDeclList, MethodDeclList, VarDecl, Type, MethodDecl;
+nonterminal Program, ConstDeclList, VarDeclList, MethodDeclList, ConstDecl, VarDecl, Const, ConstVal, Type, MethodDecl;
 nonterminal FormPars, StatementList, FormalParamList, FormalParamDecl, Statement;
-nonterminal Designator, Expr, Term, Addop, Factor, ActualPars, ActualParamList;
+nonterminal Designator, Expr, Term, Label, Assignop, Relop, Addop, Mulop, Factor, ActualPars, ActualParamList;
 nonterminal Matched, Unmatched;
 
 Program ::= (Program) PROG IDENT VarDeclList LBRACE MethodDeclList RBRACE;
+
+ConstDeclList ::= (ConstDeclarations) ConstDeclList ConstDecl
+			|
+			(NoConstDecl) /* epsilon */
+			;
+			
+ConstDecl ::= (SignleConstDecl) CONST Type:constType Const SEMI;
+			|
+			(ConstDecls) CONST Type:constType Const COMMA Const;
+
+Const ::= (Const) IDENT:constName ASSIGN Const
+
+ConstVal ::= (ConstVal) NUMBER
+		|
+		(ConstVal) APOS CHAR APOS /* TODO i u flex CHAR */
+		|
+		(ConstVal) TRUE
+		|
+		(ConstVal) FALSE
+		;
 
 VarDeclList ::= (VarDeclarations) VarDeclList VarDecl
 			|
 			(NoVarDecl) /* epsilon */
 			;
 
-VarDecl ::= (VarDecl) Type:varType IDENT:varName SEMI;
+VarDecl ::= (VarDecl) Type:varType IDENT:varName SEMI
+		|
+		(VarDecl) Type:varType IDENT:varName LBRACKET RBRACKET SEMI
+		;
+
 
 Type ::= (Type) IDENT:typeName;
 
@@ -147,7 +171,31 @@ ActualParamList ::= (ActualParams) ActualParamList COMMA Expr
 				
 Designator ::= (Designator) IDENT:name;
 
-Addop ::= (Addop) PLUS;
-		
-		
+Label ::= IDENT;
 
+Assignop ::= (Assignop) ASSIGN;
+
+Relop ::= (Relop) EQUAL
+		|
+		(Relop) NOT_EQUAL
+		|
+		(Relop) GREATER
+		|
+		(Relop) GREATER_EQUAL
+		|
+		(Relop) LESS
+		|
+		(Relop) LESS_EQUAL
+		;
+
+Addop ::= (Addop) PLUS
+		|
+		(Addop) MINUS
+		;
+		
+Mulop ::= (Mulop) MULTIPLY
+		|
+		(Mulop) DIVISION
+		|
+		(Mulop) MOD
+		;
