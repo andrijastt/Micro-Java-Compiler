@@ -57,8 +57,11 @@ terminal SEMI, DOUBLE_DOT, COMMA, DOT;
 terminal LPAREN, RPAREN, LBRACKET, RBRACKET, LBRACE, RBRACE;
 terminal POINTER_LIKE;
 
-nonterminal Program, ConstDeclList, VarDeclList, MethodDeclList, ConstDecl, VarDecl, Const, ConstVal, Type, MethodDecl;
-nonterminal FormPars, StatementList, FormalParamList, FormalParamDecl, Statement;
+nonterminal Program, MethodDeclList; 
+nonterminal ConstDeclList, ConstDecl, Const, ConstVal; 
+nonterminal VarDeclList, VarDecl, Var, VarVal, Type, MethodDecl;
+nonterminal ClassDecl, ClassInfo;
+nonterminal FormPars, FormalParamList, FormalParamDecl, StatementList, Statement;
 nonterminal Designator, Expr, Term, Label, Assignop, Relop, Addop, Mulop, Factor, ActualPars, ActualParamList;
 nonterminal Matched, Unmatched;
 
@@ -69,13 +72,14 @@ ConstDeclList ::= (ConstDeclarations) ConstDeclList ConstDecl
 			(NoConstDecl) /* epsilon */
 			;
 			
-ConstDecl ::= (SignleConstDecl) CONST Type:constType Const SEMI;
-			|
-			(ConstDecls) CONST Type:constType Const COMMA Const;
+ConstDecl ::= (ConstDecl) CONST Type:constType Const SEMI;
 
-Const ::= (Const) IDENT:constName ASSIGN Const
+Const ::= (SingleConst) IDENT:constName ASSIGN ConstVal
+		|
+		(MultipleConst) IDENT:constName ASSIGN ConstVal COMMA Const
+		;
 
-ConstVal ::= (INtVal) NUMBER
+ConstVal ::= (IntVal) NUMBER
 		|
 		(CharVal) APOS CHAR APOS /* TODO i u flex CHAR */
 		|
@@ -89,21 +93,38 @@ VarDeclList ::= (VarDeclarations) VarDeclList VarDecl
 			(NoVarDecl) /* epsilon */
 			;
 
-VarDecl ::= (VarDeclNoBrackets) Type:varType IDENT:varName SEMI
+VarDecl ::= (VarDecl) Type:varType Var SEMI;
+
+Var ::= (SingleVar) VarVal
 		|
-		(VarDeclBrackets) Type:varType IDENT:varName LBRACKET RBRACKET SEMI
+		(MultipleVar) VarVal COMMA Var
 		;
 
+VarVal ::= (VarNoBrackets) IDENT:varName 
+		|
+		(VarBrackets) IDENT:varName LBRACKET RBRACKET
+		;
 
-Type ::= (Type) IDENT:typeName;
+ClassDecl ::= (ClassDeclExtends) CLASS IDENT:className EXTENDS Type:extendsClass LBRACE VarDecl ClassInfo RBRACE
+			|
+			(ClassDeclNoExtends) CLASS IDENT:className LBRACE VarDecl ClassInfo RBRACE
+			;
+			
+ClassInfo ::= (ClassInfo) LBRACE MethodDeclList RBRACE
+			|
+			(NoClassInfo) /* epsilon*/
+			;
+			
 
 MethodDeclList ::= (MethodDeclarations) MethodDeclList MethodDecl
 				|
 				(NoMethodDecl) /* epsilon */
 				;
 				
-MethodDecl ::= (MethodDecl) Type:retType IDENT:methName LPAREN FormPars RPAREN VarDeclList LBRACE StatementList RBRACE;
-
+MethodDecl ::= (RetMethodDecl) Type:retType IDENT:methName LPAREN FormPars RPAREN VarDeclList LBRACE StatementList RBRACE
+			|
+			(VoidMethodDecl) VOID IDENT:methName LPAREN FormPars RPAREN VarDeclList LBRACE StatementList RBRACE
+			;
 
 FormPars ::= (FormParams) FormalParamList
 		  |
@@ -114,6 +135,13 @@ FormalParamList ::= (FormalParamDecls) FormalParamList COMMA FormalParamDecl
 				|
 				(SingleFormalParamDecl) FormalParamDecl
 				;
+				
+FormalParamDecl ::= (FormalParamBrackets) Type:formType IDENT:formName LBRACKET RBRACKE
+					|
+					(FormalParamNoBrackets) Type:formType IDENT:formName
+					;
+
+Type ::= (Type) IDENT:typeName;
 
 StatementList ::= (Statements) StatementList Statement
 				|
@@ -144,20 +172,6 @@ Matched ::= (Assignment) Designator:dest EQUAL Expr:e SEMI
 		   |
 		   (MatchedStatement) IF Expr Matched ELSE Matched
 		   ;
-			
-Expr ::= (AddExpr) Expr:te Addop Term:t
-	 |
-	 (TermExpr) Term:t
-	 ;
-
-Term ::= (Term) Factor:t;
-
-Factor ::= (Const) NUMBER
-		|
-		(Var) Designator:d
-		| 
-		(FuncCall) Designator:func LPAREN ActualPars RPAREN
-		;
 		
 ActualPars ::= (Actuals) ActualParamList
 			|
@@ -168,34 +182,63 @@ ActualParamList ::= (ActualParams) ActualParamList COMMA Expr
 				|
 				(ActualParam) Expr
 				;
-				
-Designator ::= (Designator) IDENT:name;
 
-Label ::= IDENT;
+Expr ::= (NegativeExpr) MINUS Term Addop Term
+		|
+		(PositiveExpr) Term Addop Term
+		;
+
+Term ::= (Term) Factor:t0 MulOp Factor:t1;
+				
+Factor ::=(DisgnatorNoPars) Designator:d
+		|
+		(DisgnatorPars) Designator:func LPAREN ActualPars RPAREN 
+		|
+		(NumConst) NUMBER
+		|
+		(TrueConst) TRUE
+		|
+		(FalseConst) False
+		|
+		(CharConst) APOS CHAR APOS /* TODO i u flex CHAR */
+		|
+		(NewFuncExpr) NEW Type:typeName LBRACKET Expr RBRACKET
+		|
+		(NewFuncActPars) NEW Type:typeName LPAREN ActualPars RPAREN
+		|
+		(Expresion) LPAREN Expr RPAREN
+		;
+
+Designator ::= (DesignatorNoBrackets) IDENT:name DOT IDENT:expr
+			|
+			(DesignatorBrackets) IDENT:name DOT LBRACKET Expr RBRACKET
+			;
+
+Label ::= (Label) IDENT;
 
 Assignop ::= (Assignop) ASSIGN;
 
 Relop ::= (Relop) EQUAL
 		|
-		(Relop) NOT_EQUAL
+		(NEop) NOT_EQUAL
 		|
-		(Relop) GREATER
+		(Greaterop) GREATER
 		|
-		(Relop) GREATER_EQUAL
+		(GreaterEop) GREATER_EQUAL
 		|
-		(Relop) LESS
+		(Lessop) LESS
 		|
-		(Relop) LESS_EQUAL
+		(LessEop) LESS_EQUAL
 		;
 
 Addop ::= (Addop) PLUS
 		|
-		(Addop) MINUS
+		(Minusop) MINUS
 		;
 		
 Mulop ::= (Mulop) MULTIPLY
 		|
-		(Mulop) DIVISION
+		(Divisonop) DIVISION
 		|
-		(Mulop) MOD
+		(Modop) MOD
 		;
