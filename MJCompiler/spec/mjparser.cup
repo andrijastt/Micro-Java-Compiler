@@ -57,15 +57,24 @@ terminal SEMI, DOUBLE_DOT, COMMA, DOT;
 terminal LPAREN, RPAREN, LBRACKET, RBRACKET, LBRACE, RBRACE;
 terminal POINTER_LIKE;
 
-nonterminal Program, MethodDeclList; 
+nonterminal Program, DeclList, DeclItem, MethodDeclList; 
 nonterminal ConstDeclList, ConstDecl, Const, ConstVal; 
 nonterminal VarDeclList, VarDecl, Var, VarVal, Type, MethodDecl;
-nonterminal ClassDecl, ClassInfo;
 nonterminal FormPars, FormalParamList, FormalParamDecl, StatementList, Statement;
 nonterminal Designator, Expr, Term, Label, Assignop, Relop, Addop, Mulop, Factor, ActualPars, ActualParamList;
 nonterminal Matched, Unmatched;
 
-Program ::= (Program) PROG IDENT VarDeclList LBRACE MethodDeclList RBRACE;
+Program ::= (Program) PROG IDENT DeclList LBRACE MethodDeclList RBRACE;
+
+DeclList ::= (AllDeclarations) DeclList DeclItem
+			|
+			(NoDeclarations) /* epsilon */
+			;
+
+DeclItem ::= (ConstDeclList) ConstDeclList
+			|
+			(VarDeclList) VarDeclList
+			;
 
 ConstDeclList ::= (ConstDeclarations) ConstDeclList ConstDecl
 			|
@@ -76,7 +85,7 @@ ConstDecl ::= (ConstDecl) CONST Type:constType Const SEMI;
 
 Const ::= (SingleConst) IDENT:constName ASSIGN ConstVal
 		|
-		(MultipleConst) IDENT:constName ASSIGN ConstVal COMMA Const
+		(MultipleConst) Const COMMA IDENT:constName ASSIGN ConstVal
 		;
 
 ConstVal ::= (IntVal) NUMBER
@@ -97,24 +106,13 @@ VarDecl ::= (VarDecl) Type:varType Var SEMI;
 
 Var ::= (SingleVar) VarVal
 		|
-		(MultipleVar) VarVal COMMA Var
+		(MultipleVar) Var COMMA VarVal
 		;
 
 VarVal ::= (VarNoBrackets) IDENT:varName 
 		|
 		(VarBrackets) IDENT:varName LBRACKET RBRACKET
 		;
-
-ClassDecl ::= (ClassDeclExtends) CLASS IDENT:className EXTENDS Type:extendsClass LBRACE VarDecl ClassInfo RBRACE
-			|
-			(ClassDeclNoExtends) CLASS IDENT:className LBRACE VarDecl ClassInfo RBRACE
-			;
-			
-ClassInfo ::= (ClassInfo) LBRACE MethodDeclList RBRACE
-			|
-			(NoClassInfo) /* epsilon*/
-			;
-			
 
 MethodDeclList ::= (MethodDeclarations) MethodDeclList MethodDecl
 				|
@@ -136,7 +134,7 @@ FormalParamList ::= (FormalParamDecls) FormalParamList COMMA FormalParamDecl
 				(SingleFormalParamDecl) FormalParamDecl
 				;
 				
-FormalParamDecl ::= (FormalParamBrackets) Type:formType IDENT:formName LBRACKET RBRACKE
+FormalParamDecl ::= (FormalParamBrackets) Type:formType IDENT:formName LBRACKET RBRACKET
 					|
 					(FormalParamNoBrackets) Type:formType IDENT:formName
 					;
@@ -164,11 +162,17 @@ Matched ::= (Assignment) Designator:dest EQUAL Expr:e SEMI
 		   (ErrorStmt) error SEMI:l
 		   {: parser.report_error("Izvrsen oporavak do ; u liniji " + lleft, null);  :}
 		   |
-		   (PrintStmt) PRINT LPAREN Expr RPAREN SEMI
+		   (BreakExpr) BREAK SEMI
+		   |
+		   (ContinueExpr) CONTINUE SEMI
 		   |
 		   (ReturnExpr) RETURN Expr:t SEMI
 		   |
 		   (ReturnNoExpr) RETURN SEMI
+		   |
+		   (ReadStmt) READ LPAREN Designator RPAREN SEMI
+		   |
+		   (PrintStmt) PRINT LPAREN Expr RPAREN SEMI
 		   |
 		   (MatchedStatement) IF Expr Matched ELSE Matched
 		   ;
@@ -182,6 +186,21 @@ ActualParamList ::= (ActualParams) ActualParamList COMMA Expr
 				|
 				(ActualParam) Expr
 				;
+
+Condition ::= (SingleCondition) CondTerm
+			|
+			(OrCondition) CondTerm OR CondTerm
+			;
+			
+CondTerm ::= (SingleCondFact) CondFact
+			|
+			(AndCondFact) CondFact AND CondFact
+			;
+			
+CondFact ::= (SingleCondFact) Expr
+			|
+			(MultipleCondFact) Expr Relop Expt
+			;
 
 Expr ::= (NegativeExpr) MINUS Term Addop Term
 		|
