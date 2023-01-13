@@ -157,7 +157,7 @@ Unmatched ::= (UnmatchedIf) IF Expr Statement
 		 	;
 		 
 
-Matched ::= (Assignment) Designator:dest EQUAL Expr:e SEMI
+Matched ::= (DesignatorStmt) DesignatorStatement SEMI
 		   |
 		   (MatchedStatement) IF Expr Matched ELSE Matched
 		   |
