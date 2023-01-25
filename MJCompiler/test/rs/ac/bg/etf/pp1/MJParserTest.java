@@ -50,6 +50,8 @@ public class MJParserTest {
 
 			log.info(" Deklarisanih promenljivih ima = " + v.varDeclCount);
 			
+			log.info(" Err semi: " + v.errSemi + " Err comma: " + v.errComma);
+			
 		} 
 		finally {
 			if (br != null) try { br.close(); } catch (IOException e1) { log.error(e1.getMessage(), e1); }

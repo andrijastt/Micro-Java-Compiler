@@ -167,9 +167,11 @@ Expr ::= (NegativeExpr) MINUS Term Addop Expr
 		(PositiveExpr) Term Addop Expr
 		|
 		(SingleExpr) Term
+		|
+		(SingleNegativeExpr) MINUS Term
 		;
 
-Term ::= (TermExpr) Factor:t0 Mulop Factor:t1
+Term ::= (TermExpr) Factor:t0 Mulop Term:t1
 		|
 		(SignleTerm) Factor:t0
 		;
@@ -203,7 +205,7 @@ Addop ::= (Addop) PLUS
 		
 Mulop ::= (Mulop) MULTIPLY
 		|
-		(Divisonop) DIVISION
+		(Divop) DIVISION
 		|
 		(Modop) MOD
 		;

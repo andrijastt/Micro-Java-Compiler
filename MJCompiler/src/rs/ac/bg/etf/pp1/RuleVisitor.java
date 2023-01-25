@@ -7,6 +7,7 @@ public class RuleVisitor extends VisitorAdaptor{
 
 	int printCallCount = 0;
 	int varDeclCount = 0;
+	int errSemi = 0, errComma = 0;
 	
 	Logger log = Logger.getLogger(getClass());
 
@@ -18,4 +19,12 @@ public class RuleVisitor extends VisitorAdaptor{
 		printCallCount++;
 	}
 
+    public void visit(ErrorCommaStmt ErrorCommaStmt){ 
+    	errComma++;
+    }
+    
+    public void visit(ErrorSemiStmt ErrorSemiStmt) { 
+    	errSemi++; 
+    }
+    
 }
