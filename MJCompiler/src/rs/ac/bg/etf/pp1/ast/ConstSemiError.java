@@ -1,13 +1,13 @@
 // generated with ast extension for cup
 // version 0.8
-// 25/0/2023 20:55:5
+// 25/0/2023 21:54:29
 
 
 package rs.ac.bg.etf.pp1.ast;
 
-public class ErrorSemiStmt extends Statement {
+public class ConstSemiError extends ConstSemi {
 
-    public ErrorSemiStmt () {
+    public ConstSemiError () {
     }
 
     public void accept(Visitor visitor) {
@@ -28,10 +28,10 @@ public class ErrorSemiStmt extends Statement {
     public String toString(String tab) {
         StringBuffer buffer=new StringBuffer();
         buffer.append(tab);
-        buffer.append("ErrorSemiStmt(\n");
+        buffer.append("ConstSemiError(\n");
 
         buffer.append(tab);
-        buffer.append(") [ErrorSemiStmt]");
+        buffer.append(") [ConstSemiError]");
         return buffer.toString();
     }
 }

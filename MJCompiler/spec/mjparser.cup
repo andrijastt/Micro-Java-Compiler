@@ -58,8 +58,8 @@ terminal LPAREN, RPAREN, LBRACKET, RBRACKET, LBRACE, RBRACE;
 terminal POINTER_LIKE;
 
 nonterminal Program, ParamList, ParamItem, MethodDeclList; 
-nonterminal ConstDecl, ConstDeclList, Const, ConstVal; 
-nonterminal VarDeclList, VarDecl, Var, Type, MethodDecl, MethodVarDecl;
+nonterminal ConstDecl, ConstDeclList, Const, ConstVal, ConstComma, ConstSemi; 
+nonterminal VarDeclList, VarDecl, VarSemi, VarComma, Var, Type, MethodDecl, MethodVarDecl;
 nonterminal StatementList, Statement;
 nonterminal Designator, Expr, Term, Assignop, Addop, Mulop, Factor;
 nonterminal DesignatorStatement, DesignatorList, DesignatorTemp, NumConstList;
@@ -75,16 +75,27 @@ ParamItem ::= (ParamConstList) ConstDecl
 			|
 			(ParamVarList) VarDecl; 
 
-ConstDecl ::= (ConstDeclaration) CONST Type:constType ConstDeclList SEMI;
+ConstDecl ::= (ConstDeclaration) CONST Type:constType ConstDeclList;
 
-ConstDeclList ::= (ConstList) ConstDeclList COMMA Const
+ConstDeclList ::= (ConstList) ConstComma ConstDeclList
 				|
-				(SingleConst) Const
+				(SingleConst) ConstSemi
 				;
+						
+ConstSemi ::= (SemiConst) Const SEMI
+			|
+			(ConstSemiError) error SEMI:l
+			{: parser.report_error("Izvrsen oporavak do ; u liniji " + lleft, null);  :}
+			;
+	
+ConstComma ::= (CommaConst) Const COMMA
+			|
+			(ConstCommaError) error COMMA:l
+			{: parser.report_error("Izvrsen oporavak do , u liniji " + lleft, null);  :}
+			;
 				
 Const ::= (Const) IDENT:constName ASSIGN ConstVal;
 			
-
 ConstVal ::= (NumConst) NUMBER
 			|
 			(CharConst) CHAR
@@ -99,17 +110,29 @@ MethodVarDecl ::= (MethodVarDecls) MethodVarDecl VarDecl
 		(NoMethodVarDecls)
 		;
 
-VarDecl ::= (VarDeclaration) Type:varType VarDeclList SEMI;
+VarDecl ::= (VarDeclaration) Type:varType VarDeclList;
 
-VarDeclList ::= (VarList) VarDeclList COMMA Var
+VarDeclList ::= (VarList) VarComma VarDeclList
 				|
-				(SingleVar) Var
+				(SingleVar) VarSemi
 				;
 				
+VarComma ::= (CommaVar) Var COMMA
+			|
+			(VarCommaError) error COMMA:l
+			{: parser.report_error("Izvrsen oporavak do , u liniji " + lleft, null);  :}
+			;
+
+VarSemi ::= (SemiVar) Var SEMI
+			|
+			(VarSemiError) error SEMI:l
+			{: parser.report_error("Izvrsen oporavak do ; u liniji " + lleft, null);  :}
+			;
+			
 Var ::= (VarNoBrackets) IDENT:varName
 		|
 		(VarBrackets) IDENT:varName LBRACKET RBRACKET
-		;
+			;
 
 MethodDeclList ::= (MethodDeclarations) MethodDeclList MethodDecl /* mozda nepotrebno */
 				|
@@ -126,12 +149,6 @@ StatementList ::= (Statements) StatementList Statement
 				;
 
 Statement ::= (DesignatorStmt) DesignatorStatement SEMI
-		   |
-		   (ErrorSemiStmt) error SEMI:l
-		   {: parser.report_error("Izvrsen oporavak do ; u liniji " + lleft, null);  :}
-		   |
-		   (ErrorCommaStmt) error COMMA:l
-		   {: parser.report_error("Izvrsen oporavak do , u liniji " + lleft, null);  :}
 		   |
 		   (ReadStmt) READ LPAREN Designator RPAREN SEMI
 		   |
@@ -150,6 +167,9 @@ DesignatorStatement ::= (DesignatorAssign) Designator Assignop Expr
 					(DesignatorDEC)Designator DEC
 					|
 					(DesignatorStatementBrackets) LBRACKET DesignatorList RBRACKET ASSIGN Designator
+					|
+					(DesignatorStatementError) error SEMI:l
+		   			{: parser.report_error("Izvrsen oporavak do ; u liniji " + lleft, null);  :}
 					;
 
 DesignatorTemp ::= (DesignatroTemp) Designator

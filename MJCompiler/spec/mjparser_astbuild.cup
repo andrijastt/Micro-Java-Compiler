@@ -64,9 +64,13 @@ nonterminal MethodDeclList MethodDeclList;
 nonterminal ConstDecl ConstDecl;
 nonterminal ConstDeclList ConstDeclList;
 nonterminal Const Const;
-nonterminal ConstVal ConstVal; 
+nonterminal ConstVal ConstVal;
+nonterminal ConstComma ConstComma;
+nonterminal ConstSemi ConstSemi; 
 nonterminal VarDeclList VarDeclList;
 nonterminal VarDecl VarDecl;
+nonterminal VarSemi VarSemi;
+nonterminal VarComma VarComma;
 nonterminal Var Var;
 nonterminal Type Type;
 nonterminal MethodDecl MethodDecl;
@@ -96,16 +100,27 @@ ParamItem ::= (ParamConstList) ConstDecl:C1 {: RESULT=new ParamConstList(C1); RE
 			|
 			(ParamVarList) VarDecl:V1 {: RESULT=new ParamVarList(V1); RESULT.setLine(V1left); :}; 
 
-ConstDecl ::= (ConstDeclaration) CONST Type:constType ConstDeclList:C1 SEMI {: RESULT=new ConstDeclaration(constType, C1); RESULT.setLine(constTypeleft); :};
+ConstDecl ::= (ConstDeclaration) CONST Type:constType ConstDeclList:C1 {: RESULT=new ConstDeclaration(constType, C1); RESULT.setLine(constTypeleft); :};
 
-ConstDeclList ::= (ConstList) ConstDeclList:C1 COMMA Const:C2 {: RESULT=new ConstList(C1, C2); RESULT.setLine(C1left); :}
+ConstDeclList ::= (ConstList) ConstComma:C1 ConstDeclList:C2 {: RESULT=new ConstList(C1, C2); RESULT.setLine(C1left); :}
 				|
-				(SingleConst) Const:C1 {: RESULT=new SingleConst(C1); RESULT.setLine(C1left); :}
+				(SingleConst) ConstSemi:C1 {: RESULT=new SingleConst(C1); RESULT.setLine(C1left); :}
 				;
+						
+ConstSemi ::= (SemiConst) Const:C1 SEMI {: RESULT=new SemiConst(C1); RESULT.setLine(C1left); :}
+			|
+			(ConstSemiError) error SEMI:l
+			{: parser.report_error("Izvrsen oporavak do ; u liniji " + lleft, null);  :} {: RESULT=new ConstSemiError(); :}
+			;
+	
+ConstComma ::= (CommaConst) Const:C1 COMMA {: RESULT=new CommaConst(C1); RESULT.setLine(C1left); :}
+			|
+			(ConstCommaError) error COMMA:l
+			{: parser.report_error("Izvrsen oporavak do , u liniji " + lleft, null);  :} {: RESULT=new ConstCommaError(); :}
+			;
 				
 Const ::= (Const) IDENT:constName ASSIGN ConstVal:C1 {: RESULT=new Const(constName, C1); RESULT.setLine(constNameleft); :};
 			
-
 ConstVal ::= (NumConst) NUMBER:N1 {: RESULT=new NumConst(N1); RESULT.setLine(N1left); :}
 			|
 			(CharConst) CHAR {: RESULT=new CharConst(); :}
@@ -120,17 +135,29 @@ MethodVarDecl ::= (MethodVarDecls) MethodVarDecl:M1 VarDecl:V2 {: RESULT=new Met
 		(NoMethodVarDecls) {: RESULT=new NoMethodVarDecls(); :}
 		;
 
-VarDecl ::= (VarDeclaration) Type:varType VarDeclList:V1 SEMI {: RESULT=new VarDeclaration(varType, V1); RESULT.setLine(varTypeleft); :};
+VarDecl ::= (VarDeclaration) Type:varType VarDeclList:V1 {: RESULT=new VarDeclaration(varType, V1); RESULT.setLine(varTypeleft); :};
 
-VarDeclList ::= (VarList) VarDeclList:V1 COMMA Var:V2 {: RESULT=new VarList(V1, V2); RESULT.setLine(V1left); :}
+VarDeclList ::= (VarList) VarComma:V1 VarDeclList:V2 {: RESULT=new VarList(V1, V2); RESULT.setLine(V1left); :}
 				|
-				(SingleVar) Var:V1 {: RESULT=new SingleVar(V1); RESULT.setLine(V1left); :}
+				(SingleVar) VarSemi:V1 {: RESULT=new SingleVar(V1); RESULT.setLine(V1left); :}
 				;
 				
+VarComma ::= (CommaVar) Var:V1 COMMA {: RESULT=new CommaVar(V1); RESULT.setLine(V1left); :}
+			|
+			(VarCommaError) error COMMA:l
+			{: parser.report_error("Izvrsen oporavak do , u liniji " + lleft, null);  :} {: RESULT=new VarCommaError(); :}
+			;
+
+VarSemi ::= (SemiVar) Var:V1 SEMI {: RESULT=new SemiVar(V1); RESULT.setLine(V1left); :}
+			|
+			(VarSemiError) error SEMI:l
+			{: parser.report_error("Izvrsen oporavak do ; u liniji " + lleft, null);  :} {: RESULT=new VarSemiError(); :}
+			;
+			
 Var ::= (VarNoBrackets) IDENT:varName {: RESULT=new VarNoBrackets(varName); RESULT.setLine(varNameleft); :}
 		|
 		(VarBrackets) IDENT:varName LBRACKET RBRACKET {: RESULT=new VarBrackets(varName); RESULT.setLine(varNameleft); :}
-		;
+			;
 
 MethodDeclList ::= (MethodDeclarations) MethodDeclList:M1 MethodDecl:M2 {: RESULT=new MethodDeclarations(M1, M2); RESULT.setLine(M1left); :} /* mozda nepotrebno */
 				|
@@ -147,12 +174,6 @@ StatementList ::= (Statements) StatementList:S1 Statement:S2 {: RESULT=new State
 				;
 
 Statement ::= (DesignatorStmt) DesignatorStatement:D1 SEMI {: RESULT=new DesignatorStmt(D1); RESULT.setLine(D1left); :}
-		   |
-		   (ErrorSemiStmt) error SEMI:l
-		   {: parser.report_error("Izvrsen oporavak do ; u liniji " + lleft, null);  :} {: RESULT=new ErrorSemiStmt(); :}
-		   |
-		   (ErrorCommaStmt) error COMMA:l
-		   {: parser.report_error("Izvrsen oporavak do , u liniji " + lleft, null);  :} {: RESULT=new ErrorCommaStmt(); :}
 		   |
 		   (ReadStmt) READ LPAREN Designator:D1 RPAREN SEMI {: RESULT=new ReadStmt(D1); RESULT.setLine(D1left); :}
 		   |
@@ -171,6 +192,9 @@ DesignatorStatement ::= (DesignatorAssign) Designator:D1 Assignop:A2 Expr:E3 {: 
 					(DesignatorDEC)Designator:D1 DEC {: RESULT=new DesignatorDEC(D1); RESULT.setLine(D1left); :}
 					|
 					(DesignatorStatementBrackets) LBRACKET DesignatorList:D1 RBRACKET ASSIGN Designator:D2 {: RESULT=new DesignatorStatementBrackets(D1, D2); RESULT.setLine(D1left); :}
+					|
+					(DesignatorStatementError) error SEMI:l
+		   			{: parser.report_error("Izvrsen oporavak do ; u liniji " + lleft, null);  :} {: RESULT=new DesignatorStatementError(); :}
 					;
 
 DesignatorTemp ::= (DesignatroTemp) Designator:D1 {: RESULT=new DesignatroTemp(D1); RESULT.setLine(D1left); :}

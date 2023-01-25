@@ -1,25 +1,25 @@
 // generated with ast extension for cup
 // version 0.8
-// 25/0/2023 20:55:5
+// 25/0/2023 21:54:29
 
 
 package rs.ac.bg.etf.pp1.ast;
 
 public class SingleConst extends ConstDeclList {
 
-    private Const Const;
+    private ConstSemi ConstSemi;
 
-    public SingleConst (Const Const) {
-        this.Const=Const;
-        if(Const!=null) Const.setParent(this);
+    public SingleConst (ConstSemi ConstSemi) {
+        this.ConstSemi=ConstSemi;
+        if(ConstSemi!=null) ConstSemi.setParent(this);
     }
 
-    public Const getConst() {
-        return Const;
+    public ConstSemi getConstSemi() {
+        return ConstSemi;
     }
 
-    public void setConst(Const Const) {
-        this.Const=Const;
+    public void setConstSemi(ConstSemi ConstSemi) {
+        this.ConstSemi=ConstSemi;
     }
 
     public void accept(Visitor visitor) {
@@ -27,16 +27,16 @@ public class SingleConst extends ConstDeclList {
     }
 
     public void childrenAccept(Visitor visitor) {
-        if(Const!=null) Const.accept(visitor);
+        if(ConstSemi!=null) ConstSemi.accept(visitor);
     }
 
     public void traverseTopDown(Visitor visitor) {
         accept(visitor);
-        if(Const!=null) Const.traverseTopDown(visitor);
+        if(ConstSemi!=null) ConstSemi.traverseTopDown(visitor);
     }
 
     public void traverseBottomUp(Visitor visitor) {
-        if(Const!=null) Const.traverseBottomUp(visitor);
+        if(ConstSemi!=null) ConstSemi.traverseBottomUp(visitor);
         accept(visitor);
     }
 
@@ -45,8 +45,8 @@ public class SingleConst extends ConstDeclList {
         buffer.append(tab);
         buffer.append("SingleConst(\n");
 
-        if(Const!=null)
-            buffer.append(Const.toString("  "+tab));
+        if(ConstSemi!=null)
+            buffer.append(ConstSemi.toString("  "+tab));
         else
             buffer.append(tab+"  null");
         buffer.append("\n");

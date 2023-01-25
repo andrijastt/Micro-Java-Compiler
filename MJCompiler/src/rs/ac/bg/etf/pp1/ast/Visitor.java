@@ -1,6 +1,6 @@
 // generated with ast extension for cup
 // version 0.8
-// 25/0/2023 20:55:5
+// 25/0/2023 21:54:29
 
 
 package rs.ac.bg.etf.pp1.ast;
@@ -14,6 +14,7 @@ public interface Visitor {
     public void visit(MethodVarDecl MethodVarDecl);
     public void visit(Var Var);
     public void visit(ConstDecl ConstDecl);
+    public void visit(VarSemi VarSemi);
     public void visit(ParamList ParamList);
     public void visit(ParamItem ParamItem);
     public void visit(Expr Expr);
@@ -24,9 +25,12 @@ public interface Visitor {
     public void visit(ConstDeclList ConstDeclList);
     public void visit(MethodDeclList MethodDeclList);
     public void visit(Statement Statement);
+    public void visit(ConstComma ConstComma);
     public void visit(ConstVal ConstVal);
     public void visit(NumConstList NumConstList);
     public void visit(Term Term);
+    public void visit(ConstSemi ConstSemi);
+    public void visit(VarComma VarComma);
     public void visit(StatementList StatementList);
     public void visit(Modop Modop);
     public void visit(Divop Divop);
@@ -53,6 +57,7 @@ public interface Visitor {
     public void visit(DesignatorLists DesignatorLists);
     public void visit(NoDesignatroTemp NoDesignatroTemp);
     public void visit(DesignatroTemp DesignatroTemp);
+    public void visit(DesignatorStatementError DesignatorStatementError);
     public void visit(DesignatorStatementBrackets DesignatorStatementBrackets);
     public void visit(DesignatorDEC DesignatorDEC);
     public void visit(DesignatorINC DesignatorINC);
@@ -61,8 +66,6 @@ public interface Visitor {
     public void visit(NumConsts NumConsts);
     public void visit(PrintStmt PrintStmt);
     public void visit(ReadStmt ReadStmt);
-    public void visit(ErrorCommaStmt ErrorCommaStmt);
-    public void visit(ErrorSemiStmt ErrorSemiStmt);
     public void visit(DesignatorStmt DesignatorStmt);
     public void visit(NoStmt NoStmt);
     public void visit(Statements Statements);
@@ -72,6 +75,10 @@ public interface Visitor {
     public void visit(MethodDeclarations MethodDeclarations);
     public void visit(VarBrackets VarBrackets);
     public void visit(VarNoBrackets VarNoBrackets);
+    public void visit(VarSemiError VarSemiError);
+    public void visit(SemiVar SemiVar);
+    public void visit(VarCommaError VarCommaError);
+    public void visit(CommaVar CommaVar);
     public void visit(SingleVar SingleVar);
     public void visit(VarList VarList);
     public void visit(VarDeclaration VarDeclaration);
@@ -82,6 +89,10 @@ public interface Visitor {
     public void visit(CharConst CharConst);
     public void visit(NumConst NumConst);
     public void visit(Const Const);
+    public void visit(ConstCommaError ConstCommaError);
+    public void visit(CommaConst CommaConst);
+    public void visit(ConstSemiError ConstSemiError);
+    public void visit(SemiConst SemiConst);
     public void visit(SingleConst SingleConst);
     public void visit(ConstList ConstList);
     public void visit(ConstDeclaration ConstDeclaration);

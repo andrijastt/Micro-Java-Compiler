@@ -1,20 +1,28 @@
 // generated with ast extension for cup
 // version 0.8
-// 25/0/2023 20:55:5
+// 25/0/2023 21:54:29
 
 
 package rs.ac.bg.etf.pp1.ast;
 
 public class VarList extends VarDeclList {
 
+    private VarComma VarComma;
     private VarDeclList VarDeclList;
-    private Var Var;
 
-    public VarList (VarDeclList VarDeclList, Var Var) {
+    public VarList (VarComma VarComma, VarDeclList VarDeclList) {
+        this.VarComma=VarComma;
+        if(VarComma!=null) VarComma.setParent(this);
         this.VarDeclList=VarDeclList;
         if(VarDeclList!=null) VarDeclList.setParent(this);
-        this.Var=Var;
-        if(Var!=null) Var.setParent(this);
+    }
+
+    public VarComma getVarComma() {
+        return VarComma;
+    }
+
+    public void setVarComma(VarComma VarComma) {
+        this.VarComma=VarComma;
     }
 
     public VarDeclList getVarDeclList() {
@@ -25,32 +33,24 @@ public class VarList extends VarDeclList {
         this.VarDeclList=VarDeclList;
     }
 
-    public Var getVar() {
-        return Var;
-    }
-
-    public void setVar(Var Var) {
-        this.Var=Var;
-    }
-
     public void accept(Visitor visitor) {
         visitor.visit(this);
     }
 
     public void childrenAccept(Visitor visitor) {
+        if(VarComma!=null) VarComma.accept(visitor);
         if(VarDeclList!=null) VarDeclList.accept(visitor);
-        if(Var!=null) Var.accept(visitor);
     }
 
     public void traverseTopDown(Visitor visitor) {
         accept(visitor);
+        if(VarComma!=null) VarComma.traverseTopDown(visitor);
         if(VarDeclList!=null) VarDeclList.traverseTopDown(visitor);
-        if(Var!=null) Var.traverseTopDown(visitor);
     }
 
     public void traverseBottomUp(Visitor visitor) {
+        if(VarComma!=null) VarComma.traverseBottomUp(visitor);
         if(VarDeclList!=null) VarDeclList.traverseBottomUp(visitor);
-        if(Var!=null) Var.traverseBottomUp(visitor);
         accept(visitor);
     }
 
@@ -59,14 +59,14 @@ public class VarList extends VarDeclList {
         buffer.append(tab);
         buffer.append("VarList(\n");
 
-        if(VarDeclList!=null)
-            buffer.append(VarDeclList.toString("  "+tab));
+        if(VarComma!=null)
+            buffer.append(VarComma.toString("  "+tab));
         else
             buffer.append(tab+"  null");
         buffer.append("\n");
 
-        if(Var!=null)
-            buffer.append(Var.toString("  "+tab));
+        if(VarDeclList!=null)
+            buffer.append(VarDeclList.toString("  "+tab));
         else
             buffer.append(tab+"  null");
         buffer.append("\n");

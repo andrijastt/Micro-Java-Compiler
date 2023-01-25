@@ -1,25 +1,25 @@
 // generated with ast extension for cup
 // version 0.8
-// 25/0/2023 20:55:5
+// 25/0/2023 21:54:29
 
 
 package rs.ac.bg.etf.pp1.ast;
 
 public class SingleVar extends VarDeclList {
 
-    private Var Var;
+    private VarSemi VarSemi;
 
-    public SingleVar (Var Var) {
-        this.Var=Var;
-        if(Var!=null) Var.setParent(this);
+    public SingleVar (VarSemi VarSemi) {
+        this.VarSemi=VarSemi;
+        if(VarSemi!=null) VarSemi.setParent(this);
     }
 
-    public Var getVar() {
-        return Var;
+    public VarSemi getVarSemi() {
+        return VarSemi;
     }
 
-    public void setVar(Var Var) {
-        this.Var=Var;
+    public void setVarSemi(VarSemi VarSemi) {
+        this.VarSemi=VarSemi;
     }
 
     public void accept(Visitor visitor) {
@@ -27,16 +27,16 @@ public class SingleVar extends VarDeclList {
     }
 
     public void childrenAccept(Visitor visitor) {
-        if(Var!=null) Var.accept(visitor);
+        if(VarSemi!=null) VarSemi.accept(visitor);
     }
 
     public void traverseTopDown(Visitor visitor) {
         accept(visitor);
-        if(Var!=null) Var.traverseTopDown(visitor);
+        if(VarSemi!=null) VarSemi.traverseTopDown(visitor);
     }
 
     public void traverseBottomUp(Visitor visitor) {
-        if(Var!=null) Var.traverseBottomUp(visitor);
+        if(VarSemi!=null) VarSemi.traverseBottomUp(visitor);
         accept(visitor);
     }
 
@@ -45,8 +45,8 @@ public class SingleVar extends VarDeclList {
         buffer.append(tab);
         buffer.append("SingleVar(\n");
 
-        if(Var!=null)
-            buffer.append(Var.toString("  "+tab));
+        if(VarSemi!=null)
+            buffer.append(VarSemi.toString("  "+tab));
         else
             buffer.append(tab+"  null");
         buffer.append("\n");
