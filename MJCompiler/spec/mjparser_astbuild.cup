@@ -68,13 +68,9 @@ nonterminal ConstVal ConstVal;
 nonterminal VarDeclList VarDeclList;
 nonterminal VarDecl VarDecl;
 nonterminal Var Var;
-nonterminal VarVal VarVal;
 nonterminal Type Type;
 nonterminal MethodDecl MethodDecl;
 nonterminal MethodVarDecl MethodVarDecl;
-nonterminal FormPars FormPars;
-nonterminal FormalParamList FormalParamList;
-nonterminal FormalParamDecl FormalParamDecl;
 nonterminal StatementList StatementList;
 nonterminal Statement Statement;
 nonterminal Designator Designator;
@@ -86,6 +82,7 @@ nonterminal Mulop Mulop;
 nonterminal Factor Factor;
 nonterminal DesignatorStatement DesignatorStatement;
 nonterminal DesignatorList DesignatorList;
+nonterminal DesignatorTemp DesignatorTemp;
 nonterminal NumConstList NumConstList;
 
 Program ::= (Program) PROG IDENT:I1 ParamList:P2 LBRACE MethodDeclList:M3 RBRACE {: RESULT=new Program(I1, P2, M3); RESULT.setLine(I1left); :};
@@ -151,8 +148,11 @@ StatementList ::= (Statements) StatementList:S1 Statement:S2 {: RESULT=new State
 
 Statement ::= (DesignatorStmt) DesignatorStatement:D1 SEMI {: RESULT=new DesignatorStmt(D1); RESULT.setLine(D1left); :}
 		   |
-		   (ErrorStmt) error SEMI:l
-		   {: parser.report_error("Izvrsen oporavak do ; u liniji " + lleft, null);  :} {: RESULT=new ErrorStmt(); :}
+		   (ErrorSemiStmt) error SEMI:l
+		   {: parser.report_error("Izvrsen oporavak do ; u liniji " + lleft, null);  :} {: RESULT=new ErrorSemiStmt(); :}
+		   |
+		   (ErrorCommaStmt) error COMMA:l
+		   {: parser.report_error("Izvrsen oporavak do , u liniji " + lleft, null);  :} {: RESULT=new ErrorCommaStmt(); :}
 		   |
 		   (ReadStmt) READ LPAREN Designator:D1 RPAREN SEMI {: RESULT=new ReadStmt(D1); RESULT.setLine(D1left); :}
 		   |
@@ -172,10 +172,15 @@ DesignatorStatement ::= (DesignatorAssign) Designator:D1 Assignop:A2 Expr:E3 {: 
 					|
 					(DesignatorStatementBrackets) LBRACKET DesignatorList:D1 RBRACKET ASSIGN Designator:D2 {: RESULT=new DesignatorStatementBrackets(D1, D2); RESULT.setLine(D1left); :}
 					;
-					
-DesignatorList ::= (DesignatorLists) Designator:D1 COMMA DesignatorList:D2 {: RESULT=new DesignatorLists(D1, D2); RESULT.setLine(D1left); :}
+
+DesignatorTemp ::= (DesignatroTemp) Designator:D1 {: RESULT=new DesignatroTemp(D1); RESULT.setLine(D1left); :}
 				|
-				(SingleDesignatorList) Designator:D1 {: RESULT=new SingleDesignatorList(D1); RESULT.setLine(D1left); :}
+				(NoDesignatroTemp) {: RESULT=new NoDesignatroTemp(); :}
+				;
+				
+DesignatorList ::= (DesignatorLists) DesignatorList:D1 COMMA DesignatorTemp:D2 {: RESULT=new DesignatorLists(D1, D2); RESULT.setLine(D1left); :}
+				|
+				(SingleDesignatorList) DesignatorTemp:D1 {: RESULT=new SingleDesignatorList(D1); RESULT.setLine(D1left); :}
 				;		
 
 Expr ::= (NegativeExpr) MINUS Term:T1 Addop:A2 Expr:E3 {: RESULT=new NegativeExpr(T1, A2, E3); RESULT.setLine(T1left); :}
@@ -207,7 +212,7 @@ Factor ::=(DisgnatorNoPars) Designator:d {: RESULT=new DisgnatorNoPars(d); RESUL
 
 Designator ::= (DesignatorNoBrackets) IDENT:name {: RESULT=new DesignatorNoBrackets(name); RESULT.setLine(nameleft); :}
 			|
-			(DesignatorBrackets) IDENT:name LBRACKET Expr:E1 RBRACKET {: RESULT=new DesignatorBrackets(name, E1); RESULT.setLine(nameleft); :}
+			(DesignatorBrackets) IDENT:name LBRACKET Expr:E1 RBRACKET {: RESULT=new DesignatorBrackets(name, E1); RESULT.setLine(nameleft); :} 
 			;
 	
 Assignop ::= (Assignop) ASSIGN {: RESULT=new Assignop(); :};

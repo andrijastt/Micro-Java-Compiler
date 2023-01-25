@@ -100,8 +100,3 @@ import java_cup.runtime.Symbol;
 
 . { System.err.println("Leksicka greska ("+yytext()+") u liniji "+(yyline+1)); }
 
-
-
-
-
-

@@ -5,9 +5,9 @@
 
 package rs.ac.bg.etf.pp1.ast;
 
-public class TrueFactorConst extends Factor {
+public class ErrorSemiStmt extends Statement {
 
-    public TrueFactorConst () {
+    public ErrorSemiStmt () {
     }
 
     public void accept(Visitor visitor) {
@@ -28,10 +28,10 @@ public class TrueFactorConst extends Factor {
     public String toString(String tab) {
         StringBuffer buffer=new StringBuffer();
         buffer.append(tab);
-        buffer.append("TrueFactorConst(\n");
+        buffer.append("ErrorSemiStmt(\n");
 
         buffer.append(tab);
-        buffer.append(") [TrueFactorConst]");
+        buffer.append(") [ErrorSemiStmt]");
         return buffer.toString();
     }
 }

@@ -59,10 +59,10 @@ terminal POINTER_LIKE;
 
 nonterminal Program, ParamList, ParamItem, MethodDeclList; 
 nonterminal ConstDecl, ConstDeclList, Const, ConstVal; 
-nonterminal VarDeclList, VarDecl, Var, VarVal, Type, MethodDecl, MethodVarDecl;
-nonterminal FormPars, FormalParamList, FormalParamDecl, StatementList, Statement;
+nonterminal VarDeclList, VarDecl, Var, Type, MethodDecl, MethodVarDecl;
+nonterminal StatementList, Statement;
 nonterminal Designator, Expr, Term, Assignop, Addop, Mulop, Factor;
-nonterminal DesignatorStatement, DesignatorList, NumConstList;
+nonterminal DesignatorStatement, DesignatorList, DesignatorTemp, NumConstList;
 
 Program ::= (Program) PROG IDENT ParamList LBRACE MethodDeclList RBRACE;
 
@@ -127,8 +127,11 @@ StatementList ::= (Statements) StatementList Statement
 
 Statement ::= (DesignatorStmt) DesignatorStatement SEMI
 		   |
-		   (ErrorStmt) error SEMI:l
+		   (ErrorSemiStmt) error SEMI:l
 		   {: parser.report_error("Izvrsen oporavak do ; u liniji " + lleft, null);  :}
+		   |
+		   (ErrorCommaStmt) error COMMA:l
+		   {: parser.report_error("Izvrsen oporavak do , u liniji " + lleft, null);  :}
 		   |
 		   (ReadStmt) READ LPAREN Designator RPAREN SEMI
 		   |
@@ -148,10 +151,15 @@ DesignatorStatement ::= (DesignatorAssign) Designator Assignop Expr
 					|
 					(DesignatorStatementBrackets) LBRACKET DesignatorList RBRACKET ASSIGN Designator
 					;
-					
-DesignatorList ::= (DesignatorLists) Designator COMMA DesignatorList
+
+DesignatorTemp ::= (DesignatroTemp) Designator
 				|
-				(SingleDesignatorList) Designator
+				(NoDesignatroTemp)
+				;
+				
+DesignatorList ::= (DesignatorLists) DesignatorList COMMA DesignatorTemp
+				|
+				(SingleDesignatorList) DesignatorTemp
 				;		
 
 Expr ::= (NegativeExpr) MINUS Term Addop Expr
@@ -183,7 +191,7 @@ Factor ::=(DisgnatorNoPars) Designator:d
 
 Designator ::= (DesignatorNoBrackets) IDENT:name
 			|
-			(DesignatorBrackets) IDENT:name LBRACKET Expr RBRACKET
+			(DesignatorBrackets) IDENT:name LBRACKET Expr RBRACKET 
 			;
 	
 Assignop ::= (Assignop) ASSIGN;

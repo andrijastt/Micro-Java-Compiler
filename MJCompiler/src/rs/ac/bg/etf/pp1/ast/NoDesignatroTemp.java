@@ -5,9 +5,9 @@
 
 package rs.ac.bg.etf.pp1.ast;
 
-public class TrueFactorConst extends Factor {
+public class NoDesignatroTemp extends DesignatorTemp {
 
-    public TrueFactorConst () {
+    public NoDesignatroTemp () {
     }
 
     public void accept(Visitor visitor) {
@@ -28,10 +28,10 @@ public class TrueFactorConst extends Factor {
     public String toString(String tab) {
         StringBuffer buffer=new StringBuffer();
         buffer.append(tab);
-        buffer.append("TrueFactorConst(\n");
+        buffer.append("NoDesignatroTemp(\n");
 
         buffer.append(tab);
-        buffer.append(") [TrueFactorConst]");
+        buffer.append(") [NoDesignatroTemp]");
         return buffer.toString();
     }
 }

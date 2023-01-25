@@ -1,25 +1,25 @@
 // generated with ast extension for cup
 // version 0.8
-// 25/0/2023 18:35:29
+// 25/0/2023 20:24:51
 
 
 package rs.ac.bg.etf.pp1.ast;
 
 public class SingleDesignatorList extends DesignatorList {
 
-    private Designator Designator;
+    private DesignatorTemp DesignatorTemp;
 
-    public SingleDesignatorList (Designator Designator) {
-        this.Designator=Designator;
-        if(Designator!=null) Designator.setParent(this);
+    public SingleDesignatorList (DesignatorTemp DesignatorTemp) {
+        this.DesignatorTemp=DesignatorTemp;
+        if(DesignatorTemp!=null) DesignatorTemp.setParent(this);
     }
 
-    public Designator getDesignator() {
-        return Designator;
+    public DesignatorTemp getDesignatorTemp() {
+        return DesignatorTemp;
     }
 
-    public void setDesignator(Designator Designator) {
-        this.Designator=Designator;
+    public void setDesignatorTemp(DesignatorTemp DesignatorTemp) {
+        this.DesignatorTemp=DesignatorTemp;
     }
 
     public void accept(Visitor visitor) {
@@ -27,16 +27,16 @@ public class SingleDesignatorList extends DesignatorList {
     }
 
     public void childrenAccept(Visitor visitor) {
-        if(Designator!=null) Designator.accept(visitor);
+        if(DesignatorTemp!=null) DesignatorTemp.accept(visitor);
     }
 
     public void traverseTopDown(Visitor visitor) {
         accept(visitor);
-        if(Designator!=null) Designator.traverseTopDown(visitor);
+        if(DesignatorTemp!=null) DesignatorTemp.traverseTopDown(visitor);
     }
 
     public void traverseBottomUp(Visitor visitor) {
-        if(Designator!=null) Designator.traverseBottomUp(visitor);
+        if(DesignatorTemp!=null) DesignatorTemp.traverseBottomUp(visitor);
         accept(visitor);
     }
 
@@ -45,8 +45,8 @@ public class SingleDesignatorList extends DesignatorList {
         buffer.append(tab);
         buffer.append("SingleDesignatorList(\n");
 
-        if(Designator!=null)
-            buffer.append(Designator.toString("  "+tab));
+        if(DesignatorTemp!=null)
+            buffer.append(DesignatorTemp.toString("  "+tab));
         else
             buffer.append(tab+"  null");
         buffer.append("\n");

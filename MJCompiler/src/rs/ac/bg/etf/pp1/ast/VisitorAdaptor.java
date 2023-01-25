@@ -1,6 +1,6 @@
 // generated with ast extension for cup
 // version 0.8
-// 25/0/2023 18:35:29
+// 25/0/2023 20:24:51
 
 
 package rs.ac.bg.etf.pp1.ast;
@@ -17,14 +17,11 @@ public abstract class VisitorAdaptor implements Visitor {
     public void visit(ParamList ParamList) { }
     public void visit(ParamItem ParamItem) { }
     public void visit(Expr Expr) { }
-    public void visit(FormalParamList FormalParamList) { }
-    public void visit(FormPars FormPars) { }
     public void visit(DesignatorList DesignatorList) { }
     public void visit(VarDeclList VarDeclList) { }
-    public void visit(VarVal VarVal) { }
+    public void visit(DesignatorTemp DesignatorTemp) { }
     public void visit(VarDecl VarDecl) { }
     public void visit(ConstDeclList ConstDeclList) { }
-    public void visit(FormalParamDecl FormalParamDecl) { }
     public void visit(MethodDeclList MethodDeclList) { }
     public void visit(Statement Statement) { }
     public void visit(ConstVal ConstVal) { }
@@ -53,6 +50,8 @@ public abstract class VisitorAdaptor implements Visitor {
     public void visit(NegativeExpr NegativeExpr) { visit(); }
     public void visit(SingleDesignatorList SingleDesignatorList) { visit(); }
     public void visit(DesignatorLists DesignatorLists) { visit(); }
+    public void visit(NoDesignatroTemp NoDesignatroTemp) { visit(); }
+    public void visit(DesignatroTemp DesignatroTemp) { visit(); }
     public void visit(DesignatorStatementBrackets DesignatorStatementBrackets) { visit(); }
     public void visit(DesignatorDEC DesignatorDEC) { visit(); }
     public void visit(DesignatorINC DesignatorINC) { visit(); }
@@ -61,7 +60,8 @@ public abstract class VisitorAdaptor implements Visitor {
     public void visit(NumConsts NumConsts) { visit(); }
     public void visit(PrintStmt PrintStmt) { visit(); }
     public void visit(ReadStmt ReadStmt) { visit(); }
-    public void visit(ErrorStmt ErrorStmt) { visit(); }
+    public void visit(ErrorCommaStmt ErrorCommaStmt) { visit(); }
+    public void visit(ErrorSemiStmt ErrorSemiStmt) { visit(); }
     public void visit(DesignatorStmt DesignatorStmt) { visit(); }
     public void visit(NoStmt NoStmt) { visit(); }
     public void visit(Statements Statements) { visit(); }

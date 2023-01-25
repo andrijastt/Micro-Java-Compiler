@@ -5,11 +5,11 @@
 
 package rs.ac.bg.etf.pp1.ast;
 
-public class DesignatorINC extends DesignatorStatement {
+public class DesignatroTemp extends DesignatorTemp {
 
     private Designator Designator;
 
-    public DesignatorINC (Designator Designator) {
+    public DesignatroTemp (Designator Designator) {
         this.Designator=Designator;
         if(Designator!=null) Designator.setParent(this);
     }
@@ -43,7 +43,7 @@ public class DesignatorINC extends DesignatorStatement {
     public String toString(String tab) {
         StringBuffer buffer=new StringBuffer();
         buffer.append(tab);
-        buffer.append("DesignatorINC(\n");
+        buffer.append("DesignatroTemp(\n");
 
         if(Designator!=null)
             buffer.append(Designator.toString("  "+tab));
@@ -52,7 +52,7 @@ public class DesignatorINC extends DesignatorStatement {
         buffer.append("\n");
 
         buffer.append(tab);
-        buffer.append(") [DesignatorINC]");
+        buffer.append(") [DesignatroTemp]");
         return buffer.toString();
     }
 }

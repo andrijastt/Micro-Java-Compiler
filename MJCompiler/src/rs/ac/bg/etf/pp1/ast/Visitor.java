@@ -1,6 +1,6 @@
 // generated with ast extension for cup
 // version 0.8
-// 25/0/2023 18:35:29
+// 25/0/2023 20:24:51
 
 
 package rs.ac.bg.etf.pp1.ast;
@@ -17,14 +17,11 @@ public interface Visitor {
     public void visit(ParamList ParamList);
     public void visit(ParamItem ParamItem);
     public void visit(Expr Expr);
-    public void visit(FormalParamList FormalParamList);
-    public void visit(FormPars FormPars);
     public void visit(DesignatorList DesignatorList);
     public void visit(VarDeclList VarDeclList);
-    public void visit(VarVal VarVal);
+    public void visit(DesignatorTemp DesignatorTemp);
     public void visit(VarDecl VarDecl);
     public void visit(ConstDeclList ConstDeclList);
-    public void visit(FormalParamDecl FormalParamDecl);
     public void visit(MethodDeclList MethodDeclList);
     public void visit(Statement Statement);
     public void visit(ConstVal ConstVal);
@@ -53,6 +50,8 @@ public interface Visitor {
     public void visit(NegativeExpr NegativeExpr);
     public void visit(SingleDesignatorList SingleDesignatorList);
     public void visit(DesignatorLists DesignatorLists);
+    public void visit(NoDesignatroTemp NoDesignatroTemp);
+    public void visit(DesignatroTemp DesignatroTemp);
     public void visit(DesignatorStatementBrackets DesignatorStatementBrackets);
     public void visit(DesignatorDEC DesignatorDEC);
     public void visit(DesignatorINC DesignatorINC);
@@ -61,7 +60,8 @@ public interface Visitor {
     public void visit(NumConsts NumConsts);
     public void visit(PrintStmt PrintStmt);
     public void visit(ReadStmt ReadStmt);
-    public void visit(ErrorStmt ErrorStmt);
+    public void visit(ErrorCommaStmt ErrorCommaStmt);
+    public void visit(ErrorSemiStmt ErrorSemiStmt);
     public void visit(DesignatorStmt DesignatorStmt);
     public void visit(NoStmt NoStmt);
     public void visit(Statements Statements);
