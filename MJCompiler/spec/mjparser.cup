@@ -47,7 +47,7 @@ scan with {:
 terminal PROG, CONST, CLASS, IF, ELSE, WHILE, BREAK, CONTINUE, NEW;
 terminal PRINT, READ, RETURN, VOID, EXTENDS, FOREACH;
 terminal TRUE, FALSE;
-terminal APOS, CHAR;
+terminal CHAR;
 terminal Integer NUMBER;
 terminal String IDENT;
 terminal PLUS, MINUS, MULTIPLY, DIVISION, MOD;
@@ -61,12 +61,12 @@ nonterminal Program, DeclList, DeclItem, MethodDeclList;
 nonterminal ConstDeclList, ConstDecl, Const, ConstVal; 
 nonterminal VarDeclList, VarDecl, Var, VarVal, Type, MethodDecl;
 nonterminal FormPars, FormalParamList, FormalParamDecl, StatementList, Statement;
-nonterminal Designator, Expr, Term, Label, Assignop, Relop, Addop, Mulop, Factor, ActualPars, ActualParamList;
-nonterminal DesignatorStatement, DesignatorList, Matched, Unmatched;
+nonterminal Designator, Expr, Term, Assignop, Addop, Mulop, Factor;
+nonterminal DesignatorStatement, DesignatorList, NumConstList;
 
 Program ::= (Program) PROG IDENT DeclList LBRACE MethodDeclList RBRACE;
 
-DeclList ::= (AllDeclarations) DeclList DeclItem
+DeclList ::= (AllDeclarations) DeclItem DeclList 
 			|
 			(NoDeclarations) /* epsilon */
 			;
@@ -76,7 +76,7 @@ DeclItem ::= (ConstDeclList) ConstDeclList
 			(VarDeclList) VarDeclList
 			;
 
-ConstDeclList ::= (ConstDeclarations) ConstDeclList ConstDecl
+ConstDeclList ::= (ConstDeclarations) ConstDecl ConstDeclList 
 			|
 			(NoConstDecl) /* epsilon */
 			;
@@ -90,14 +90,14 @@ Const ::= (SingleConst) IDENT:constName ASSIGN ConstVal
 
 ConstVal ::= (IntVal) NUMBER
 		|
-		(CharVal) APOS CHAR APOS /* TODO i u flex CHAR */
+		(CharVal) CHAR /* TODO i u flex CHAR */
 		|
 		(TrueVal) TRUE
 		|
 		(FalseVal) FALSE
 		;
 
-VarDeclList ::= (VarDeclarations) VarDeclList VarDecl
+VarDeclList ::= (VarDeclarations) VarDecl VarDeclList 
 			|
 			(NoVarDecl) /* epsilon */
 			;
@@ -106,7 +106,7 @@ VarDecl ::= (VarDecl) Type:varType Var SEMI;
 
 Var ::= (SingleVar) VarVal
 		|
-		(MultipleVar) Var COMMA VarVal
+		(MultipleVar) Var COMMA VarVal /* Proveri ako mozes na obrnut nacin da zapises */
 		;
 
 VarVal ::= (VarNoBrackets) IDENT:varName 
@@ -145,45 +145,24 @@ StatementList ::= (Statements) StatementList Statement
 				|
 				(NoStmt) /* epsilon */
 				;
-				
-Statement ::= (MatchedStmt) Matched
-		   |
-		   (UnmatchedStmt) Unmatched
-		   ; 
 
-Unmatched ::= (UnmatchedIf) IF Expr Statement
-		 	|
-		 	(UnmatchedIfElse) IF Expr Matched ELSE Unmatched
-		 	;
-		 
-
-Matched ::= (DesignatorStmt) DesignatorStatement SEMI
-		   |
-		   (MatchedStatement) IF Expr Matched ELSE Matched
-		   |
-		   (WhileStmt) WHILE LPAREN Condition RPAREN Statement 
+Statement ::= (DesignatorStmt) DesignatorStatement SEMI
 		   |
 		   (ErrorStmt) error SEMI:l
 		   {: parser.report_error("Izvrsen oporavak do ; u liniji " + lleft, null);  :}
 		   |
-		   (BreakExpr) BREAK SEMI
-		   |
-		   (ContinueExpr) CONTINUE SEMI
-		   |
-		   (ReturnExpr) RETURN Expr:t SEMI
-		   |
-		   (ReturnNoExpr) RETURN SEMI
-		   |
 		   (ReadStmt) READ LPAREN Designator RPAREN SEMI
 		   |
-		   (PrintStmt) PRINT LPAREN Expr RPAREN SEMI
+		   (PrintStmt) PRINT LPAREN Expr NumConstList RPAREN SEMI
 		   |
 		   (BracketsStms) LBRACKET Statement RBRACKET
 		   ;
-		
+
+NumConstList ::= (NumConsts) NumConstList COMMA NUMBER
+				|
+				(NoNumConsts) /* epsilon */
+
 DesignatorStatement ::= (DesignatorAssign) Designator Assignop Expr
-					|
-					(DesignatorActPars) Designator LPAREN ActPars RPAREN
 					|
 					(DesignatorINC)Designator INC
 					|
@@ -194,33 +173,8 @@ DesignatorStatement ::= (DesignatorAssign) Designator Assignop Expr
 					
 DesignatorList ::= (DesignatorLists) Designator COMMA DesignatorList
 				|
-				(NoDesignatorList)
+				(NoDesignatorList) /* epsilon */
 				;
-		
-ActualPars ::= (Actuals) ActualParamList
-			|
-			(NoActuals) /* epsilon */
-			;
-		
-ActualParamList ::= (ActualParams) ActualParamList COMMA Expr
-				|
-				(ActualParam) Expr
-				;
-
-Condition ::= (SingleCondition) CondTerm
-			|
-			(OrCondition) CondTerm OR CondTerm
-			;
-			
-CondTerm ::= (SingleCondFact) CondFact
-			|
-			(AndCondFact) CondFact AND CondFact
-			;
-			
-CondFact ::= (SingleCondFact) Expr
-			|
-			(MultipleCondFact) Expr Relop Expr
-			;
 
 Expr ::= (NegativeExpr) MINUS Term Addop Term
 		|
@@ -236,44 +190,26 @@ Term ::= (TermExpr) Factor:t0 MulOp Factor:t1
 				
 Factor ::=(DisgnatorNoPars) Designator:d
 		|
-		(DisgnatorPars) Designator:func LPAREN ActualPars RPAREN 
-		|
 		(NumConst) NUMBER
+		|
+		(CharConst) CHAR
 		|
 		(TrueConst) TRUE
 		|
 		(FalseConst) False
 		|
-		(CharConst) APOS CHAR APOS /* TODO i u flex CHAR */
-		|
 		(NewFuncExpr) NEW Type:typeName LBRACKET Expr RBRACKET
-		|
-		(NewFuncActPars) NEW Type:typeName LPAREN ActualPars RPAREN
 		|
 		(Expresion) LPAREN Expr RPAREN
 		;
 
-Designator ::= (DesignatorNoBrackets) IDENT:name DOT IDENT:expr
+Designator ::= (DesignatorNoBrackets) IDENT:name IDENT:expr
 			|
-			(DesignatorBrackets) IDENT:name DOT LBRACKET Expr RBRACKET
+			(DesignatorBrackets) IDENT:name LBRACKET Expr RBRACKET
 			;
-
-Label ::= (Label) IDENT;
 
 Assignop ::= (Assignop) ASSIGN;
 
-Relop ::= (Relop) EQUAL
-		|
-		(NEop) NOT_EQUAL
-		|
-		(Greaterop) GREATER
-		|
-		(GreaterEop) GREATER_EQUAL
-		|
-		(Lessop) LESS
-		|
-		(LessEop) LESS_EQUAL
-		;
 
 Addop ::= (Addop) PLUS
 		|
