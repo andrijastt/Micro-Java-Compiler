@@ -57,87 +57,66 @@ terminal SEMI, DOUBLE_DOT, COMMA, DOT;
 terminal LPAREN, RPAREN, LBRACKET, RBRACKET, LBRACE, RBRACE;
 terminal POINTER_LIKE;
 
-nonterminal Program, DeclList, DeclItem, MethodDeclList; 
-nonterminal ConstDeclList, ConstDecl, Const, ConstVal; 
-nonterminal VarDeclList, VarDecl, Var, VarVal, Type, MethodDecl;
+nonterminal Program, ParamList, ParamItem, MethodDeclList; 
+nonterminal ConstDecl, ConstDeclList, Const, ConstVal; 
+nonterminal VarDeclList, VarDecl, Var, VarVal, Type, MethodDecl, MethodVarDecl;
 nonterminal FormPars, FormalParamList, FormalParamDecl, StatementList, Statement;
 nonterminal Designator, Expr, Term, Assignop, Addop, Mulop, Factor;
 nonterminal DesignatorStatement, DesignatorList, NumConstList;
 
-Program ::= (Program) PROG IDENT DeclList LBRACE MethodDeclList RBRACE;
+Program ::= (Program) PROG IDENT ParamList LBRACE MethodDeclList RBRACE;
 
-DeclList ::= (AllDeclarations) DeclItem DeclList 
+ParamList ::= (ParamItemList) ParamList ParamItem
 			|
-			(NoDeclarations) /* epsilon */
-			;
-
-DeclItem ::= (ConstDeclList) ConstDeclList
-			|
-			(VarDeclList) VarDeclList
-			;
-
-ConstDeclList ::= (ConstDeclarations) ConstDecl ConstDeclList 
-			|
-			(NoConstDecl) /* epsilon */
+			(NoParamItem)
 			;
 			
-ConstDecl ::= (ConstDecl) CONST Type:constType Const SEMI;
-
-Const ::= (SingleConst) IDENT:constName ASSIGN ConstVal
-		|
-		(MultipleConst) Const COMMA IDENT:constName ASSIGN ConstVal
-		;
-
-ConstVal ::= (IntVal) NUMBER
-		|
-		(CharVal) CHAR /* TODO i u flex CHAR */
-		|
-		(TrueVal) TRUE
-		|
-		(FalseVal) FALSE
-		;
-
-VarDeclList ::= (VarDeclarations) VarDecl VarDeclList 
+ParamItem ::= (ParamConstList) ConstDecl
 			|
-			(NoVarDecl) /* epsilon */
+			(ParamVarList) VarDecl; 
+
+ConstDecl ::= (ConstDeclaration) CONST Type:constType ConstDeclList SEMI;
+
+ConstDeclList ::= (ConstList) ConstDeclList COMMA Const
+				|
+				(SingleConst) Const
+				;
+				
+Const ::= (Const) IDENT:constName ASSIGN ConstVal;
+			
+
+ConstVal ::= (NumConst) NUMBER
+			|
+			(CharConst) CHAR
+			|
+			(TrueConst) TRUE
+			|
+			(FalseConst) FALSE
 			;
 
-VarDecl ::= (VarDecl) Type:varType Var SEMI;
-
-Var ::= (SingleVar) VarVal
+MethodVarDecl ::= (MethodVarDecls) MethodVarDecl VarDecl
 		|
-		(MultipleVar) Var COMMA VarVal /* Proveri ako mozes na obrnut nacin da zapises */
+		(NoMethodVarDecls)
 		;
 
-VarVal ::= (VarNoBrackets) IDENT:varName 
+VarDecl ::= (VarDeclaration) Type:varType VarDeclList SEMI;
+
+VarDeclList ::= (VarList) VarDeclList COMMA Var
+				|
+				(SingleVar) Var
+				;
+				
+Var ::= (VarNoBrackets) IDENT:varName
 		|
 		(VarBrackets) IDENT:varName LBRACKET RBRACKET
 		;
 
-MethodDeclList ::= (MethodDeclarations) MethodDeclList MethodDecl
+MethodDeclList ::= (MethodDeclarations) MethodDeclList MethodDecl /* mozda nepotrebno */
 				|
 				(NoMethodDecl) /* epsilon */
 				;
 				
-MethodDecl ::= (RetMethodDecl) Type:retType IDENT:methName LPAREN FormPars RPAREN VarDeclList LBRACE StatementList RBRACE
-			|
-			(VoidMethodDecl) VOID IDENT:methName LPAREN FormPars RPAREN VarDeclList LBRACE StatementList RBRACE
-			;
-
-FormPars ::= (FormParams) FormalParamList
-		  |
-		  (NoFormParam) /* epsilon */
-		  ;
-		  
-FormalParamList ::= (FormalParamDecls) FormalParamList COMMA FormalParamDecl
-				|
-				(SingleFormalParamDecl) FormalParamDecl
-				;
-				
-FormalParamDecl ::= (FormalParamBrackets) Type:formType IDENT:formName LBRACKET RBRACKET
-					|
-					(FormalParamNoBrackets) Type:formType IDENT:formName
-					;
+MethodDecl ::= (VoidMethodDecl) VOID IDENT:methName LPAREN RPAREN MethodVarDecl LBRACE StatementList RBRACE;
 
 Type ::= (Type) IDENT:typeName;
 
@@ -154,13 +133,12 @@ Statement ::= (DesignatorStmt) DesignatorStatement SEMI
 		   (ReadStmt) READ LPAREN Designator RPAREN SEMI
 		   |
 		   (PrintStmt) PRINT LPAREN Expr NumConstList RPAREN SEMI
-		   |
-		   (BracketsStms) LBRACKET Statement RBRACKET
 		   ;
-
+		   
 NumConstList ::= (NumConsts) NumConstList COMMA NUMBER
 				|
 				(NoNumConsts) /* epsilon */
+				;
 
 DesignatorStatement ::= (DesignatorAssign) Designator Assignop Expr
 					|
@@ -168,48 +146,47 @@ DesignatorStatement ::= (DesignatorAssign) Designator Assignop Expr
 					|
 					(DesignatorDEC)Designator DEC
 					|
-					(DesignatorBrackets) LBRACKET DesignatorList RBRACKET ASSIGN Designator
+					(DesignatorStatementBrackets) LBRACKET DesignatorList RBRACKET ASSIGN Designator
 					;
 					
 DesignatorList ::= (DesignatorLists) Designator COMMA DesignatorList
 				|
-				(NoDesignatorList) /* epsilon */
-				;
+				(SingleDesignatorList) Designator
+				;		
 
-Expr ::= (NegativeExpr) MINUS Term Addop Term
+Expr ::= (NegativeExpr) MINUS Term Addop Expr
 		|
-		(PositiveExpr) Term Addop Term
+		(PositiveExpr) Term Addop Expr
 		|
-		(SignleExpr) Term
+		(SingleExpr) Term
 		;
 
-Term ::= (TermExpr) Factor:t0 MulOp Factor:t1
+Term ::= (TermExpr) Factor:t0 Mulop Factor:t1
 		|
 		(SignleTerm) Factor:t0
 		;
 				
 Factor ::=(DisgnatorNoPars) Designator:d
 		|
-		(NumConst) NUMBER
+		(NumFactorConst) NUMBER
 		|
-		(CharConst) CHAR
+		(CharFactorConst) CHAR
 		|
-		(TrueConst) TRUE
+		(TrueFactorConst) TRUE
 		|
-		(FalseConst) False
+		(FalseFactorConst) FALSE
 		|
 		(NewFuncExpr) NEW Type:typeName LBRACKET Expr RBRACKET
 		|
-		(Expresion) LPAREN Expr RPAREN
+		(Expression) LPAREN Expr RPAREN
 		;
 
-Designator ::= (DesignatorNoBrackets) IDENT:name IDENT:expr
+Designator ::= (DesignatorNoBrackets) IDENT:name
 			|
 			(DesignatorBrackets) IDENT:name LBRACKET Expr RBRACKET
 			;
-
+	
 Assignop ::= (Assignop) ASSIGN;
-
 
 Addop ::= (Addop) PLUS
 		|
@@ -222,3 +199,4 @@ Mulop ::= (Mulop) MULTIPLY
 		|
 		(Modop) MOD
 		;
+			

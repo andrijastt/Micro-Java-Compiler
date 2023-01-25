@@ -1,11 +1,11 @@
 // generated with ast extension for cup
 // version 0.8
-// 11/0/2023 20:11:55
+// 25/0/2023 18:35:29
 
 
 package rs.ac.bg.etf.pp1.ast;
 
-public class ErrorStmt extends Matched {
+public class ErrorStmt extends Statement {
 
     public ErrorStmt () {
     }

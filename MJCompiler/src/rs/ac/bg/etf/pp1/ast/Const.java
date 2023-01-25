@@ -1,24 +1,53 @@
 // generated with ast extension for cup
 // version 0.8
-// 11/0/2023 20:11:55
+// 25/0/2023 18:35:29
 
 
 package rs.ac.bg.etf.pp1.ast;
 
-public class Const extends Factor {
+public class Const implements SyntaxNode {
 
-    private Integer N1;
+    private SyntaxNode parent;
+    private int line;
+    private String constName;
+    private ConstVal ConstVal;
 
-    public Const (Integer N1) {
-        this.N1=N1;
+    public Const (String constName, ConstVal ConstVal) {
+        this.constName=constName;
+        this.ConstVal=ConstVal;
+        if(ConstVal!=null) ConstVal.setParent(this);
     }
 
-    public Integer getN1() {
-        return N1;
+    public String getConstName() {
+        return constName;
     }
 
-    public void setN1(Integer N1) {
-        this.N1=N1;
+    public void setConstName(String constName) {
+        this.constName=constName;
+    }
+
+    public ConstVal getConstVal() {
+        return ConstVal;
+    }
+
+    public void setConstVal(ConstVal ConstVal) {
+        this.ConstVal=ConstVal;
+    }
+
+    public SyntaxNode getParent() {
+        return parent;
+    }
+
+    public void setParent(SyntaxNode parent) {
+        this.parent=parent;
+    }
+
+    public int getLine() {
+        return line;
+    }
+
+    public void setLine(int line) {
+        this.line=line;
     }
 
     public void accept(Visitor visitor) {
@@ -26,13 +55,16 @@ public class Const extends Factor {
     }
 
     public void childrenAccept(Visitor visitor) {
+        if(ConstVal!=null) ConstVal.accept(visitor);
     }
 
     public void traverseTopDown(Visitor visitor) {
         accept(visitor);
+        if(ConstVal!=null) ConstVal.traverseTopDown(visitor);
     }
 
     public void traverseBottomUp(Visitor visitor) {
+        if(ConstVal!=null) ConstVal.traverseBottomUp(visitor);
         accept(visitor);
     }
 
@@ -41,7 +73,13 @@ public class Const extends Factor {
         buffer.append(tab);
         buffer.append("Const(\n");
 
-        buffer.append(" "+tab+N1);
+        buffer.append(" "+tab+constName);
+        buffer.append("\n");
+
+        if(ConstVal!=null)
+            buffer.append(ConstVal.toString("  "+tab));
+        else
+            buffer.append(tab+"  null");
         buffer.append("\n");
 
         buffer.append(tab);
