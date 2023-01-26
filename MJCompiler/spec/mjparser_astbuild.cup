@@ -9,7 +9,7 @@ import rs.ac.bg.etf.pp1.ast.*;
 parser code {:
 
 	Logger log = Logger.getLogger(getClass());
-   
+   	boolean errorDetected = false;
    
     // slede redefinisani metodi za prijavu gresaka radi izmene teksta poruke
      
@@ -27,6 +27,7 @@ parser code {:
     }
 
     public void report_error(String message, Object info) {
+    	errorDetected = true;
     	StringBuilder msg = new StringBuilder(message); 
     	if (info instanceof Symbol)
             msg.append (" na liniji ").append(((Symbol)info).left);
@@ -36,6 +37,9 @@ parser code {:
 
 :}
 
+init with {:
+	errorDetected = false;
+:}
 
 scan with {:
 	Symbol s = this.getScanner().next_token();
@@ -57,7 +61,6 @@ terminal SEMI, DOUBLE_DOT, COMMA, DOT;
 terminal LPAREN, RPAREN, LBRACKET, RBRACKET, LBRACE, RBRACE;
 terminal POINTER_LIKE;
 
-nonterminal Program Program;
 nonterminal ParamList ParamList;
 nonterminal ParamItem ParamItem;
 nonterminal MethodDeclList MethodDeclList; 
@@ -72,37 +75,36 @@ nonterminal VarDecl VarDecl;
 nonterminal VarSemi VarSemi;
 nonterminal VarComma VarComma;
 nonterminal Var Var;
-nonterminal Type Type;
-nonterminal MethodDecl MethodDecl;
 nonterminal MethodVarDecl MethodVarDecl;
 nonterminal StatementList StatementList;
 nonterminal Statement Statement;
-nonterminal Designator Designator;
-nonterminal Expr Expr;
-nonterminal Term Term;
 nonterminal Assignop Assignop;
 nonterminal Addop Addop;
 nonterminal Mulop Mulop;
-nonterminal Factor Factor;
 nonterminal DesignatorStatement DesignatorStatement;
 nonterminal DesignatorList DesignatorList;
 nonterminal DesignatorTemp DesignatorTemp;
 nonterminal NumConstList NumConstList;
 
-Program ::= (Program) PROG IDENT:I1 ParamList:P2 LBRACE MethodDeclList:M3 RBRACE {: RESULT=new Program(I1, P2, M3); RESULT.setLine(I1left); :};
+nonterminal rs.etf.pp1.symboltable.concepts.Obj ProgName, Program, MethodDecl, MethodType, Designator;
+nonterminal rs.etf.pp1.symboltable.concepts.Struct Type, Term, Factor, Expr;
+
+Program ::= (Program) PROG ProgName:p ParamList:P1 LBRACE MethodDeclList:M2 RBRACE {: RESULT=new Program(p, P1, M2); RESULT.setLine(pleft); :};
+
+ProgName ::= (ProgName) IDENT:progName {: RESULT=new ProgName(progName); RESULT.setLine(progNameleft); :};
 
 ParamList ::= (ParamItemList) ParamList:P1 ParamItem:P2 {: RESULT=new ParamItemList(P1, P2); RESULT.setLine(P1left); :}
 			|
 			(NoParamItem) {: RESULT=new NoParamItem(); :}
 			;
 			
-ParamItem ::= (ParamConstList) ConstDecl:C1 {: RESULT=new ParamConstList(C1); RESULT.setLine(C1left); :}
+ParamItem ::= (ParamConstList) ConstDeclList:constants {: RESULT=new ParamConstList(constants); RESULT.setLine(constantsleft); :}
 			|
-			(ParamVarList) VarDecl:V1 {: RESULT=new ParamVarList(V1); RESULT.setLine(V1left); :}; 
+			(ParamVarList) VarDeclList:variables {: RESULT=new ParamVarList(variables); RESULT.setLine(variablesleft); :}; 
 
-ConstDecl ::= (ConstDeclaration) CONST Type:constType ConstDeclList:C1 {: RESULT=new ConstDeclaration(constType, C1); RESULT.setLine(constTypeleft); :};
+ConstDeclList ::= (ConstDeclaration) CONST Type:constType ConstDecl:C1 {: RESULT=new ConstDeclaration(constType, C1); RESULT.setLine(constTypeleft); :};
 
-ConstDeclList ::= (ConstList) ConstComma:C1 ConstDeclList:C2 {: RESULT=new ConstList(C1, C2); RESULT.setLine(C1left); :}
+ConstDecl ::= (ConstList) ConstComma:C1 ConstDecl:C2 {: RESULT=new ConstList(C1, C2); RESULT.setLine(C1left); :}
 				|
 				(SingleConst) ConstSemi:C1 {: RESULT=new SingleConst(C1); RESULT.setLine(C1left); :}
 				;
@@ -130,14 +132,14 @@ ConstVal ::= (NumConst) NUMBER:N1 {: RESULT=new NumConst(N1); RESULT.setLine(N1l
 			(FalseConst) FALSE {: RESULT=new FalseConst(); :}
 			;
 
-MethodVarDecl ::= (MethodVarDecls) MethodVarDecl:M1 VarDecl:V2 {: RESULT=new MethodVarDecls(M1, V2); RESULT.setLine(M1left); :}
+MethodVarDecl ::= (MethodVarDecls) MethodVarDecl:M1 VarDeclList:V2 {: RESULT=new MethodVarDecls(M1, V2); RESULT.setLine(M1left); :}
 		|
 		(NoMethodVarDecls) {: RESULT=new NoMethodVarDecls(); :}
 		;
 
-VarDecl ::= (VarDeclaration) Type:varType VarDeclList:V1 {: RESULT=new VarDeclaration(varType, V1); RESULT.setLine(varTypeleft); :};
+VarDeclList ::= (VarDeclaration) Type:varType VarDecl:V1 {: RESULT=new VarDeclaration(varType, V1); RESULT.setLine(varTypeleft); :};
 
-VarDeclList ::= (VarList) VarComma:V1 VarDeclList:V2 {: RESULT=new VarList(V1, V2); RESULT.setLine(V1left); :}
+VarDecl ::= (VarList) VarComma:V1 VarDecl:V2 {: RESULT=new VarList(V1, V2); RESULT.setLine(V1left); :}
 				|
 				(SingleVar) VarSemi:V1 {: RESULT=new SingleVar(V1); RESULT.setLine(V1left); :}
 				;
@@ -164,7 +166,9 @@ MethodDeclList ::= (MethodDeclarations) MethodDeclList:M1 MethodDecl:M2 {: RESUL
 				(NoMethodDecl) {: RESULT=new NoMethodDecl(); :} /* epsilon */
 				;
 				
-MethodDecl ::= (VoidMethodDecl) VOID IDENT:methName LPAREN RPAREN MethodVarDecl:M1 LBRACE StatementList:S2 RBRACE {: RESULT=new VoidMethodDecl(methName, M1, S2); RESULT.setLine(methNameleft); :};
+MethodDecl ::= (VoidMethodDecl) MethodType:M1 LPAREN RPAREN MethodVarDecl:M2 LBRACE StatementList:S3 RBRACE {: RESULT=new VoidMethodDecl(M1, M2, S3); RESULT.setLine(M1left); :};
+
+MethodType ::= (MethodType) VOID IDENT:methName {: RESULT=new MethodType(methName); RESULT.setLine(methNameleft); :};
 
 Type ::= (Type) IDENT:typeName {: RESULT=new Type(typeName); RESULT.setLine(typeNameleft); :};
 

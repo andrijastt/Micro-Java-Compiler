@@ -1,25 +1,25 @@
 // generated with ast extension for cup
 // version 0.8
-// 25/0/2023 21:54:29
+// 26/0/2023 17:24:39
 
 
 package rs.ac.bg.etf.pp1.ast;
 
 public class ParamVarList extends ParamItem {
 
-    private VarDecl VarDecl;
+    private VarDeclList VarDeclList;
 
-    public ParamVarList (VarDecl VarDecl) {
-        this.VarDecl=VarDecl;
-        if(VarDecl!=null) VarDecl.setParent(this);
+    public ParamVarList (VarDeclList VarDeclList) {
+        this.VarDeclList=VarDeclList;
+        if(VarDeclList!=null) VarDeclList.setParent(this);
     }
 
-    public VarDecl getVarDecl() {
-        return VarDecl;
+    public VarDeclList getVarDeclList() {
+        return VarDeclList;
     }
 
-    public void setVarDecl(VarDecl VarDecl) {
-        this.VarDecl=VarDecl;
+    public void setVarDeclList(VarDeclList VarDeclList) {
+        this.VarDeclList=VarDeclList;
     }
 
     public void accept(Visitor visitor) {
@@ -27,16 +27,16 @@ public class ParamVarList extends ParamItem {
     }
 
     public void childrenAccept(Visitor visitor) {
-        if(VarDecl!=null) VarDecl.accept(visitor);
+        if(VarDeclList!=null) VarDeclList.accept(visitor);
     }
 
     public void traverseTopDown(Visitor visitor) {
         accept(visitor);
-        if(VarDecl!=null) VarDecl.traverseTopDown(visitor);
+        if(VarDeclList!=null) VarDeclList.traverseTopDown(visitor);
     }
 
     public void traverseBottomUp(Visitor visitor) {
-        if(VarDecl!=null) VarDecl.traverseBottomUp(visitor);
+        if(VarDeclList!=null) VarDeclList.traverseBottomUp(visitor);
         accept(visitor);
     }
 
@@ -45,8 +45,8 @@ public class ParamVarList extends ParamItem {
         buffer.append(tab);
         buffer.append("ParamVarList(\n");
 
-        if(VarDecl!=null)
-            buffer.append(VarDecl.toString("  "+tab));
+        if(VarDeclList!=null)
+            buffer.append(VarDeclList.toString("  "+tab));
         else
             buffer.append(tab+"  null");
         buffer.append("\n");

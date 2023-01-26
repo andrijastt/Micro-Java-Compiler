@@ -1,25 +1,25 @@
 // generated with ast extension for cup
 // version 0.8
-// 25/0/2023 21:54:29
+// 26/0/2023 17:24:39
 
 
 package rs.ac.bg.etf.pp1.ast;
 
 public class ParamConstList extends ParamItem {
 
-    private ConstDecl ConstDecl;
+    private ConstDeclList ConstDeclList;
 
-    public ParamConstList (ConstDecl ConstDecl) {
-        this.ConstDecl=ConstDecl;
-        if(ConstDecl!=null) ConstDecl.setParent(this);
+    public ParamConstList (ConstDeclList ConstDeclList) {
+        this.ConstDeclList=ConstDeclList;
+        if(ConstDeclList!=null) ConstDeclList.setParent(this);
     }
 
-    public ConstDecl getConstDecl() {
-        return ConstDecl;
+    public ConstDeclList getConstDeclList() {
+        return ConstDeclList;
     }
 
-    public void setConstDecl(ConstDecl ConstDecl) {
-        this.ConstDecl=ConstDecl;
+    public void setConstDeclList(ConstDeclList ConstDeclList) {
+        this.ConstDeclList=ConstDeclList;
     }
 
     public void accept(Visitor visitor) {
@@ -27,16 +27,16 @@ public class ParamConstList extends ParamItem {
     }
 
     public void childrenAccept(Visitor visitor) {
-        if(ConstDecl!=null) ConstDecl.accept(visitor);
+        if(ConstDeclList!=null) ConstDeclList.accept(visitor);
     }
 
     public void traverseTopDown(Visitor visitor) {
         accept(visitor);
-        if(ConstDecl!=null) ConstDecl.traverseTopDown(visitor);
+        if(ConstDeclList!=null) ConstDeclList.traverseTopDown(visitor);
     }
 
     public void traverseBottomUp(Visitor visitor) {
-        if(ConstDecl!=null) ConstDecl.traverseBottomUp(visitor);
+        if(ConstDeclList!=null) ConstDeclList.traverseBottomUp(visitor);
         accept(visitor);
     }
 
@@ -45,8 +45,8 @@ public class ParamConstList extends ParamItem {
         buffer.append(tab);
         buffer.append("ParamConstList(\n");
 
-        if(ConstDecl!=null)
-            buffer.append(ConstDecl.toString("  "+tab));
+        if(ConstDeclList!=null)
+            buffer.append(ConstDeclList.toString("  "+tab));
         else
             buffer.append(tab+"  null");
         buffer.append("\n");

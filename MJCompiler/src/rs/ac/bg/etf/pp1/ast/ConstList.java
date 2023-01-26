@@ -1,20 +1,20 @@
 // generated with ast extension for cup
 // version 0.8
-// 25/0/2023 21:54:29
+// 26/0/2023 17:24:39
 
 
 package rs.ac.bg.etf.pp1.ast;
 
-public class ConstList extends ConstDeclList {
+public class ConstList extends ConstDecl {
 
     private ConstComma ConstComma;
-    private ConstDeclList ConstDeclList;
+    private ConstDecl ConstDecl;
 
-    public ConstList (ConstComma ConstComma, ConstDeclList ConstDeclList) {
+    public ConstList (ConstComma ConstComma, ConstDecl ConstDecl) {
         this.ConstComma=ConstComma;
         if(ConstComma!=null) ConstComma.setParent(this);
-        this.ConstDeclList=ConstDeclList;
-        if(ConstDeclList!=null) ConstDeclList.setParent(this);
+        this.ConstDecl=ConstDecl;
+        if(ConstDecl!=null) ConstDecl.setParent(this);
     }
 
     public ConstComma getConstComma() {
@@ -25,12 +25,12 @@ public class ConstList extends ConstDeclList {
         this.ConstComma=ConstComma;
     }
 
-    public ConstDeclList getConstDeclList() {
-        return ConstDeclList;
+    public ConstDecl getConstDecl() {
+        return ConstDecl;
     }
 
-    public void setConstDeclList(ConstDeclList ConstDeclList) {
-        this.ConstDeclList=ConstDeclList;
+    public void setConstDecl(ConstDecl ConstDecl) {
+        this.ConstDecl=ConstDecl;
     }
 
     public void accept(Visitor visitor) {
@@ -39,18 +39,18 @@ public class ConstList extends ConstDeclList {
 
     public void childrenAccept(Visitor visitor) {
         if(ConstComma!=null) ConstComma.accept(visitor);
-        if(ConstDeclList!=null) ConstDeclList.accept(visitor);
+        if(ConstDecl!=null) ConstDecl.accept(visitor);
     }
 
     public void traverseTopDown(Visitor visitor) {
         accept(visitor);
         if(ConstComma!=null) ConstComma.traverseTopDown(visitor);
-        if(ConstDeclList!=null) ConstDeclList.traverseTopDown(visitor);
+        if(ConstDecl!=null) ConstDecl.traverseTopDown(visitor);
     }
 
     public void traverseBottomUp(Visitor visitor) {
         if(ConstComma!=null) ConstComma.traverseBottomUp(visitor);
-        if(ConstDeclList!=null) ConstDeclList.traverseBottomUp(visitor);
+        if(ConstDecl!=null) ConstDecl.traverseBottomUp(visitor);
         accept(visitor);
     }
 
@@ -65,8 +65,8 @@ public class ConstList extends ConstDeclList {
             buffer.append(tab+"  null");
         buffer.append("\n");
 
-        if(ConstDeclList!=null)
-            buffer.append(ConstDeclList.toString("  "+tab));
+        if(ConstDecl!=null)
+            buffer.append(ConstDecl.toString("  "+tab));
         else
             buffer.append(tab+"  null");
         buffer.append("\n");

@@ -1,30 +1,31 @@
 // generated with ast extension for cup
 // version 0.8
-// 25/0/2023 21:54:29
+// 26/0/2023 17:24:39
 
 
 package rs.ac.bg.etf.pp1.ast;
 
 public class VoidMethodDecl extends MethodDecl {
 
-    private String methName;
+    private MethodType MethodType;
     private MethodVarDecl MethodVarDecl;
     private StatementList StatementList;
 
-    public VoidMethodDecl (String methName, MethodVarDecl MethodVarDecl, StatementList StatementList) {
-        this.methName=methName;
+    public VoidMethodDecl (MethodType MethodType, MethodVarDecl MethodVarDecl, StatementList StatementList) {
+        this.MethodType=MethodType;
+        if(MethodType!=null) MethodType.setParent(this);
         this.MethodVarDecl=MethodVarDecl;
         if(MethodVarDecl!=null) MethodVarDecl.setParent(this);
         this.StatementList=StatementList;
         if(StatementList!=null) StatementList.setParent(this);
     }
 
-    public String getMethName() {
-        return methName;
+    public MethodType getMethodType() {
+        return MethodType;
     }
 
-    public void setMethName(String methName) {
-        this.methName=methName;
+    public void setMethodType(MethodType MethodType) {
+        this.MethodType=MethodType;
     }
 
     public MethodVarDecl getMethodVarDecl() {
@@ -48,17 +49,20 @@ public class VoidMethodDecl extends MethodDecl {
     }
 
     public void childrenAccept(Visitor visitor) {
+        if(MethodType!=null) MethodType.accept(visitor);
         if(MethodVarDecl!=null) MethodVarDecl.accept(visitor);
         if(StatementList!=null) StatementList.accept(visitor);
     }
 
     public void traverseTopDown(Visitor visitor) {
         accept(visitor);
+        if(MethodType!=null) MethodType.traverseTopDown(visitor);
         if(MethodVarDecl!=null) MethodVarDecl.traverseTopDown(visitor);
         if(StatementList!=null) StatementList.traverseTopDown(visitor);
     }
 
     public void traverseBottomUp(Visitor visitor) {
+        if(MethodType!=null) MethodType.traverseBottomUp(visitor);
         if(MethodVarDecl!=null) MethodVarDecl.traverseBottomUp(visitor);
         if(StatementList!=null) StatementList.traverseBottomUp(visitor);
         accept(visitor);
@@ -69,7 +73,10 @@ public class VoidMethodDecl extends MethodDecl {
         buffer.append(tab);
         buffer.append("VoidMethodDecl(\n");
 
-        buffer.append(" "+tab+methName);
+        if(MethodType!=null)
+            buffer.append(MethodType.toString("  "+tab));
+        else
+            buffer.append(tab+"  null");
         buffer.append("\n");
 
         if(MethodVarDecl!=null)

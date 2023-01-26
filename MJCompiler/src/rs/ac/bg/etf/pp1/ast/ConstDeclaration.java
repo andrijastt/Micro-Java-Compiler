@@ -1,20 +1,20 @@
 // generated with ast extension for cup
 // version 0.8
-// 25/0/2023 21:54:29
+// 26/0/2023 17:24:39
 
 
 package rs.ac.bg.etf.pp1.ast;
 
-public class ConstDeclaration extends ConstDecl {
+public class ConstDeclaration extends ConstDeclList {
 
     private Type Type;
-    private ConstDeclList ConstDeclList;
+    private ConstDecl ConstDecl;
 
-    public ConstDeclaration (Type Type, ConstDeclList ConstDeclList) {
+    public ConstDeclaration (Type Type, ConstDecl ConstDecl) {
         this.Type=Type;
         if(Type!=null) Type.setParent(this);
-        this.ConstDeclList=ConstDeclList;
-        if(ConstDeclList!=null) ConstDeclList.setParent(this);
+        this.ConstDecl=ConstDecl;
+        if(ConstDecl!=null) ConstDecl.setParent(this);
     }
 
     public Type getType() {
@@ -25,12 +25,12 @@ public class ConstDeclaration extends ConstDecl {
         this.Type=Type;
     }
 
-    public ConstDeclList getConstDeclList() {
-        return ConstDeclList;
+    public ConstDecl getConstDecl() {
+        return ConstDecl;
     }
 
-    public void setConstDeclList(ConstDeclList ConstDeclList) {
-        this.ConstDeclList=ConstDeclList;
+    public void setConstDecl(ConstDecl ConstDecl) {
+        this.ConstDecl=ConstDecl;
     }
 
     public void accept(Visitor visitor) {
@@ -39,18 +39,18 @@ public class ConstDeclaration extends ConstDecl {
 
     public void childrenAccept(Visitor visitor) {
         if(Type!=null) Type.accept(visitor);
-        if(ConstDeclList!=null) ConstDeclList.accept(visitor);
+        if(ConstDecl!=null) ConstDecl.accept(visitor);
     }
 
     public void traverseTopDown(Visitor visitor) {
         accept(visitor);
         if(Type!=null) Type.traverseTopDown(visitor);
-        if(ConstDeclList!=null) ConstDeclList.traverseTopDown(visitor);
+        if(ConstDecl!=null) ConstDecl.traverseTopDown(visitor);
     }
 
     public void traverseBottomUp(Visitor visitor) {
         if(Type!=null) Type.traverseBottomUp(visitor);
-        if(ConstDeclList!=null) ConstDeclList.traverseBottomUp(visitor);
+        if(ConstDecl!=null) ConstDecl.traverseBottomUp(visitor);
         accept(visitor);
     }
 
@@ -65,8 +65,8 @@ public class ConstDeclaration extends ConstDecl {
             buffer.append(tab+"  null");
         buffer.append("\n");
 
-        if(ConstDeclList!=null)
-            buffer.append(ConstDeclList.toString("  "+tab));
+        if(ConstDecl!=null)
+            buffer.append(ConstDecl.toString("  "+tab));
         else
             buffer.append(tab+"  null");
         buffer.append("\n");

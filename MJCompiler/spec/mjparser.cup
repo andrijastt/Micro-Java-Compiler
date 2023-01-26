@@ -9,7 +9,7 @@ import rs.ac.bg.etf.pp1.ast.*;
 parser code {:
 
 	Logger log = Logger.getLogger(getClass());
-   
+   	boolean errorDetected = false;
    
     // slede redefinisani metodi za prijavu gresaka radi izmene teksta poruke
      
@@ -27,6 +27,7 @@ parser code {:
     }
 
     public void report_error(String message, Object info) {
+    	errorDetected = true;
     	StringBuilder msg = new StringBuilder(message); 
     	if (info instanceof Symbol)
             msg.append (" na liniji ").append(((Symbol)info).left);
@@ -36,6 +37,9 @@ parser code {:
 
 :}
 
+init with {:
+	errorDetected = false;
+:}
 
 scan with {:
 	Symbol s = this.getScanner().next_token();
@@ -57,27 +61,32 @@ terminal SEMI, DOUBLE_DOT, COMMA, DOT;
 terminal LPAREN, RPAREN, LBRACKET, RBRACKET, LBRACE, RBRACE;
 terminal POINTER_LIKE;
 
-nonterminal Program, ParamList, ParamItem, MethodDeclList; 
+nonterminal ParamList, ParamItem, MethodDeclList; 
 nonterminal ConstDecl, ConstDeclList, Const, ConstVal, ConstComma, ConstSemi; 
-nonterminal VarDeclList, VarDecl, VarSemi, VarComma, Var, Type, MethodDecl, MethodVarDecl;
+nonterminal VarDeclList, VarDecl, VarSemi, VarComma, Var, MethodVarDecl;
 nonterminal StatementList, Statement;
-nonterminal Designator, Expr, Term, Assignop, Addop, Mulop, Factor;
+nonterminal Assignop, Addop, Mulop;
 nonterminal DesignatorStatement, DesignatorList, DesignatorTemp, NumConstList;
 
-Program ::= (Program) PROG IDENT ParamList LBRACE MethodDeclList RBRACE;
+nonterminal rs.etf.pp1.symboltable.concepts.Obj ProgName, Program, MethodDecl, MethodType, Designator;
+nonterminal rs.etf.pp1.symboltable.concepts.Struct Type, Term, Factor, Expr;
+
+Program ::= (Program) PROG ProgName:p ParamList LBRACE MethodDeclList RBRACE;
+
+ProgName ::= (ProgName) IDENT:progName;
 
 ParamList ::= (ParamItemList) ParamList ParamItem
 			|
 			(NoParamItem)
 			;
 			
-ParamItem ::= (ParamConstList) ConstDecl
+ParamItem ::= (ParamConstList) ConstDeclList:constants
 			|
-			(ParamVarList) VarDecl; 
+			(ParamVarList) VarDeclList:variables; 
 
-ConstDecl ::= (ConstDeclaration) CONST Type:constType ConstDeclList;
+ConstDeclList ::= (ConstDeclaration) CONST Type:constType ConstDecl;
 
-ConstDeclList ::= (ConstList) ConstComma ConstDeclList
+ConstDecl ::= (ConstList) ConstComma ConstDecl
 				|
 				(SingleConst) ConstSemi
 				;
@@ -105,14 +114,14 @@ ConstVal ::= (NumConst) NUMBER
 			(FalseConst) FALSE
 			;
 
-MethodVarDecl ::= (MethodVarDecls) MethodVarDecl VarDecl
+MethodVarDecl ::= (MethodVarDecls) MethodVarDecl VarDeclList
 		|
 		(NoMethodVarDecls)
 		;
 
-VarDecl ::= (VarDeclaration) Type:varType VarDeclList;
+VarDeclList ::= (VarDeclaration) Type:varType VarDecl;
 
-VarDeclList ::= (VarList) VarComma VarDeclList
+VarDecl ::= (VarList) VarComma VarDecl
 				|
 				(SingleVar) VarSemi
 				;
@@ -139,7 +148,9 @@ MethodDeclList ::= (MethodDeclarations) MethodDeclList MethodDecl /* mozda nepot
 				(NoMethodDecl) /* epsilon */
 				;
 				
-MethodDecl ::= (VoidMethodDecl) VOID IDENT:methName LPAREN RPAREN MethodVarDecl LBRACE StatementList RBRACE;
+MethodDecl ::= (VoidMethodDecl) MethodType LPAREN RPAREN MethodVarDecl LBRACE StatementList RBRACE;
+
+MethodType ::= (MethodType) VOID IDENT:methName;
 
 Type ::= (Type) IDENT:typeName;
 

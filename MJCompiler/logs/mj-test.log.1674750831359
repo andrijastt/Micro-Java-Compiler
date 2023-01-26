@@ -1,0 +1,1322 @@
+INFO  17:33:28,146 - Compiling source file: C:\Users\Andrija Stojanovic\Documents\PP1\Micro-Java-Compiler\MJCompiler\test\test301.mj
+INFO  17:33:28,178 - #2 program
+INFO  17:33:28,178 - #21 test301
+INFO  17:33:28,178 - #3 const
+INFO  17:33:28,179 - #21 int
+INFO  17:33:28,179 - #21 nula
+INFO  17:33:28,180 - #37 =
+INFO  17:33:28,180 - #20 0
+INFO  17:33:28,180 - #38 ;
+INFO  17:33:28,181 - #3 const
+INFO  17:33:28,182 - #21 int
+INFO  17:33:28,182 - #21 jedan
+INFO  17:33:28,182 - #37 =
+INFO  17:33:28,182 - #20 1
+INFO  17:33:28,182 - #38 ;
+INFO  17:33:28,183 - #3 const
+INFO  17:33:28,183 - #21 int
+INFO  17:33:28,183 - #21 pet
+INFO  17:33:28,183 - #37 =
+INFO  17:33:28,183 - #20 5
+INFO  17:33:28,183 - #38 ;
+INFO  17:33:28,185 - #21 int
+INFO  17:33:28,186 - #21 niz
+INFO  17:33:28,186 - #44 [
+INFO  17:33:28,186 - #45 ]
+INFO  17:33:28,186 - #40 ,
+INFO  17:33:28,187 - #21 niz2
+INFO  17:33:28,187 - #44 [
+INFO  17:33:28,188 - #45 ]
+INFO  17:33:28,188 - #40 ,
+INFO  17:33:28,188 - #21 a
+INFO  17:33:28,188 - #40 ,
+INFO  17:33:28,189 - #21 b
+INFO  17:33:28,189 - #38 ;
+INFO  17:33:28,189 - #21 char
+INFO  17:33:28,190 - #21 nizch
+INFO  17:33:28,191 - #44 [
+INFO  17:33:28,191 - #45 ]
+INFO  17:33:28,192 - #38 ;
+INFO  17:33:28,192 - #46 {
+INFO  17:33:28,192 - #14 void
+INFO  17:33:28,193 - #21 main
+INFO  17:33:28,194 - #42 (
+INFO  17:33:28,197 - #43 )
+INFO  17:33:28,197 - #21 int
+INFO  17:33:28,203 - #21 bodovi
+INFO  17:33:28,204 - #38 ;
+INFO  17:33:28,204 - #21 bool
+INFO  17:33:28,206 - #21 bt
+INFO  17:33:28,206 - #38 ;
+INFO  17:33:28,207 - #46 {
+INFO  17:33:28,207 - #21 bodovi
+INFO  17:33:28,208 - #37 =
+INFO  17:33:28,209 - #20 0
+INFO  17:33:28,211 - #38 ;
+INFO  17:33:28,213 - #21 bodovi
+INFO  17:33:28,214 - #35 ++
+INFO  17:33:28,214 - #38 ;
+INFO  17:33:28,215 - #21 bodovi
+INFO  17:33:28,216 - #37 =
+INFO  17:33:28,216 - #21 bodovi
+INFO  17:33:28,216 - #22 +
+INFO  17:33:28,216 - #21 jedan
+INFO  17:33:28,218 - #38 ;
+INFO  17:33:28,219 - #21 bodovi
+INFO  17:33:28,219 - #37 =
+INFO  17:33:28,219 - #21 bodovi
+INFO  17:33:28,219 - #24 *
+INFO  17:33:28,220 - #21 pet
+INFO  17:33:28,220 - #38 ;
+INFO  17:33:28,221 - #21 bodovi
+INFO  17:33:28,221 - #36 --
+INFO  17:33:28,221 - #38 ;
+INFO  17:33:28,221 - #11 print
+INFO  17:33:28,221 - #42 (
+INFO  17:33:28,222 - #21 bodovi
+INFO  17:33:28,222 - #43 )
+INFO  17:33:28,224 - #38 ;
+INFO  17:33:28,225 - #21 niz
+INFO  17:33:28,225 - #37 =
+INFO  17:33:28,225 - #10 new
+INFO  17:33:28,225 - #21 int
+INFO  17:33:28,225 - #44 [
+INFO  17:33:28,226 - #20 3
+INFO  17:33:28,226 - #45 ]
+INFO  17:33:28,226 - #38 ;
+INFO  17:33:28,226 - #21 niz
+INFO  17:33:28,227 - #44 [
+INFO  17:33:28,227 - #21 nula
+INFO  17:33:28,227 - #45 ]
+INFO  17:33:28,227 - #37 =
+INFO  17:33:28,228 - #21 jedan
+INFO  17:33:28,228 - #38 ;
+INFO  17:33:28,229 - #21 niz
+INFO  17:33:28,230 - #44 [
+INFO  17:33:28,230 - #20 1
+INFO  17:33:28,230 - #45 ]
+INFO  17:33:28,231 - #37 =
+INFO  17:33:28,231 - #20 2
+INFO  17:33:28,231 - #38 ;
+INFO  17:33:28,232 - #21 niz
+INFO  17:33:28,233 - #44 [
+INFO  17:33:28,233 - #21 niz
+INFO  17:33:28,233 - #44 [
+INFO  17:33:28,234 - #21 jedan
+INFO  17:33:28,235 - #45 ]
+INFO  17:33:28,235 - #45 ]
+INFO  17:33:28,236 - #37 =
+INFO  17:33:28,236 - #21 niz
+INFO  17:33:28,236 - #44 [
+INFO  17:33:28,236 - #21 niz
+INFO  17:33:28,236 - #44 [
+INFO  17:33:28,236 - #20 0
+INFO  17:33:28,237 - #45 ]
+INFO  17:33:28,237 - #45 ]
+INFO  17:33:28,237 - #24 *
+INFO  17:33:28,238 - #20 3
+INFO  17:33:28,238 - #38 ;
+INFO  17:33:28,238 - #21 bodovi
+INFO  17:33:28,239 - #37 =
+INFO  17:33:28,239 - #21 niz
+INFO  17:33:28,239 - #44 [
+INFO  17:33:28,240 - #20 2
+INFO  17:33:28,240 - #45 ]
+INFO  17:33:28,240 - #25 /
+INFO  17:33:28,240 - #21 niz
+INFO  17:33:28,242 - #44 [
+INFO  17:33:28,242 - #20 0
+INFO  17:33:28,242 - #45 ]
+INFO  17:33:28,243 - #38 ;
+INFO  17:33:28,243 - #11 print
+INFO  17:33:28,243 - #42 (
+INFO  17:33:28,244 - #21 bodovi
+INFO  17:33:28,244 - #43 )
+INFO  17:33:28,244 - #38 ;
+INFO  17:33:28,244 - #11 print
+INFO  17:33:28,245 - #42 (
+INFO  17:33:28,245 - #21 niz
+INFO  17:33:28,246 - #44 [
+INFO  17:33:28,246 - #20 2
+INFO  17:33:28,246 - #45 ]
+INFO  17:33:28,246 - #43 )
+INFO  17:33:28,246 - #38 ;
+INFO  17:33:28,246 - #44 [
+INFO  17:33:28,246 - #21 a
+INFO  17:33:28,247 - #40 ,
+INFO  17:33:28,247 - #21 b
+INFO  17:33:28,248 - #45 ]
+INFO  17:33:28,248 - #37 =
+INFO  17:33:28,248 - #21 niz
+INFO  17:33:28,248 - #38 ;
+INFO  17:33:28,249 - #11 print
+INFO  17:33:28,249 - #42 (
+INFO  17:33:28,249 - #21 a
+INFO  17:33:28,249 - #43 )
+INFO  17:33:28,249 - #38 ;
+INFO  17:33:28,249 - #11 print
+INFO  17:33:28,249 - #42 (
+INFO  17:33:28,249 - #21 b
+INFO  17:33:28,249 - #43 )
+INFO  17:33:28,250 - #38 ;
+INFO  17:33:28,250 - #44 [
+INFO  17:33:28,250 - #40 ,
+INFO  17:33:28,251 - #21 a
+INFO  17:33:28,252 - #40 ,
+INFO  17:33:28,252 - #45 ]
+INFO  17:33:28,252 - #37 =
+INFO  17:33:28,252 - #21 niz
+INFO  17:33:28,252 - #38 ;
+INFO  17:33:28,252 - #11 print
+INFO  17:33:28,252 - #42 (
+INFO  17:33:28,252 - #21 a
+INFO  17:33:28,253 - #43 )
+INFO  17:33:28,253 - #38 ;
+INFO  17:33:28,254 - #21 niz2
+INFO  17:33:28,255 - #37 =
+INFO  17:33:28,255 - #10 new
+INFO  17:33:28,255 - #21 int
+INFO  17:33:28,256 - #44 [
+INFO  17:33:28,256 - #20 2
+INFO  17:33:28,256 - #45 ]
+INFO  17:33:28,256 - #38 ;
+INFO  17:33:28,256 - #44 [
+INFO  17:33:28,256 - #21 niz2
+INFO  17:33:28,257 - #44 [
+INFO  17:33:28,257 - #20 0
+INFO  17:33:28,258 - #45 ]
+INFO  17:33:28,258 - #40 ,
+INFO  17:33:28,258 - #40 ,
+INFO  17:33:28,258 - #21 niz2
+INFO  17:33:28,258 - #44 [
+INFO  17:33:28,258 - #21 niz
+INFO  17:33:28,264 - #44 [
+INFO  17:33:28,264 - #21 nula
+INFO  17:33:28,264 - #45 ]
+INFO  17:33:28,265 - #45 ]
+INFO  17:33:28,265 - #45 ]
+INFO  17:33:28,265 - #37 =
+INFO  17:33:28,265 - #21 niz
+INFO  17:33:28,265 - #38 ;
+INFO  17:33:28,265 - #11 print
+INFO  17:33:28,266 - #42 (
+INFO  17:33:28,266 - #21 niz2
+INFO  17:33:28,266 - #44 [
+INFO  17:33:28,267 - #20 0
+INFO  17:33:28,267 - #45 ]
+INFO  17:33:28,267 - #43 )
+INFO  17:33:28,267 - #38 ;
+INFO  17:33:28,267 - #11 print
+INFO  17:33:28,268 - #42 (
+INFO  17:33:28,268 - #21 niz2
+INFO  17:33:28,268 - #44 [
+INFO  17:33:28,268 - #20 1
+INFO  17:33:28,268 - #45 ]
+INFO  17:33:28,268 - #43 )
+INFO  17:33:28,269 - #38 ;
+INFO  17:33:28,269 - #21 nizch
+INFO  17:33:28,269 - #37 =
+INFO  17:33:28,269 - #10 new
+INFO  17:33:28,270 - #21 char
+INFO  17:33:28,270 - #44 [
+INFO  17:33:28,270 - #20 3
+INFO  17:33:28,270 - #45 ]
+INFO  17:33:28,270 - #38 ;
+INFO  17:33:28,271 - #21 nizch
+INFO  17:33:28,271 - #44 [
+INFO  17:33:28,271 - #20 0
+INFO  17:33:28,272 - #45 ]
+INFO  17:33:28,272 - #37 =
+INFO  17:33:28,272 - #19 a
+INFO  17:33:28,272 - #38 ;
+INFO  17:33:28,273 - #21 nizch
+INFO  17:33:28,273 - #44 [
+INFO  17:33:28,274 - #21 jedan
+INFO  17:33:28,274 - #45 ]
+INFO  17:33:28,274 - #37 =
+INFO  17:33:28,274 - #19 b
+INFO  17:33:28,274 - #38 ;
+INFO  17:33:28,274 - #21 nizch
+INFO  17:33:28,274 - #44 [
+INFO  17:33:28,275 - #21 pet
+INFO  17:33:28,275 - #23 -
+INFO  17:33:28,275 - #20 3
+INFO  17:33:28,277 - #45 ]
+INFO  17:33:28,278 - #37 =
+INFO  17:33:28,278 - #19 c
+INFO  17:33:28,278 - #38 ;
+INFO  17:33:28,278 - #11 print
+INFO  17:33:28,278 - #42 (
+INFO  17:33:28,278 - #21 nizch
+INFO  17:33:28,278 - #44 [
+INFO  17:33:28,278 - #20 1
+INFO  17:33:28,278 - #45 ]
+INFO  17:33:28,278 - #43 )
+INFO  17:33:28,279 - #38 ;
+INFO  17:33:28,279 - #11 print
+INFO  17:33:28,279 - #42 (
+INFO  17:33:28,279 - #21 nizch
+INFO  17:33:28,279 - #44 [
+INFO  17:33:28,279 - #21 jedan
+INFO  17:33:28,280 - #24 *
+INFO  17:33:28,280 - #20 2
+INFO  17:33:28,280 - #45 ]
+INFO  17:33:28,280 - #43 )
+INFO  17:33:28,280 - #38 ;
+INFO  17:33:28,280 - #12 read
+INFO  17:33:28,280 - #42 (
+INFO  17:33:28,280 - #21 bodovi
+INFO  17:33:28,280 - #43 )
+INFO  17:33:28,281 - #38 ;
+INFO  17:33:28,281 - #21 bodovi
+INFO  17:33:28,282 - #37 =
+INFO  17:33:28,282 - #23 -
+INFO  17:33:28,282 - #21 bodovi
+INFO  17:33:28,282 - #22 +
+INFO  17:33:28,282 - #42 (
+INFO  17:33:28,282 - #21 pet
+INFO  17:33:28,282 - #24 *
+INFO  17:33:28,282 - #21 a
+INFO  17:33:28,282 - #25 /
+INFO  17:33:28,283 - #20 2
+INFO  17:33:28,283 - #23 -
+INFO  17:33:28,283 - #21 jedan
+INFO  17:33:28,283 - #43 )
+INFO  17:33:28,283 - #24 *
+INFO  17:33:28,283 - #21 bodovi
+INFO  17:33:28,283 - #23 -
+INFO  17:33:28,283 - #42 (
+INFO  17:33:28,284 - #20 3
+INFO  17:33:28,284 - #26 %
+INFO  17:33:28,284 - #20 2
+INFO  17:33:28,285 - #22 +
+INFO  17:33:28,285 - #20 3
+INFO  17:33:28,285 - #24 *
+INFO  17:33:28,285 - #20 2
+INFO  17:33:28,285 - #23 -
+INFO  17:33:28,285 - #20 3
+INFO  17:33:28,285 - #43 )
+INFO  17:33:28,286 - #38 ;
+INFO  17:33:28,286 - #11 print
+INFO  17:33:28,286 - #42 (
+INFO  17:33:28,286 - #21 bodovi
+INFO  17:33:28,286 - #43 )
+INFO  17:33:28,286 - #38 ;
+INFO  17:33:28,286 - #47 }
+INFO  17:33:28,286 - #47 }
+INFO  17:33:28,302 - Program(
+  ProgName(
+   test301
+  ) [ProgName]
+  ParamItemList(
+    ParamItemList(
+      ParamItemList(
+        ParamItemList(
+          ParamItemList(
+            NoParamItem(
+            ) [NoParamItem]
+            ParamConstList(
+              ConstDeclaration(
+                Type(
+                 int
+                ) [Type]
+                SingleConst(
+                  SemiConst(
+                    Const(
+                     nula
+                      NumConst(
+                       0
+                      ) [NumConst]
+                    ) [Const]
+                  ) [SemiConst]
+                ) [SingleConst]
+              ) [ConstDeclaration]
+            ) [ParamConstList]
+          ) [ParamItemList]
+          ParamConstList(
+            ConstDeclaration(
+              Type(
+               int
+              ) [Type]
+              SingleConst(
+                SemiConst(
+                  Const(
+                   jedan
+                    NumConst(
+                     1
+                    ) [NumConst]
+                  ) [Const]
+                ) [SemiConst]
+              ) [SingleConst]
+            ) [ConstDeclaration]
+          ) [ParamConstList]
+        ) [ParamItemList]
+        ParamConstList(
+          ConstDeclaration(
+            Type(
+             int
+            ) [Type]
+            SingleConst(
+              SemiConst(
+                Const(
+                 pet
+                  NumConst(
+                   5
+                  ) [NumConst]
+                ) [Const]
+              ) [SemiConst]
+            ) [SingleConst]
+          ) [ConstDeclaration]
+        ) [ParamConstList]
+      ) [ParamItemList]
+      ParamVarList(
+        VarDeclaration(
+          Type(
+           int
+          ) [Type]
+          VarList(
+            CommaVar(
+              VarBrackets(
+               niz
+              ) [VarBrackets]
+            ) [CommaVar]
+            VarList(
+              CommaVar(
+                VarBrackets(
+                 niz2
+                ) [VarBrackets]
+              ) [CommaVar]
+              VarList(
+                CommaVar(
+                  VarNoBrackets(
+                   a
+                  ) [VarNoBrackets]
+                ) [CommaVar]
+                SingleVar(
+                  SemiVar(
+                    VarNoBrackets(
+                     b
+                    ) [VarNoBrackets]
+                  ) [SemiVar]
+                ) [SingleVar]
+              ) [VarList]
+            ) [VarList]
+          ) [VarList]
+        ) [VarDeclaration]
+      ) [ParamVarList]
+    ) [ParamItemList]
+    ParamVarList(
+      VarDeclaration(
+        Type(
+         char
+        ) [Type]
+        SingleVar(
+          SemiVar(
+            VarBrackets(
+             nizch
+            ) [VarBrackets]
+          ) [SemiVar]
+        ) [SingleVar]
+      ) [VarDeclaration]
+    ) [ParamVarList]
+  ) [ParamItemList]
+  MethodDeclarations(
+    NoMethodDecl(
+    ) [NoMethodDecl]
+    VoidMethodDecl(
+      MethodType(
+       main
+      ) [MethodType]
+      MethodVarDecls(
+        MethodVarDecls(
+          NoMethodVarDecls(
+          ) [NoMethodVarDecls]
+          VarDeclaration(
+            Type(
+             int
+            ) [Type]
+            SingleVar(
+              SemiVar(
+                VarNoBrackets(
+                 bodovi
+                ) [VarNoBrackets]
+              ) [SemiVar]
+            ) [SingleVar]
+          ) [VarDeclaration]
+        ) [MethodVarDecls]
+        VarDeclaration(
+          Type(
+           bool
+          ) [Type]
+          SingleVar(
+            SemiVar(
+              VarNoBrackets(
+               bt
+              ) [VarNoBrackets]
+            ) [SemiVar]
+          ) [SingleVar]
+        ) [VarDeclaration]
+      ) [MethodVarDecls]
+      Statements(
+        Statements(
+          Statements(
+            Statements(
+              Statements(
+                Statements(
+                  Statements(
+                    Statements(
+                      Statements(
+                        Statements(
+                          Statements(
+                            Statements(
+                              Statements(
+                                Statements(
+                                  Statements(
+                                    Statements(
+                                      Statements(
+                                        Statements(
+                                          Statements(
+                                            Statements(
+                                              Statements(
+                                                Statements(
+                                                  Statements(
+                                                    Statements(
+                                                      Statements(
+                                                        Statements(
+                                                          Statements(
+                                                            Statements(
+                                                              Statements(
+                                                                Statements(
+                                                                  Statements(
+                                                                    NoStmt(
+                                                                    ) [NoStmt]
+                                                                    DesignatorStmt(
+                                                                      DesignatorAssign(
+                                                                        DesignatorNoBrackets(
+                                                                         bodovi
+                                                                        ) [DesignatorNoBrackets]
+                                                                        Assignop(
+                                                                        ) [Assignop]
+                                                                        SingleExpr(
+                                                                          SignleTerm(
+                                                                            NumFactorConst(
+                                                                             0
+                                                                            ) [NumFactorConst]
+                                                                          ) [SignleTerm]
+                                                                        ) [SingleExpr]
+                                                                      ) [DesignatorAssign]
+                                                                    ) [DesignatorStmt]
+                                                                  ) [Statements]
+                                                                  DesignatorStmt(
+                                                                    DesignatorINC(
+                                                                      DesignatorNoBrackets(
+                                                                       bodovi
+                                                                      ) [DesignatorNoBrackets]
+                                                                    ) [DesignatorINC]
+                                                                  ) [DesignatorStmt]
+                                                                ) [Statements]
+                                                                DesignatorStmt(
+                                                                  DesignatorAssign(
+                                                                    DesignatorNoBrackets(
+                                                                     bodovi
+                                                                    ) [DesignatorNoBrackets]
+                                                                    Assignop(
+                                                                    ) [Assignop]
+                                                                    PositiveExpr(
+                                                                      SignleTerm(
+                                                                        DisgnatorNoPars(
+                                                                          DesignatorNoBrackets(
+                                                                           bodovi
+                                                                          ) [DesignatorNoBrackets]
+                                                                        ) [DisgnatorNoPars]
+                                                                      ) [SignleTerm]
+                                                                      Addop(
+                                                                      ) [Addop]
+                                                                      SingleExpr(
+                                                                        SignleTerm(
+                                                                          DisgnatorNoPars(
+                                                                            DesignatorNoBrackets(
+                                                                             jedan
+                                                                            ) [DesignatorNoBrackets]
+                                                                          ) [DisgnatorNoPars]
+                                                                        ) [SignleTerm]
+                                                                      ) [SingleExpr]
+                                                                    ) [PositiveExpr]
+                                                                  ) [DesignatorAssign]
+                                                                ) [DesignatorStmt]
+                                                              ) [Statements]
+                                                              DesignatorStmt(
+                                                                DesignatorAssign(
+                                                                  DesignatorNoBrackets(
+                                                                   bodovi
+                                                                  ) [DesignatorNoBrackets]
+                                                                  Assignop(
+                                                                  ) [Assignop]
+                                                                  SingleExpr(
+                                                                    TermExpr(
+                                                                      DisgnatorNoPars(
+                                                                        DesignatorNoBrackets(
+                                                                         bodovi
+                                                                        ) [DesignatorNoBrackets]
+                                                                      ) [DisgnatorNoPars]
+                                                                      Mulop(
+                                                                      ) [Mulop]
+                                                                      SignleTerm(
+                                                                        DisgnatorNoPars(
+                                                                          DesignatorNoBrackets(
+                                                                           pet
+                                                                          ) [DesignatorNoBrackets]
+                                                                        ) [DisgnatorNoPars]
+                                                                      ) [SignleTerm]
+                                                                    ) [TermExpr]
+                                                                  ) [SingleExpr]
+                                                                ) [DesignatorAssign]
+                                                              ) [DesignatorStmt]
+                                                            ) [Statements]
+                                                            DesignatorStmt(
+                                                              DesignatorDEC(
+                                                                DesignatorNoBrackets(
+                                                                 bodovi
+                                                                ) [DesignatorNoBrackets]
+                                                              ) [DesignatorDEC]
+                                                            ) [DesignatorStmt]
+                                                          ) [Statements]
+                                                          PrintStmt(
+                                                            SingleExpr(
+                                                              SignleTerm(
+                                                                DisgnatorNoPars(
+                                                                  DesignatorNoBrackets(
+                                                                   bodovi
+                                                                  ) [DesignatorNoBrackets]
+                                                                ) [DisgnatorNoPars]
+                                                              ) [SignleTerm]
+                                                            ) [SingleExpr]
+                                                            NoNumConsts(
+                                                            ) [NoNumConsts]
+                                                          ) [PrintStmt]
+                                                        ) [Statements]
+                                                        DesignatorStmt(
+                                                          DesignatorAssign(
+                                                            DesignatorNoBrackets(
+                                                             niz
+                                                            ) [DesignatorNoBrackets]
+                                                            Assignop(
+                                                            ) [Assignop]
+                                                            SingleExpr(
+                                                              SignleTerm(
+                                                                NewFuncExpr(
+                                                                  Type(
+                                                                   int
+                                                                  ) [Type]
+                                                                  SingleExpr(
+                                                                    SignleTerm(
+                                                                      NumFactorConst(
+                                                                       3
+                                                                      ) [NumFactorConst]
+                                                                    ) [SignleTerm]
+                                                                  ) [SingleExpr]
+                                                                ) [NewFuncExpr]
+                                                              ) [SignleTerm]
+                                                            ) [SingleExpr]
+                                                          ) [DesignatorAssign]
+                                                        ) [DesignatorStmt]
+                                                      ) [Statements]
+                                                      DesignatorStmt(
+                                                        DesignatorAssign(
+                                                          DesignatorBrackets(
+                                                           niz
+                                                            SingleExpr(
+                                                              SignleTerm(
+                                                                DisgnatorNoPars(
+                                                                  DesignatorNoBrackets(
+                                                                   nula
+                                                                  ) [DesignatorNoBrackets]
+                                                                ) [DisgnatorNoPars]
+                                                              ) [SignleTerm]
+                                                            ) [SingleExpr]
+                                                          ) [DesignatorBrackets]
+                                                          Assignop(
+                                                          ) [Assignop]
+                                                          SingleExpr(
+                                                            SignleTerm(
+                                                              DisgnatorNoPars(
+                                                                DesignatorNoBrackets(
+                                                                 jedan
+                                                                ) [DesignatorNoBrackets]
+                                                              ) [DisgnatorNoPars]
+                                                            ) [SignleTerm]
+                                                          ) [SingleExpr]
+                                                        ) [DesignatorAssign]
+                                                      ) [DesignatorStmt]
+                                                    ) [Statements]
+                                                    DesignatorStmt(
+                                                      DesignatorAssign(
+                                                        DesignatorBrackets(
+                                                         niz
+                                                          SingleExpr(
+                                                            SignleTerm(
+                                                              NumFactorConst(
+                                                               1
+                                                              ) [NumFactorConst]
+                                                            ) [SignleTerm]
+                                                          ) [SingleExpr]
+                                                        ) [DesignatorBrackets]
+                                                        Assignop(
+                                                        ) [Assignop]
+                                                        SingleExpr(
+                                                          SignleTerm(
+                                                            NumFactorConst(
+                                                             2
+                                                            ) [NumFactorConst]
+                                                          ) [SignleTerm]
+                                                        ) [SingleExpr]
+                                                      ) [DesignatorAssign]
+                                                    ) [DesignatorStmt]
+                                                  ) [Statements]
+                                                  DesignatorStmt(
+                                                    DesignatorAssign(
+                                                      DesignatorBrackets(
+                                                       niz
+                                                        SingleExpr(
+                                                          SignleTerm(
+                                                            DisgnatorNoPars(
+                                                              DesignatorBrackets(
+                                                               niz
+                                                                SingleExpr(
+                                                                  SignleTerm(
+                                                                    DisgnatorNoPars(
+                                                                      DesignatorNoBrackets(
+                                                                       jedan
+                                                                      ) [DesignatorNoBrackets]
+                                                                    ) [DisgnatorNoPars]
+                                                                  ) [SignleTerm]
+                                                                ) [SingleExpr]
+                                                              ) [DesignatorBrackets]
+                                                            ) [DisgnatorNoPars]
+                                                          ) [SignleTerm]
+                                                        ) [SingleExpr]
+                                                      ) [DesignatorBrackets]
+                                                      Assignop(
+                                                      ) [Assignop]
+                                                      SingleExpr(
+                                                        TermExpr(
+                                                          DisgnatorNoPars(
+                                                            DesignatorBrackets(
+                                                             niz
+                                                              SingleExpr(
+                                                                SignleTerm(
+                                                                  DisgnatorNoPars(
+                                                                    DesignatorBrackets(
+                                                                     niz
+                                                                      SingleExpr(
+                                                                        SignleTerm(
+                                                                          NumFactorConst(
+                                                                           0
+                                                                          ) [NumFactorConst]
+                                                                        ) [SignleTerm]
+                                                                      ) [SingleExpr]
+                                                                    ) [DesignatorBrackets]
+                                                                  ) [DisgnatorNoPars]
+                                                                ) [SignleTerm]
+                                                              ) [SingleExpr]
+                                                            ) [DesignatorBrackets]
+                                                          ) [DisgnatorNoPars]
+                                                          Mulop(
+                                                          ) [Mulop]
+                                                          SignleTerm(
+                                                            NumFactorConst(
+                                                             3
+                                                            ) [NumFactorConst]
+                                                          ) [SignleTerm]
+                                                        ) [TermExpr]
+                                                      ) [SingleExpr]
+                                                    ) [DesignatorAssign]
+                                                  ) [DesignatorStmt]
+                                                ) [Statements]
+                                                DesignatorStmt(
+                                                  DesignatorAssign(
+                                                    DesignatorNoBrackets(
+                                                     bodovi
+                                                    ) [DesignatorNoBrackets]
+                                                    Assignop(
+                                                    ) [Assignop]
+                                                    SingleExpr(
+                                                      TermExpr(
+                                                        DisgnatorNoPars(
+                                                          DesignatorBrackets(
+                                                           niz
+                                                            SingleExpr(
+                                                              SignleTerm(
+                                                                NumFactorConst(
+                                                                 2
+                                                                ) [NumFactorConst]
+                                                              ) [SignleTerm]
+                                                            ) [SingleExpr]
+                                                          ) [DesignatorBrackets]
+                                                        ) [DisgnatorNoPars]
+                                                        Divop(
+                                                        ) [Divop]
+                                                        SignleTerm(
+                                                          DisgnatorNoPars(
+                                                            DesignatorBrackets(
+                                                             niz
+                                                              SingleExpr(
+                                                                SignleTerm(
+                                                                  NumFactorConst(
+                                                                   0
+                                                                  ) [NumFactorConst]
+                                                                ) [SignleTerm]
+                                                              ) [SingleExpr]
+                                                            ) [DesignatorBrackets]
+                                                          ) [DisgnatorNoPars]
+                                                        ) [SignleTerm]
+                                                      ) [TermExpr]
+                                                    ) [SingleExpr]
+                                                  ) [DesignatorAssign]
+                                                ) [DesignatorStmt]
+                                              ) [Statements]
+                                              PrintStmt(
+                                                SingleExpr(
+                                                  SignleTerm(
+                                                    DisgnatorNoPars(
+                                                      DesignatorNoBrackets(
+                                                       bodovi
+                                                      ) [DesignatorNoBrackets]
+                                                    ) [DisgnatorNoPars]
+                                                  ) [SignleTerm]
+                                                ) [SingleExpr]
+                                                NoNumConsts(
+                                                ) [NoNumConsts]
+                                              ) [PrintStmt]
+                                            ) [Statements]
+                                            PrintStmt(
+                                              SingleExpr(
+                                                SignleTerm(
+                                                  DisgnatorNoPars(
+                                                    DesignatorBrackets(
+                                                     niz
+                                                      SingleExpr(
+                                                        SignleTerm(
+                                                          NumFactorConst(
+                                                           2
+                                                          ) [NumFactorConst]
+                                                        ) [SignleTerm]
+                                                      ) [SingleExpr]
+                                                    ) [DesignatorBrackets]
+                                                  ) [DisgnatorNoPars]
+                                                ) [SignleTerm]
+                                              ) [SingleExpr]
+                                              NoNumConsts(
+                                              ) [NoNumConsts]
+                                            ) [PrintStmt]
+                                          ) [Statements]
+                                          DesignatorStmt(
+                                            DesignatorStatementBrackets(
+                                              DesignatorLists(
+                                                SingleDesignatorList(
+                                                  DesignatroTemp(
+                                                    DesignatorNoBrackets(
+                                                     a
+                                                    ) [DesignatorNoBrackets]
+                                                  ) [DesignatroTemp]
+                                                ) [SingleDesignatorList]
+                                                DesignatroTemp(
+                                                  DesignatorNoBrackets(
+                                                   b
+                                                  ) [DesignatorNoBrackets]
+                                                ) [DesignatroTemp]
+                                              ) [DesignatorLists]
+                                              DesignatorNoBrackets(
+                                               niz
+                                              ) [DesignatorNoBrackets]
+                                            ) [DesignatorStatementBrackets]
+                                          ) [DesignatorStmt]
+                                        ) [Statements]
+                                        PrintStmt(
+                                          SingleExpr(
+                                            SignleTerm(
+                                              DisgnatorNoPars(
+                                                DesignatorNoBrackets(
+                                                 a
+                                                ) [DesignatorNoBrackets]
+                                              ) [DisgnatorNoPars]
+                                            ) [SignleTerm]
+                                          ) [SingleExpr]
+                                          NoNumConsts(
+                                          ) [NoNumConsts]
+                                        ) [PrintStmt]
+                                      ) [Statements]
+                                      PrintStmt(
+                                        SingleExpr(
+                                          SignleTerm(
+                                            DisgnatorNoPars(
+                                              DesignatorNoBrackets(
+                                               b
+                                              ) [DesignatorNoBrackets]
+                                            ) [DisgnatorNoPars]
+                                          ) [SignleTerm]
+                                        ) [SingleExpr]
+                                        NoNumConsts(
+                                        ) [NoNumConsts]
+                                      ) [PrintStmt]
+                                    ) [Statements]
+                                    DesignatorStmt(
+                                      DesignatorStatementBrackets(
+                                        DesignatorLists(
+                                          DesignatorLists(
+                                            SingleDesignatorList(
+                                              NoDesignatroTemp(
+                                              ) [NoDesignatroTemp]
+                                            ) [SingleDesignatorList]
+                                            DesignatroTemp(
+                                              DesignatorNoBrackets(
+                                               a
+                                              ) [DesignatorNoBrackets]
+                                            ) [DesignatroTemp]
+                                          ) [DesignatorLists]
+                                          NoDesignatroTemp(
+                                          ) [NoDesignatroTemp]
+                                        ) [DesignatorLists]
+                                        DesignatorNoBrackets(
+                                         niz
+                                        ) [DesignatorNoBrackets]
+                                      ) [DesignatorStatementBrackets]
+                                    ) [DesignatorStmt]
+                                  ) [Statements]
+                                  PrintStmt(
+                                    SingleExpr(
+                                      SignleTerm(
+                                        DisgnatorNoPars(
+                                          DesignatorNoBrackets(
+                                           a
+                                          ) [DesignatorNoBrackets]
+                                        ) [DisgnatorNoPars]
+                                      ) [SignleTerm]
+                                    ) [SingleExpr]
+                                    NoNumConsts(
+                                    ) [NoNumConsts]
+                                  ) [PrintStmt]
+                                ) [Statements]
+                                DesignatorStmt(
+                                  DesignatorAssign(
+                                    DesignatorNoBrackets(
+                                     niz2
+                                    ) [DesignatorNoBrackets]
+                                    Assignop(
+                                    ) [Assignop]
+                                    SingleExpr(
+                                      SignleTerm(
+                                        NewFuncExpr(
+                                          Type(
+                                           int
+                                          ) [Type]
+                                          SingleExpr(
+                                            SignleTerm(
+                                              NumFactorConst(
+                                               2
+                                              ) [NumFactorConst]
+                                            ) [SignleTerm]
+                                          ) [SingleExpr]
+                                        ) [NewFuncExpr]
+                                      ) [SignleTerm]
+                                    ) [SingleExpr]
+                                  ) [DesignatorAssign]
+                                ) [DesignatorStmt]
+                              ) [Statements]
+                              DesignatorStmt(
+                                DesignatorStatementBrackets(
+                                  DesignatorLists(
+                                    DesignatorLists(
+                                      SingleDesignatorList(
+                                        DesignatroTemp(
+                                          DesignatorBrackets(
+                                           niz2
+                                            SingleExpr(
+                                              SignleTerm(
+                                                NumFactorConst(
+                                                 0
+                                                ) [NumFactorConst]
+                                              ) [SignleTerm]
+                                            ) [SingleExpr]
+                                          ) [DesignatorBrackets]
+                                        ) [DesignatroTemp]
+                                      ) [SingleDesignatorList]
+                                      NoDesignatroTemp(
+                                      ) [NoDesignatroTemp]
+                                    ) [DesignatorLists]
+                                    DesignatroTemp(
+                                      DesignatorBrackets(
+                                       niz2
+                                        SingleExpr(
+                                          SignleTerm(
+                                            DisgnatorNoPars(
+                                              DesignatorBrackets(
+                                               niz
+                                                SingleExpr(
+                                                  SignleTerm(
+                                                    DisgnatorNoPars(
+                                                      DesignatorNoBrackets(
+                                                       nula
+                                                      ) [DesignatorNoBrackets]
+                                                    ) [DisgnatorNoPars]
+                                                  ) [SignleTerm]
+                                                ) [SingleExpr]
+                                              ) [DesignatorBrackets]
+                                            ) [DisgnatorNoPars]
+                                          ) [SignleTerm]
+                                        ) [SingleExpr]
+                                      ) [DesignatorBrackets]
+                                    ) [DesignatroTemp]
+                                  ) [DesignatorLists]
+                                  DesignatorNoBrackets(
+                                   niz
+                                  ) [DesignatorNoBrackets]
+                                ) [DesignatorStatementBrackets]
+                              ) [DesignatorStmt]
+                            ) [Statements]
+                            PrintStmt(
+                              SingleExpr(
+                                SignleTerm(
+                                  DisgnatorNoPars(
+                                    DesignatorBrackets(
+                                     niz2
+                                      SingleExpr(
+                                        SignleTerm(
+                                          NumFactorConst(
+                                           0
+                                          ) [NumFactorConst]
+                                        ) [SignleTerm]
+                                      ) [SingleExpr]
+                                    ) [DesignatorBrackets]
+                                  ) [DisgnatorNoPars]
+                                ) [SignleTerm]
+                              ) [SingleExpr]
+                              NoNumConsts(
+                              ) [NoNumConsts]
+                            ) [PrintStmt]
+                          ) [Statements]
+                          PrintStmt(
+                            SingleExpr(
+                              SignleTerm(
+                                DisgnatorNoPars(
+                                  DesignatorBrackets(
+                                   niz2
+                                    SingleExpr(
+                                      SignleTerm(
+                                        NumFactorConst(
+                                         1
+                                        ) [NumFactorConst]
+                                      ) [SignleTerm]
+                                    ) [SingleExpr]
+                                  ) [DesignatorBrackets]
+                                ) [DisgnatorNoPars]
+                              ) [SignleTerm]
+                            ) [SingleExpr]
+                            NoNumConsts(
+                            ) [NoNumConsts]
+                          ) [PrintStmt]
+                        ) [Statements]
+                        DesignatorStmt(
+                          DesignatorAssign(
+                            DesignatorNoBrackets(
+                             nizch
+                            ) [DesignatorNoBrackets]
+                            Assignop(
+                            ) [Assignop]
+                            SingleExpr(
+                              SignleTerm(
+                                NewFuncExpr(
+                                  Type(
+                                   char
+                                  ) [Type]
+                                  SingleExpr(
+                                    SignleTerm(
+                                      NumFactorConst(
+                                       3
+                                      ) [NumFactorConst]
+                                    ) [SignleTerm]
+                                  ) [SingleExpr]
+                                ) [NewFuncExpr]
+                              ) [SignleTerm]
+                            ) [SingleExpr]
+                          ) [DesignatorAssign]
+                        ) [DesignatorStmt]
+                      ) [Statements]
+                      DesignatorStmt(
+                        DesignatorAssign(
+                          DesignatorBrackets(
+                           nizch
+                            SingleExpr(
+                              SignleTerm(
+                                NumFactorConst(
+                                 0
+                                ) [NumFactorConst]
+                              ) [SignleTerm]
+                            ) [SingleExpr]
+                          ) [DesignatorBrackets]
+                          Assignop(
+                          ) [Assignop]
+                          SingleExpr(
+                            SignleTerm(
+                              CharFactorConst(
+                              ) [CharFactorConst]
+                            ) [SignleTerm]
+                          ) [SingleExpr]
+                        ) [DesignatorAssign]
+                      ) [DesignatorStmt]
+                    ) [Statements]
+                    DesignatorStmt(
+                      DesignatorAssign(
+                        DesignatorBrackets(
+                         nizch
+                          SingleExpr(
+                            SignleTerm(
+                              DisgnatorNoPars(
+                                DesignatorNoBrackets(
+                                 jedan
+                                ) [DesignatorNoBrackets]
+                              ) [DisgnatorNoPars]
+                            ) [SignleTerm]
+                          ) [SingleExpr]
+                        ) [DesignatorBrackets]
+                        Assignop(
+                        ) [Assignop]
+                        SingleExpr(
+                          SignleTerm(
+                            CharFactorConst(
+                            ) [CharFactorConst]
+                          ) [SignleTerm]
+                        ) [SingleExpr]
+                      ) [DesignatorAssign]
+                    ) [DesignatorStmt]
+                  ) [Statements]
+                  DesignatorStmt(
+                    DesignatorAssign(
+                      DesignatorBrackets(
+                       nizch
+                        PositiveExpr(
+                          SignleTerm(
+                            DisgnatorNoPars(
+                              DesignatorNoBrackets(
+                               pet
+                              ) [DesignatorNoBrackets]
+                            ) [DisgnatorNoPars]
+                          ) [SignleTerm]
+                          Minusop(
+                          ) [Minusop]
+                          SingleExpr(
+                            SignleTerm(
+                              NumFactorConst(
+                               3
+                              ) [NumFactorConst]
+                            ) [SignleTerm]
+                          ) [SingleExpr]
+                        ) [PositiveExpr]
+                      ) [DesignatorBrackets]
+                      Assignop(
+                      ) [Assignop]
+                      SingleExpr(
+                        SignleTerm(
+                          CharFactorConst(
+                          ) [CharFactorConst]
+                        ) [SignleTerm]
+                      ) [SingleExpr]
+                    ) [DesignatorAssign]
+                  ) [DesignatorStmt]
+                ) [Statements]
+                PrintStmt(
+                  SingleExpr(
+                    SignleTerm(
+                      DisgnatorNoPars(
+                        DesignatorBrackets(
+                         nizch
+                          SingleExpr(
+                            SignleTerm(
+                              NumFactorConst(
+                               1
+                              ) [NumFactorConst]
+                            ) [SignleTerm]
+                          ) [SingleExpr]
+                        ) [DesignatorBrackets]
+                      ) [DisgnatorNoPars]
+                    ) [SignleTerm]
+                  ) [SingleExpr]
+                  NoNumConsts(
+                  ) [NoNumConsts]
+                ) [PrintStmt]
+              ) [Statements]
+              PrintStmt(
+                SingleExpr(
+                  SignleTerm(
+                    DisgnatorNoPars(
+                      DesignatorBrackets(
+                       nizch
+                        SingleExpr(
+                          TermExpr(
+                            DisgnatorNoPars(
+                              DesignatorNoBrackets(
+                               jedan
+                              ) [DesignatorNoBrackets]
+                            ) [DisgnatorNoPars]
+                            Mulop(
+                            ) [Mulop]
+                            SignleTerm(
+                              NumFactorConst(
+                               2
+                              ) [NumFactorConst]
+                            ) [SignleTerm]
+                          ) [TermExpr]
+                        ) [SingleExpr]
+                      ) [DesignatorBrackets]
+                    ) [DisgnatorNoPars]
+                  ) [SignleTerm]
+                ) [SingleExpr]
+                NoNumConsts(
+                ) [NoNumConsts]
+              ) [PrintStmt]
+            ) [Statements]
+            ReadStmt(
+              DesignatorNoBrackets(
+               bodovi
+              ) [DesignatorNoBrackets]
+            ) [ReadStmt]
+          ) [Statements]
+          DesignatorStmt(
+            DesignatorAssign(
+              DesignatorNoBrackets(
+               bodovi
+              ) [DesignatorNoBrackets]
+              Assignop(
+              ) [Assignop]
+              NegativeExpr(
+                SignleTerm(
+                  DisgnatorNoPars(
+                    DesignatorNoBrackets(
+                     bodovi
+                    ) [DesignatorNoBrackets]
+                  ) [DisgnatorNoPars]
+                ) [SignleTerm]
+                Addop(
+                ) [Addop]
+                PositiveExpr(
+                  TermExpr(
+                    Expression(
+                      PositiveExpr(
+                        TermExpr(
+                          DisgnatorNoPars(
+                            DesignatorNoBrackets(
+                             pet
+                            ) [DesignatorNoBrackets]
+                          ) [DisgnatorNoPars]
+                          Mulop(
+                          ) [Mulop]
+                          TermExpr(
+                            DisgnatorNoPars(
+                              DesignatorNoBrackets(
+                               a
+                              ) [DesignatorNoBrackets]
+                            ) [DisgnatorNoPars]
+                            Divop(
+                            ) [Divop]
+                            SignleTerm(
+                              NumFactorConst(
+                               2
+                              ) [NumFactorConst]
+                            ) [SignleTerm]
+                          ) [TermExpr]
+                        ) [TermExpr]
+                        Minusop(
+                        ) [Minusop]
+                        SingleExpr(
+                          SignleTerm(
+                            DisgnatorNoPars(
+                              DesignatorNoBrackets(
+                               jedan
+                              ) [DesignatorNoBrackets]
+                            ) [DisgnatorNoPars]
+                          ) [SignleTerm]
+                        ) [SingleExpr]
+                      ) [PositiveExpr]
+                    ) [Expression]
+                    Mulop(
+                    ) [Mulop]
+                    SignleTerm(
+                      DisgnatorNoPars(
+                        DesignatorNoBrackets(
+                         bodovi
+                        ) [DesignatorNoBrackets]
+                      ) [DisgnatorNoPars]
+                    ) [SignleTerm]
+                  ) [TermExpr]
+                  Minusop(
+                  ) [Minusop]
+                  SingleExpr(
+                    SignleTerm(
+                      Expression(
+                        PositiveExpr(
+                          TermExpr(
+                            NumFactorConst(
+                             3
+                            ) [NumFactorConst]
+                            Modop(
+                            ) [Modop]
+                            SignleTerm(
+                              NumFactorConst(
+                               2
+                              ) [NumFactorConst]
+                            ) [SignleTerm]
+                          ) [TermExpr]
+                          Addop(
+                          ) [Addop]
+                          PositiveExpr(
+                            TermExpr(
+                              NumFactorConst(
+                               3
+                              ) [NumFactorConst]
+                              Mulop(
+                              ) [Mulop]
+                              SignleTerm(
+                                NumFactorConst(
+                                 2
+                                ) [NumFactorConst]
+                              ) [SignleTerm]
+                            ) [TermExpr]
+                            Minusop(
+                            ) [Minusop]
+                            SingleExpr(
+                              SignleTerm(
+                                NumFactorConst(
+                                 3
+                                ) [NumFactorConst]
+                              ) [SignleTerm]
+                            ) [SingleExpr]
+                          ) [PositiveExpr]
+                        ) [PositiveExpr]
+                      ) [Expression]
+                    ) [SignleTerm]
+                  ) [SingleExpr]
+                ) [PositiveExpr]
+              ) [NegativeExpr]
+            ) [DesignatorAssign]
+          ) [DesignatorStmt]
+        ) [Statements]
+        PrintStmt(
+          SingleExpr(
+            SignleTerm(
+              DisgnatorNoPars(
+                DesignatorNoBrackets(
+                 bodovi
+                ) [DesignatorNoBrackets]
+              ) [DisgnatorNoPars]
+            ) [SignleTerm]
+          ) [SingleExpr]
+          NoNumConsts(
+          ) [NoNumConsts]
+        ) [PrintStmt]
+      ) [Statements]
+    ) [VoidMethodDecl]
+  ) [MethodDeclarations]
+) [Program]
+INFO  17:33:28,305 - ===================================
+INFO  17:33:28,309 - Function: main on line 13
+ERROR 17:33:28,310 - Not found type bool in symbol table!
