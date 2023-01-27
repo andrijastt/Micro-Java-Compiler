@@ -50,13 +50,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     }
     
     public void visit(Designator designator) {
-//    	Obj obj = Tab.find(designator.getName()); ovako se nalazi 
-//    	if(obj == Tab.noObj) {
-//    		report_error("Error on line " + designator.getLine() + " name: " + designator.getName() + "not declared! ", null);
-//    	}
-//    	designator.obj = obj;
-    	
-    	
+    	report_info("Designator", designator); 
     }
     
     public void visit(MethodDecl methodDecl) {
@@ -75,7 +69,6 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     public void visit(ParamList paramList) { report_info("ParamList", paramList); }
     
     public void visit(ParamItem paramItem){
-//		Obj varNode = Tab.insert(Obj.Var, paramItem.get, paramItem.getType().struct); // ovako se dodaje promenljiva
     	report_info("ParamItem", paramItem); 
 	}
     
@@ -100,8 +93,27 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     public void visit(Minusop Minusop) { report_info("Minusop", Minusop); }
     public void visit(Addop Addop) { report_info("Addop", Addop); }
     public void visit(Assignop Assignop) { report_info("Assignop", Assignop); }
-    public void visit(DesignatorBrackets DesignatorBrackets) { report_info("DesignatorBrackets", DesignatorBrackets); }
-    public void visit(DesignatorNoBrackets DesignatorNoBrackets) { report_info("DesignatorNoBrackets", DesignatorNoBrackets); }
+    
+    public void visit(DesignatorBrackets designatorBrackets) { 
+    	
+    	Obj obj = Tab.find(designatorBrackets.getName());  
+    	if(obj == Tab.noObj) {
+    		report_error("Error on line " + designatorBrackets.getLine() + " name: " + designatorBrackets.getName() + "not declared! ", null);
+    	}
+    	designatorBrackets.obj = obj;
+    	report_info("DesignatorBrackets found: " + designatorBrackets.getName(), designatorBrackets);
+    }
+    
+    public void visit(DesignatorNoBrackets designatorNoBrackets) {
+    	
+    	Obj obj = Tab.find(designatorNoBrackets.getName());  
+    	if(obj == Tab.noObj) {
+    		report_error("Error on line " + designatorNoBrackets.getLine() + " name: " + designatorNoBrackets.getName() + "not declared! ", null);
+    	}
+    	designatorNoBrackets.obj = obj;
+    	report_info("DesignatorNoBrackets found: " + designatorNoBrackets.getName(), designatorNoBrackets);
+    }
+    
     public void visit(Expression Expression) { report_info("Expression", Expression); }
     public void visit(NewFuncExpr NewFuncExpr) { report_info("NewFuncExpr", NewFuncExpr); }
     public void visit(FalseFactorConst FalseFactorConst) { report_info("FalseFactorConst", FalseFactorConst); }
@@ -114,7 +126,6 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     public void visit(SingleNegativeExpr SingleNegativeExpr) { report_info("SingleNegativeExpr", SingleNegativeExpr); }
     public void visit(SingleExpr SingleExpr) { report_info("SingleExpr", SingleExpr); }
     public void visit(PositiveExpr PositiveExpr) { report_info("PositiveExpr", PositiveExpr); }
-    public void visit(NegativeExpr NegativeExpr) { report_info("NegativeExpr", NegativeExpr); }
     public void visit(SingleDesignatorList SingleDesignatorList) { report_info("SingleDesignatorList", SingleDesignatorList); }
     public void visit(DesignatorLists DesignatorLists) { report_info("DesignatorLists", DesignatorLists); }
     public void visit(NoDesignatorTemp NoDesignatorTemp) { report_info("NoDesignatorTemp", NoDesignatorTemp); }
@@ -137,8 +148,16 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     public void visit(NoStmt NoStmt) { report_info("NoStmt", NoStmt); }
     public void visit(Statements Statements) { report_info("Statements", Statements); }
     
+    /**
+     * Checks if there is an type in table, if there isn't returns error.
+     */
     public void visit(Type type) {
+    
     	Obj typeNode = Tab.find(type.getTypeName());
+    	
+    	if(type.getTypeName().equals("bool")) {
+    		typeNode = Tab.find("int");
+    	}
     	
     	if(typeNode == Tab.noObj) {
     		report_error("Not found type " + type.getTypeName() + " in symbol table!", null);
@@ -156,12 +175,12 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     }
     
     public void visit(MethodType methodType) {
-//    	currentMethod = Tab.insert(Obj.Meth, methodType.getMethName(), null); // null == void?
-//    	methodType.obj = currentMethod;
-//    	Tab.openScope();
-//    	report_info("Function: " + methodType.getMethName(), methodType);
     	
-    	{ report_info("MethodType", methodType); }
+//    	currentMethod = Tab.insert(Obj.Meth, methodType.getMethName(), ); 
+    	methodType.obj = currentMethod;
+    	Tab.openScope();
+    	report_info("Function: " + methodType.getMethName(), methodType);
+ 
     }
     
     public void visit(VoidMethodDecl VoidMethodDecl) { report_info("VoidMethodDecl", VoidMethodDecl); }
@@ -189,13 +208,20 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	report_info("Type in VarDeclaration " + varDeclaration.getType().getTypeName(), varDeclaration); 
     }
     
-    public void visit(NoMethodVarDecls NoMethodVarDecls) { report_info("NoMethodVarDecls", NoMethodVarDecls); }
-    public void visit(MethodVarDecls MethodVarDecls) { report_info("MethodVarDecls", MethodVarDecls); }
+    public void visit(SingleMethodVarDecl SingleMethodVarDecl) { report_info("SingleMethodVarDecl", SingleMethodVarDecl); }
+    public void visit(MethodVarDecls MethodVarDecls) { 
+    	report_info("MethodVarDecls", MethodVarDecls); 
+    }
     public void visit(FalseConst FalseConst) { report_info("FalseConst", FalseConst); }
     public void visit(TrueConst TrueConst) { report_info("TrueConst", TrueConst); }
     public void visit(CharConst CharConst) { report_info("CharConst", CharConst); }
     public void visit(NumConst NumConst) { report_info("NumConst", NumConst); }
-    public void visit(Const Const) { report_info("Const", Const); }
+    
+    public void visit(Const Const) { 
+    	report_info("Declared constant Const: " + Const.getConstName(), Const);
+    	Obj varNode = Tab.insert(Obj.Con, Const.getConstName(), typeStruct);
+    }
+    
     public void visit(ConstCommaError ConstCommaError) { report_info("ConstCommaError", ConstCommaError); }
     public void visit(CommaConst CommaConst) { report_info("CommaConst", CommaConst); }
     public void visit(ConstSemiError ConstSemiError) { report_info("ConstSemiError", ConstSemiError); }

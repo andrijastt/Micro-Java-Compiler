@@ -116,7 +116,7 @@ ConstVal ::= (NumConst) NUMBER
 
 MethodVarDecl ::= (MethodVarDecls) MethodVarDecl VarDeclList
 		|
-		(NoMethodVarDecls)
+		(SingleMethodVarDecl) VarDeclList
 		;
 
 VarDeclList ::= (VarDeclaration) Type:varType VarDecl;
@@ -193,16 +193,14 @@ DesignatorList ::= (DesignatorLists) DesignatorList COMMA DesignatorTemp
 				(SingleDesignatorList) DesignatorTemp
 				;		
 
-Expr ::= (NegativeExpr) MINUS Term Addop Expr
+Expr ::= (PositiveExpr) Expr:t0 Addop Term:t1
 		|
-		(PositiveExpr) Term Addop Expr
+		(SingleExpr) Term:t0
 		|
-		(SingleExpr) Term
-		|
-		(SingleNegativeExpr) MINUS Term
+		(SingleNegativeExpr) MINUS Term:t0
 		;
 
-Term ::= (TermExpr) Factor:t0 Mulop Term:t1
+Term ::= (TermExpr) Term:t0 Mulop Factor:t1
 		|
 		(SignleTerm) Factor:t0
 		;
