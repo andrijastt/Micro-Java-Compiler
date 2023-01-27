@@ -203,7 +203,7 @@ DesignatorStatement ::= (DesignatorAssign) Designator:D1 Assignop:A2 Expr:E3 {: 
 
 DesignatorTemp ::= (DesignatroTemp) Designator:D1 {: RESULT=new DesignatroTemp(D1); RESULT.setLine(D1left); :}
 				|
-				(NoDesignatroTemp) {: RESULT=new NoDesignatroTemp(); :}
+				(NoDesignatorTemp) {: RESULT=new NoDesignatorTemp(); :}
 				;
 				
 DesignatorList ::= (DesignatorLists) DesignatorList:D1 COMMA DesignatorTemp:D2 {: RESULT=new DesignatorLists(D1, D2); RESULT.setLine(D1left); :}

@@ -185,7 +185,7 @@ DesignatorStatement ::= (DesignatorAssign) Designator Assignop Expr
 
 DesignatorTemp ::= (DesignatroTemp) Designator
 				|
-				(NoDesignatroTemp)
+				(NoDesignatorTemp)
 				;
 				
 DesignatorList ::= (DesignatorLists) DesignatorList COMMA DesignatorTemp

@@ -1,13 +1,13 @@
 // generated with ast extension for cup
 // version 0.8
-// 26/0/2023 17:24:39
+// 27/0/2023 14:29:3
 
 
 package rs.ac.bg.etf.pp1.ast;
 
-public class NoDesignatroTemp extends DesignatorTemp {
+public class NoDesignatorTemp extends DesignatorTemp {
 
-    public NoDesignatroTemp () {
+    public NoDesignatorTemp () {
     }
 
     public void accept(Visitor visitor) {
@@ -28,10 +28,10 @@ public class NoDesignatroTemp extends DesignatorTemp {
     public String toString(String tab) {
         StringBuffer buffer=new StringBuffer();
         buffer.append(tab);
-        buffer.append("NoDesignatroTemp(\n");
+        buffer.append("NoDesignatorTemp(\n");
 
         buffer.append(tab);
-        buffer.append(") [NoDesignatroTemp]");
+        buffer.append(") [NoDesignatorTemp]");
         return buffer.toString();
     }
 }

@@ -5,14 +5,18 @@ import org.apache.log4j.Logger;
 import rs.ac.bg.etf.pp1.ast.*;
 import rs.etf.pp1.symboltable.Tab;
 import rs.etf.pp1.symboltable.concepts.Obj;
+import rs.etf.pp1.symboltable.concepts.Struct;
 
-public class SemanticPass extends VisitorAdaptor {
+public class SemanticAnalyzer extends VisitorAdaptor {
 
 	int printCallCount = 0;
 	
 	Obj currentMethod = null;
 	boolean errorDetected = false;
 	Logger log = Logger.getLogger(getClass());
+	
+	// We remember the last type for variables
+	Struct typeStruct = null;
 	
 	public void report_error(String message, SyntaxNode info) {
 		errorDetected = true;
@@ -113,7 +117,7 @@ public class SemanticPass extends VisitorAdaptor {
     public void visit(NegativeExpr NegativeExpr) { report_info("NegativeExpr", NegativeExpr); }
     public void visit(SingleDesignatorList SingleDesignatorList) { report_info("SingleDesignatorList", SingleDesignatorList); }
     public void visit(DesignatorLists DesignatorLists) { report_info("DesignatorLists", DesignatorLists); }
-    public void visit(NoDesignatroTemp NoDesignatroTemp) { report_info("NoDesignatroTemp", NoDesignatroTemp); }
+    public void visit(NoDesignatorTemp NoDesignatorTemp) { report_info("NoDesignatorTemp", NoDesignatorTemp); }
     public void visit(DesignatroTemp DesignatroTemp) { report_info("DesignatroTemp", DesignatroTemp); }
     public void visit(DesignatorStatementError DesignatorStatementError) { report_info("DesignatorStatementError", DesignatorStatementError); }
     public void visit(DesignatorStatementBrackets DesignatorStatementBrackets) { report_info("DesignatorStatementBrackets", DesignatorStatementBrackets); }
@@ -134,22 +138,20 @@ public class SemanticPass extends VisitorAdaptor {
     public void visit(Statements Statements) { report_info("Statements", Statements); }
     
     public void visit(Type type) {
-//    	Obj typeNode = Tab.find(type.getTypeName());
-//    	
-//    	if(typeNode == Tab.noObj) {
-//    		report_error("Not found type " + type.getTypeName() + " in symbol table!", null);
-//    		type.struct = Tab.noType;
-//    	}
-//    	else {
-//    		if(Obj.Type == typeNode.getKind()) {
-//    			type.struct = typeNode.getType();
-//    		} else {
-//    			report_error("Error: Name " + type.getTypeName() + " isn't a type!", type);
-//				type.struct = Tab.noType;
-//    		}
-//    	}
+    	Obj typeNode = Tab.find(type.getTypeName());
     	
-    	{ report_info("Type", type); }
+    	if(typeNode == Tab.noObj) {
+    		report_error("Not found type " + type.getTypeName() + " in symbol table!", null);
+    		typeStruct = type.struct = Tab.noType;
+    	}
+    	else {
+    		if(Obj.Type == typeNode.getKind()) {
+    			typeStruct = type.struct = typeNode.getType();
+    		} else {
+    			report_error("Error: Name " + type.getTypeName() + " isn't a type!", type);
+    			typeStruct = type.struct = Tab.noType;
+    		}
+    	}
     	
     }
     
@@ -165,15 +167,28 @@ public class SemanticPass extends VisitorAdaptor {
     public void visit(VoidMethodDecl VoidMethodDecl) { report_info("VoidMethodDecl", VoidMethodDecl); }
     public void visit(NoMethodDecl NoMethodDecl) { report_info("NoMethodDecl", NoMethodDecl); }
     public void visit(MethodDeclarations MethodDeclarations) { report_info("MethodDeclarations", MethodDeclarations); }
-    public void visit(VarBrackets VarBrackets) { report_info("VarBrackets", VarBrackets); }
-    public void visit(VarNoBrackets VarNoBrackets) { report_info("VarNoBrackets", VarNoBrackets); }
+    
+    public void visit(VarBrackets varBrackets) { 
+    	report_info("Declared variable VarBrackets: " + varBrackets.getVarName(), varBrackets); 
+    	Obj varNode = Tab.insert(Obj.Var, varBrackets.getVarName(), typeStruct);
+    }
+    
+    public void visit(VarNoBrackets varNoBrackets) { 
+    	report_info("Declared variable VarNoBrackets: " + varNoBrackets.getVarName(), varNoBrackets); 
+    	Obj varNode = Tab.insert(Obj.Var, varNoBrackets.getVarName(), typeStruct);
+    }
+    
     public void visit(VarSemiError VarSemiError) { report_info("VarSemiError", VarSemiError); }
     public void visit(SemiVar SemiVar) { report_info("SemiVar", SemiVar); }
     public void visit(VarCommaError VarCommaError) { report_info("VarCommaError", VarCommaError); }
     public void visit(CommaVar CommaVar) { report_info("CommaVar", CommaVar); }
     public void visit(SingleVar SingleVar) { report_info("SingleVar", SingleVar); }
     public void visit(VarList VarList) { report_info("VarList", VarList); }
-    public void visit(VarDeclaration VarDeclaration) { report_info("VarDeclaration", VarDeclaration); }
+    
+    public void visit(VarDeclaration varDeclaration) { 
+    	report_info("Type in VarDeclaration " + varDeclaration.getType().getTypeName(), varDeclaration); 
+    }
+    
     public void visit(NoMethodVarDecls NoMethodVarDecls) { report_info("NoMethodVarDecls", NoMethodVarDecls); }
     public void visit(MethodVarDecls MethodVarDecls) { report_info("MethodVarDecls", MethodVarDecls); }
     public void visit(FalseConst FalseConst) { report_info("FalseConst", FalseConst); }
@@ -192,5 +207,5 @@ public class SemanticPass extends VisitorAdaptor {
     public void visit(ParamConstList ParamConstList) { report_info("ParamConstList", ParamConstList); }
     public void visit(NoParamItem NoParamItem) { report_info("NoParamItem", NoParamItem); }
     public void visit(ParamItemList ParamItemList) { report_info("ParamItemList", ParamItemList); }
-    
+	
 }
