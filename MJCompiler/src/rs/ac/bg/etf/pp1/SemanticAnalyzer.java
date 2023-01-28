@@ -10,8 +10,13 @@ import rs.etf.pp1.symboltable.concepts.Struct;
 public class SemanticAnalyzer extends VisitorAdaptor {
 
 	int printCallCount = 0;
+	int localVariablesCount = 0;
+	int globalVaribalesCount = 0;
+	
+	int temp = 0;
 	
 	Obj currentMethod = null;
+	Obj currentDesignator = null;
 	boolean errorDetected = false;
 	Logger log = Logger.getLogger(getClass());
 	
@@ -111,6 +116,18 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     		report_error("Error on line " + designatorNoBrackets.getLine() + " name: " + designatorNoBrackets.getName() + "not declared! ", null);
     	}
     	designatorNoBrackets.obj = obj;
+    	
+    	if(currentDesignator == null) {
+    		currentDesignator = obj;
+    	} else {
+    		if(obj.getKind() == currentDesignator.getKind()) {
+    			report_info("Ide Gas!!!!!", designatorNoBrackets);
+    			
+    		} else {
+    			report_error("Error name: " + designatorNoBrackets.getName() + "not same type as: " + currentDesignator.getName(), null);
+    		}
+    	}
+    	
     	report_info("DesignatorNoBrackets found: " + designatorNoBrackets.getName(), designatorNoBrackets);
     }
     
@@ -132,9 +149,52 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     public void visit(DesignatroTemp DesignatroTemp) { report_info("DesignatroTemp", DesignatroTemp); }
     public void visit(DesignatorStatementError DesignatorStatementError) { report_info("DesignatorStatementError", DesignatorStatementError); }
     public void visit(DesignatorStatementBrackets DesignatorStatementBrackets) { report_info("DesignatorStatementBrackets", DesignatorStatementBrackets); }
-    public void visit(DesignatorDEC DesignatorDEC) { report_info("DesignatorDEC", DesignatorDEC); }
-    public void visit(DesignatorINC DesignatorINC) { report_info("DesignatorINC", DesignatorINC); }
-    public void visit(DesignatorAssign DesignatorAssign) { report_info("DesignatorAssign", DesignatorAssign); }
+    
+    public void visit(DesignatorDEC DesignatorDEC) { 
+    	
+    	Designator des = DesignatorDEC.getDesignator();
+    	if(des.obj.getType().getKind() == Struct.Int) {
+    		report_info("Found DesignatorINC that can INC: " + des.obj.getName(), DesignatorDEC);
+    	} else {
+    		report_error("Found DesignatorINC that can't be INC: " + des.obj.getName(), DesignatorDEC);
+    	} 
+    }
+    
+    public void visit(DesignatorINC DesignatorINC) { 
+    	 
+    	Designator des = DesignatorINC.getDesignator();
+    	if(des.obj.getType().getKind() == Struct.Int) {
+    		report_info("Found DesignatorINC that can INC: " + des.obj.getName(), DesignatorINC);
+    	} else {
+    		report_error("Found DesignatorINC that can't be INC: " + des.obj.getName(), DesignatorINC);
+    	}
+    	
+    }
+    
+    /**
+     * We check if the types are good then set them if they are, else error
+     */
+    public void visit(DesignatorAssign DesignatorAssign) { 
+    	 
+    	Designator des = DesignatorAssign.getDesignator();
+    	Expr expr = DesignatorAssign.getExpr();
+    	
+    	
+    	
+    	if(expr.getClass() == PositiveExpr.class) {
+    		
+    	}
+    	else if(expr.getClass() == SingleExpr.class) {
+    		
+    	}
+    	else if(expr.getClass() == SingleNegativeExpr.class) {
+    		
+    	}
+    	
+    	report_info("Found DesignatorAssign: " + expr.getClass(), DesignatorAssign);
+    	
+    }
+    
     public void visit(NoNumConsts NoNumConsts) { report_info("NoNumConsts", NoNumConsts); }
     public void visit(NumConsts NumConsts) { report_info("NumConsts", NumConsts); }
     
