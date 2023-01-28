@@ -12,8 +12,17 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	int printCallCount = 0;
 	int localVariablesCount = 0;
 	int globalVaribalesCount = 0;
-	
 	int temp = 0;
+	
+	final private int NOOP = -1;
+	final private int ASSIGN = 0;
+	final private int ADD = 1;
+	final private int MINUS = 2;
+	final private int DIV = 3;
+	final private int MOD = 4;
+	final private int MUL = 5;
+	
+	private int operation = NOOP;
 	
 	Obj currentMethod = null;
 	Obj currentDesignator = null;
@@ -92,12 +101,53 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     public void visit(ConstSemi ConstSemi) { report_info("ConstSemi", ConstSemi); }
     public void visit(VarComma VarComma) { report_info("VarComma", VarComma); }
     public void visit(StatementList StatementList) { report_info("StatementList", StatementList); }
-    public void visit(Modop Modop) { report_info("Modop", Modop); }
-    public void visit(Divop Divop) { report_info("Divop", Divop); }
-    public void visit(Mulop Mulop) { report_info("Mulop", Mulop); }
-    public void visit(Minusop Minusop) { report_info("Minusop", Minusop); }
-    public void visit(Addop Addop) { report_info("Addop", Addop); }
-    public void visit(Assignop Assignop) { report_info("Assignop", Assignop); }
+    /**
+     * Set what opertaion is currently
+     */
+    public void visit(Modop Modop) { 
+    	report_info("Modop", Modop);
+    	operation = MOD;
+    }
+    
+    /**
+     * Set what opertaion is currently
+     */
+    public void visit(Divop Divop) { 
+    	report_info("Divop", Divop);
+    	operation = DIV;
+    }
+    
+    /**
+     * Set what opertaion is currently
+     */
+    public void visit(Mulop Mulop) { 
+    	report_info("Found Mulop:", Mulop);
+    	operation = MUL;
+    }
+    
+    /**
+     * Set what opertaion is currently
+     */
+    public void visit(Minusop Minusop) { 
+    	report_info("Found Minusop:", Minusop);
+    	operation = MINUS;
+    }
+    
+    /**
+     * Set what opertaion is currently
+     */
+    public void visit(Addop Addop) { 
+    	report_info("Found Addop:", Addop); 
+    	operation = ADD; 
+    }
+    
+    /**
+     * Set what opertaion is currently
+     */
+    public void visit(Assignop Assignop) { 
+    	report_info("Found Assignop:", Assignop); 
+    	operation = ASSIGN;
+    }
     
     public void visit(DesignatorBrackets designatorBrackets) { 
     	
@@ -121,7 +171,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     		currentDesignator = obj;
     	} else {
     		if(obj.getKind() == currentDesignator.getKind()) {
-    			report_info("Ide Gas!!!!!", designatorNoBrackets);
+    			report_info("Ide Gas!", designatorNoBrackets);
     			
     		} else {
     			report_error("Error name: " + designatorNoBrackets.getName() + "not same type as: " + currentDesignator.getName(), null);
@@ -136,7 +186,19 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     public void visit(FalseFactorConst FalseFactorConst) { report_info("FalseFactorConst", FalseFactorConst); }
     public void visit(TrueFactorConst TrueFactorConst) { report_info("TrueFactorConst", TrueFactorConst); }
     public void visit(CharFactorConst CharFactorConst) { report_info("CharFactorConst", CharFactorConst); }
-    public void visit(NumFactorConst NumFactorConst) { report_info("NumFactorConst", NumFactorConst); }
+    
+    public void visit(NumFactorConst NumFactorConst) { 
+    	report_info("NumFactorConst:" + NumFactorConst.getN1(), NumFactorConst);
+    	
+    	if(currentDesignator.getKind() == Struct.Int) {
+    		report_info("NumFactorConst:" + NumFactorConst.getN1(), NumFactorConst);
+    	}
+    	else {
+    		report_error("Error NumFactorConst assignment is bad: " + currentDesignator.getName() + " isn't int", NumFactorConst);
+    	}
+    	
+    }
+    
     public void visit(DisgnatorNoPars DisgnatorNoPars) { report_info("DisgnatorNoPars", DisgnatorNoPars); }
     public void visit(SignleTerm SignleTerm) { report_info("SignleTerm", SignleTerm); }
     public void visit(TermExpr TermExpr) { report_info("TermExpr", TermExpr); }
@@ -154,9 +216,9 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	
     	Designator des = DesignatorDEC.getDesignator();
     	if(des.obj.getType().getKind() == Struct.Int) {
-    		report_info("Found DesignatorINC that can INC: " + des.obj.getName(), DesignatorDEC);
+    		report_info("Found DesignatorDEC that can DEC: " + des.obj.getName(), DesignatorDEC);
     	} else {
-    		report_error("Found DesignatorINC that can't be INC: " + des.obj.getName(), DesignatorDEC);
+    		report_error("Found DesignatorDEC that can't be DEC: " + des.obj.getName(), DesignatorDEC);
     	} 
     }
     
@@ -172,26 +234,13 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     }
     
     /**
-     * We check if the types are good then set them if they are, else error
+     * We reset assignments
      */
     public void visit(DesignatorAssign DesignatorAssign) { 
     	 
-    	Designator des = DesignatorAssign.getDesignator();
-    	Expr expr = DesignatorAssign.getExpr();
-    	
-    	
-    	
-    	if(expr.getClass() == PositiveExpr.class) {
-    		
-    	}
-    	else if(expr.getClass() == SingleExpr.class) {
-    		
-    	}
-    	else if(expr.getClass() == SingleNegativeExpr.class) {
-    		
-    	}
-    	
-    	report_info("Found DesignatorAssign: " + expr.getClass(), DesignatorAssign);
+    	report_info("Found DesignatorAssign: " + currentDesignator.getName(), DesignatorAssign);
+    	currentDesignator = null;
+    	operation = NOOP;
     	
     }
     
