@@ -201,9 +201,9 @@ DesignatorStatement ::= (DesignatorAssign) Designator:D1 Assignop:A2 Expr:E3 {: 
 		   			{: parser.report_error("Izvrsen oporavak do ; u liniji " + lleft, null);  :} {: RESULT=new DesignatorStatementError(); :}
 					;
 
-DesignatorTemp ::= (DesignatroTemp) Designator:D1 {: RESULT=new DesignatroTemp(D1); RESULT.setLine(D1left); :}
+DesignatorTemp ::= (DesignatorListItem) Designator:D1 {: RESULT=new DesignatorListItem(D1); RESULT.setLine(D1left); :}
 				|
-				(NoDesignatorTemp) {: RESULT=new NoDesignatorTemp(); :}
+				(NoDesignatorListItem) {: RESULT=new NoDesignatorListItem(); :}
 				;
 				
 DesignatorList ::= (DesignatorLists) DesignatorList:D1 COMMA DesignatorTemp:D2 {: RESULT=new DesignatorLists(D1, D2); RESULT.setLine(D1left); :}

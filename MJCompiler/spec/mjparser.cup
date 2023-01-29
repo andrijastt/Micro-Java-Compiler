@@ -183,9 +183,9 @@ DesignatorStatement ::= (DesignatorAssign) Designator Assignop Expr
 		   			{: parser.report_error("Izvrsen oporavak do ; u liniji " + lleft, null);  :}
 					;
 
-DesignatorTemp ::= (DesignatroTemp) Designator
+DesignatorTemp ::= (DesignatorListItem) Designator
 				|
-				(NoDesignatorTemp)
+				(NoDesignatorListItem)
 				;
 				
 DesignatorList ::= (DesignatorLists) DesignatorList COMMA DesignatorTemp

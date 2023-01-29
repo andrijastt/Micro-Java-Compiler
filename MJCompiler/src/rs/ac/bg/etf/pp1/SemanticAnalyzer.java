@@ -25,6 +25,8 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	private int operation = NOOP;
 	
 	boolean brackets = false;
+	boolean foundMain = false;
+	boolean leftSide = true;
 	
 	Obj currentMethod = null;
 	Obj currentDesignator = null;
@@ -33,6 +35,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	
 	// We remember the last type for variables
 	Struct typeStruct = null;
+	Struct leftType = null, rightType = null;
 	
 	public void report_error(String message, SyntaxNode info) {
 		errorDetected = true;
@@ -57,12 +60,35 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     
     public void visit(ProgName progName) {
     	progName.obj = Tab.insert(Obj.Prog, progName.getProgName(), Tab.noType);
+    	report_info("Program name: " + progName.getProgName(), progName);
     	Tab.openScope();
     }
 
     public void visit(Program program) {
     	Tab.chainLocalSymbols(program.getProgName().obj);
     	Tab.closeScope();
+    	
+    	if(!foundMain) {
+    		report_error("No main function!", program);
+    	}
+    	else {
+    		report_info("Main is declared!", program);
+    	}
+    	
+    	if(localVariablesCount > 256) {
+    		report_error("Local varibale count > 256: " + localVariablesCount, program);
+    	}
+    	else {
+    		report_info("Local varibale count: " + localVariablesCount, program);
+    	}
+    	
+    	if(globalVaribalesCount > 65536) {
+    		report_error("Global varibale count > 65536: " + globalVaribalesCount, program);
+    	}
+    	else {
+    		report_info("Global varibale count: " + globalVaribalesCount, program);
+    	}
+    	
     }
     
     public void visit(Designator designator) {
@@ -151,6 +177,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     public void visit(Assignop Assignop) { 
     	report_info("Found Assignop:", Assignop); 
     	operation = ASSIGN;
+    	leftSide = false;
     }
     
     public void visit(DesignatorBrackets designatorBrackets) { 
@@ -238,8 +265,8 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     public void visit(PositiveExpr PositiveExpr) { report_info("PositiveExpr", PositiveExpr); }
     public void visit(SingleDesignatorList SingleDesignatorList) { report_info("SingleDesignatorList", SingleDesignatorList); }
     public void visit(DesignatorLists DesignatorLists) { report_info("DesignatorLists", DesignatorLists); }
-    public void visit(NoDesignatorTemp NoDesignatorTemp) { report_info("NoDesignatorTemp", NoDesignatorTemp); }
-    public void visit(DesignatroTemp DesignatroTemp) { report_info("DesignatroTemp", DesignatroTemp); }
+    public void visit(NoDesignatorListItem NoDesignatorListItem) { report_info("NoDesignatorListItem", NoDesignatorListItem); }
+    public void visit(DesignatorListItem DesignatorListItem) { report_info("DesignatorListItem", DesignatorListItem); }
     public void visit(DesignatorStatementError DesignatorStatementError) { report_info("DesignatorStatementError", DesignatorStatementError); }
     public void visit(DesignatorStatementBrackets DesignatorStatementBrackets) { report_info("DesignatorStatementBrackets", DesignatorStatementBrackets); }
     
@@ -274,6 +301,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	currentDesignator = null;
     	operation = NOOP;
     	brackets = false;
+    	leftSide = true;
     	
     }
     
@@ -320,6 +348,11 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	
     	currentMethod = Tab.insert(Obj.Meth, methodType.getMethName(), new Struct(0)); 
     	methodType.obj = currentMethod;
+    	
+    	if(methodType.getMethName().equals("main")) {
+    		foundMain = true;
+    	}
+    	
     	Tab.openScope();
     	report_info("Function: " + methodType.getMethName(), methodType);
  
@@ -332,11 +365,51 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     public void visit(VarBrackets varBrackets) { 
     	report_info("Declared variable VarBrackets: " + varBrackets.getVarName(), varBrackets); 
     	Obj varNode = Tab.insert(Obj.Var, varBrackets.getVarName(), typeStruct);
+    	
+    	Tab.currentScope.addToLocals(varNode);
+    	
+    	if(varNode.getLevel() > 0) {
+    		if(Tab.currentScope.getnVars() > 256) {
+    			report_error("Local varibale count > 256: " + Tab.currentScope.getnVars(), varBrackets);
+    		}
+    		else {
+    			report_info("Current scope: " + varNode.getLevel() + ", variable count: " + Tab.currentScope.getnVars(), varBrackets);
+    		}
+    		localVariablesCount++;
+    	} else {
+    		if(Tab.currentScope.getnVars() > 65536) {
+    			report_error("Global varibale count > 65536: " + Tab.currentScope.getnVars(), varBrackets);
+    		}
+    		else {
+    			report_info("Current scope: " + varNode.getLevel() + ", variable count: " + Tab.currentScope.getnVars(), varBrackets);
+    		}
+    		globalVaribalesCount++;
+    	}
     }
     
     public void visit(VarNoBrackets varNoBrackets) { 
     	report_info("Declared variable VarNoBrackets: " + varNoBrackets.getVarName(), varNoBrackets); 
     	Obj varNode = Tab.insert(Obj.Var, varNoBrackets.getVarName(), typeStruct);
+    	
+    	Tab.currentScope.addToLocals(varNode);
+    	
+    	if(varNode.getLevel() > 0) {
+    		if(Tab.currentScope.getnVars() > 256) {
+    			report_error("Local varibale count > 256: " + Tab.currentScope.getnVars(), varNoBrackets);
+    		}
+    		else {
+    			report_info("Current scope: " + varNode.getLevel() + ", variable count: " + Tab.currentScope.getnVars(), varNoBrackets);
+    		}
+    		localVariablesCount++;
+    	} else {
+    		if(Tab.currentScope.getnVars() > 65536) {
+    			report_error("Global varibale count > 65536: " + Tab.currentScope.getnVars(), varNoBrackets);
+    		}
+    		else {
+    			report_info("Current scope: " + varNode.getLevel() + ", variable count: " + Tab.currentScope.getnVars(), varNoBrackets);
+    		}
+    		globalVaribalesCount++;
+    	}
     }
     
     public void visit(VarSemiError VarSemiError) { report_info("VarSemiError", VarSemiError); }
@@ -354,14 +427,50 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     public void visit(MethodVarDecls MethodVarDecls) { 
     	report_info("MethodVarDecls", MethodVarDecls); 
     }
-    public void visit(FalseConst FalseConst) { report_info("FalseConst", FalseConst); }
-    public void visit(TrueConst TrueConst) { report_info("TrueConst", TrueConst); }
-    public void visit(CharConst CharConst) { report_info("CharConst", CharConst); }
-    public void visit(NumConst NumConst) { report_info("NumConst", NumConst); }
+    
+    public void visit(FalseConst FalseConst) { 
+    	report_info("FalseConst", FalseConst); 
+    	
+    	// check if type is good
+    	
+    }
+    
+    public void visit(TrueConst TrueConst) { 
+    	report_info("TrueConst", TrueConst); 
+    }
+    
+    public void visit(CharConst CharConst) { 
+    	report_info("CharConst", CharConst); 
+    }
+    
+    public void visit(NumConst NumConst) { 
+    	report_info("NumConst", NumConst); 
+    }
     
     public void visit(Const Const) { 
     	report_info("Declared constant Const: " + Const.getConstName(), Const);
-    	Obj varNode = Tab.insert(Obj.Con, Const.getConstName(), typeStruct);
+    	Obj constNode = Tab.insert(Obj.Con, Const.getConstName(), typeStruct);
+    	
+    	Tab.currentScope.addToLocals(constNode);
+    	
+    	if(constNode.getLevel() > 0) {
+    		if(Tab.currentScope.getnVars() > 256) {
+    			report_error("Local varibale count > 256: " + Tab.currentScope.getnVars(), Const);
+    		}
+    		else {
+    			report_info("Current scope: " + constNode.getLevel() + ", variable count: " + Tab.currentScope.getnVars(), Const);
+    		}
+//    		localVariablesCount++; // Not sure if i need this for constants
+    	} else {
+    		if(Tab.currentScope.getnVars() > 65536) {
+    			report_error("Global varibale count > 65536: " + Tab.currentScope.getnVars(), Const);
+    		}
+    		else {
+    			report_info("Current scope: " + constNode.getLevel() + ", variable count: " + Tab.currentScope.getnVars(), Const);
+    		}
+//    		globalVaribalesCount++; // Not sure if i need this for constants
+    	}
+    	
     }
     
     public void visit(ConstCommaError ConstCommaError) { report_info("ConstCommaError", ConstCommaError); }

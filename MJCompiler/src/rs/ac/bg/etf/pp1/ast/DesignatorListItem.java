@@ -1,15 +1,15 @@
 // generated with ast extension for cup
 // version 0.8
-// 29/0/2023 1:2:48
+// 29/0/2023 13:30:50
 
 
 package rs.ac.bg.etf.pp1.ast;
 
-public class DesignatroTemp extends DesignatorTemp {
+public class DesignatorListItem extends DesignatorTemp {
 
     private Designator Designator;
 
-    public DesignatroTemp (Designator Designator) {
+    public DesignatorListItem (Designator Designator) {
         this.Designator=Designator;
         if(Designator!=null) Designator.setParent(this);
     }
@@ -43,7 +43,7 @@ public class DesignatroTemp extends DesignatorTemp {
     public String toString(String tab) {
         StringBuffer buffer=new StringBuffer();
         buffer.append(tab);
-        buffer.append("DesignatroTemp(\n");
+        buffer.append("DesignatorListItem(\n");
 
         if(Designator!=null)
             buffer.append(Designator.toString("  "+tab));
@@ -52,7 +52,7 @@ public class DesignatroTemp extends DesignatorTemp {
         buffer.append("\n");
 
         buffer.append(tab);
-        buffer.append(") [DesignatroTemp]");
+        buffer.append(") [DesignatorListItem]");
         return buffer.toString();
     }
 }
