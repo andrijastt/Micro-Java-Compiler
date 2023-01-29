@@ -29,13 +29,16 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	boolean leftSide = true;
 	
 	Obj currentMethod = null;
-	Obj currentDesignator = null;
 	boolean errorDetected = false;
 	Logger log = Logger.getLogger(getClass());
 	
-	// We remember the last type for variables
+	// We use this for when we declare new vars or constants in table 
 	Struct typeStruct = null;
+	
+	// We use this to check if expression is good
 	Struct leftType = null, rightType = null;
+	
+	Obj currentDesignator = null;
 	
 	public void report_error(String message, SyntaxNode info) {
 		errorDetected = true;
@@ -55,8 +58,6 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		}
 		log.info(msg.toString());
 	}
-	
-    
     
     public void visit(ProgName progName) {
     	progName.obj = Tab.insert(Obj.Prog, progName.getProgName(), Tab.noType);
@@ -102,35 +103,30 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	currentMethod = null;
     }
     
-    public void visit(Factor factor) { report_info("Factor: ", factor); }
-    public void visit(DesignatorStatement designatorStatement) { report_info("DesignatorStatement: ", designatorStatement); }
-    public void visit(MethodVarDecl methodVarDecl) { report_info("MethodVarDecl: ", methodVarDecl); }
-    public void visit(Var var) { report_info("Var: ", var); }
-    public void visit(ConstDecl constDecl) { report_info("ConstDecl", constDecl); }
-    public void visit(VarSemi varSemi) { report_info("VarSemi", varSemi); }
-    public void visit(ParamList paramList) { report_info("ParamList", paramList); }
+//    public void visit(Factor factor) { report_info("Factor: ", factor); }
+//    public void visit(DesignatorStatement designatorStatement) { report_info("DesignatorStatement: ", designatorStatement); }
+//    public void visit(MethodVarDecl methodVarDecl) { report_info("MethodVarDecl: ", methodVarDecl); }
+//    public void visit(Var var) { report_info("Var: ", var); }
+//    public void visit(ConstDecl constDecl) { report_info("ConstDecl", constDecl); }
+//    public void visit(VarSemi varSemi) { report_info("VarSemi", varSemi); }
+//    public void visit(ParamList paramList) { report_info("ParamList", paramList); }
+//    public void visit(ParamItem paramItem){ report_info("ParamItem", paramItem); }
+//    public void visit(Expr expr) { report_info("Expr", expr); }
+//    public void visit(DesignatorList DesignatorList) { report_info("DesignatorList", DesignatorList); }
+//    public void visit(VarDeclList VarDeclList) { report_info("VarDeclList", VarDeclList); }
+//    public void visit(DesignatorTemp DesignatorTemp) { report_info("DesignatorTemp", DesignatorTemp); }
+//    public void visit(VarDecl VarDecl) { report_info("VarDecl", VarDecl); }
+//    public void visit(ConstDeclList ConstDeclList) { report_info("ConstDeclList", ConstDeclList); }
+//    public void visit(MethodDeclList MethodDeclList) { report_info("MethodDeclList", MethodDeclList); }
+//    public void visit(Statement Statement) { report_info("Statement", Statement); }
+//    public void visit(ConstComma ConstComma) { report_info("ConstComma", ConstComma); }
+//    public void visit(ConstVal ConstVal) { report_info("ConstVal", ConstVal); }
+//    public void visit(NumConstList NumConstList) { report_info("NumConstList", NumConstList); }
+//    public void visit(Term Term) { report_info("Term", Term); }
+//    public void visit(ConstSemi ConstSemi) { report_info("ConstSemi", ConstSemi); }
+//    public void visit(VarComma VarComma) { report_info("VarComma", VarComma); }
+//    public void visit(StatementList StatementList) { report_info("StatementList", StatementList); }
     
-    public void visit(ParamItem paramItem){
-    	report_info("ParamItem", paramItem); 
-	}
-    
-    public void visit(Expr expr) { report_info("Expr", expr); }
-    public void visit(DesignatorList DesignatorList) { report_info("DesignatorList", DesignatorList); }
-    public void visit(VarDeclList VarDeclList) { report_info("VarDeclList", VarDeclList); }
-    public void visit(DesignatorTemp DesignatorTemp) { report_info("DesignatorTemp", DesignatorTemp); }
-    public void visit(VarDecl VarDecl) { report_info("VarDecl", VarDecl); }
-    public void visit(ConstDeclList ConstDeclList) { report_info("ConstDeclList", ConstDeclList); }
-    public void visit(MethodDeclList MethodDeclList) { report_info("MethodDeclList", MethodDeclList); }
-    public void visit(Statement Statement) { report_info("Statement", Statement); }
-    public void visit(ConstComma ConstComma) { report_info("ConstComma", ConstComma); }
-    
-    public void visit(ConstVal ConstVal) { report_info("ConstVal", ConstVal); }
-    
-    public void visit(NumConstList NumConstList) { report_info("NumConstList", NumConstList); }
-    public void visit(Term Term) { report_info("Term", Term); }
-    public void visit(ConstSemi ConstSemi) { report_info("ConstSemi", ConstSemi); }
-    public void visit(VarComma VarComma) { report_info("VarComma", VarComma); }
-    public void visit(StatementList StatementList) { report_info("StatementList", StatementList); }
     /**
      * Set what opertaion is currently
      */
@@ -178,20 +174,35 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	report_info("Found Assignop:", Assignop); 
     	operation = ASSIGN;
     	leftSide = false;
+    	leftType = currentDesignator.getType();
     }
     
     public void visit(DesignatorBrackets designatorBrackets) { 
     	
-    	Obj obj = Tab.find(designatorBrackets.getName());  
-    	brackets = true;
+    	Obj obj = Tab.find(designatorBrackets.getName());
+    	
     	if(obj == Tab.noObj) {
     		report_error("Error on line " + designatorBrackets.getLine() + " name: " + designatorBrackets.getName() + "not declared! ", null);
     	}
+    	
+    	if(obj.getType().getKind() != Struct.Array) {
+    		report_error("Deisgnator: " + designatorBrackets.getName() + " isn't an Array", designatorBrackets);
+    	}
+    	
+    	brackets = true;
     	designatorBrackets.obj = obj;
-    			
+    	
+    	if(currentDesignator.getType().getKind() == Struct.Array) {
+    		if(currentDesignator.getType().getElemType().getKind() != Struct.Int) {
+    			report_error("Type in brackets isn't int: " + currentDesignator.getName(), designatorBrackets);
+    		}
+    	}
+    	else if(currentDesignator.getType().getKind() != Struct.Int) {
+    		report_error("Type in brackets isn't int: " + currentDesignator.getName(), designatorBrackets);
+    	}
+    	
 		currentDesignator = obj;
-	
-		if(obj.getType().getKind() == currentDesignator.getType().getKind()) {
+		if(obj.getType().getElemType().getKind() == currentDesignator.getType().getKind()) {
 			report_info("Same kind!", designatorBrackets);
 		} else {
 			if(!brackets)
@@ -209,33 +220,96 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     		report_error("Error on line " + designatorNoBrackets.getLine() + " name: " + designatorNoBrackets.getName() + "not declared! ", null);
     	}
     	designatorNoBrackets.obj = obj;
-    	
-    	if(currentDesignator == null) {
-    		currentDesignator = obj;
-    	} else {
-    		if(obj.getType().getKind() == currentDesignator.getType().getKind()) {
-    			report_info("Same kind!", designatorNoBrackets);
-    		} else {
-    			if(!brackets)
-    				report_error("Error name: " + designatorNoBrackets.getName() + " not same type as: " + currentDesignator.getName(), null);
-    		}
-    	}
+    		
+		currentDesignator = obj;
+	
+		if(obj.getType().getKind() == currentDesignator.getType().getKind()) {
+			report_info("Same kind!", designatorNoBrackets);
+		} else {
+			if(!brackets)
+				report_error("Error name: " + designatorNoBrackets.getName() + " not same type as: " + currentDesignator.getName(), null);
+		}
+	
     	
     	report_info("DesignatorNoBrackets found: " + designatorNoBrackets.getName(), designatorNoBrackets);
     }
     
-    public void visit(Expression Expression) { report_info("Expression", Expression); }
-    public void visit(NewFuncExpr NewFuncExpr) { report_info("NewFuncExpr", NewFuncExpr); }
-    public void visit(FalseFactorConst FalseFactorConst) { report_info("FalseFactorConst", FalseFactorConst); }
+//    public void visit(Expression Expression) { report_info("Expression", Expression); }
+    
+    public void visit(NewFuncExpr NewFuncExpr) { 
+    	
+    	Obj typeNode = Tab.find(NewFuncExpr.getType().getTypeName());
+    	
+    	if(typeNode == Tab.noObj) {
+    		report_error("Not found type " + NewFuncExpr.getType().getTypeName() + " in symbol table!", NewFuncExpr);
+    		
+    	}
+    	else {
+    		if(Obj.Type == typeNode.getKind()) {
+    			
+    			if(leftType.getKind() == typeNode.getType().getKind()) {
+    				report_info("Found NewFuncExpr: ", NewFuncExpr);
+    			}
+    			else {
+    				report_error("Wrong NewFuncExpr can't creat diffenrt types", NewFuncExpr);
+    			}
+    			
+    			
+    		} else {
+    			report_error("Error: Name " + NewFuncExpr.getType().getTypeName() + " isn't a type!", NewFuncExpr);
+    			
+    		}
+    	}
+    	
+    }
+    
+    public void visit(FalseFactorConst FalseFactorConst) { 
+    	
+    	if(rightType == null) {
+    		rightType = new Struct(Struct.Bool);
+    	}
+    	if(currentDesignator == null) {
+    		currentDesignator = new Obj(Obj.Var, FalseFactorConst.getF1(), new Struct(Struct.Bool));
+    	}
+    	
+    	if(currentDesignator.getType().getKind() == Struct.Bool) {
+    		report_info("Found TrueFactorConst: " + FalseFactorConst.getF1(), FalseFactorConst); 
+    	}
+    	else {
+    		report_error("Error TrueFactorConst assignment is bad: " + currentDesignator.getName() + " isn't bool", FalseFactorConst);
+    	} 
+    }
     
     public void visit(TrueFactorConst TrueFactorConst) {
     	
-    	report_info("TrueFactorConst", TrueFactorConst); 
+    	if(rightType == null) {
+    		rightType = new Struct(Struct.Bool);
+    	}
+    	
+    	if(currentDesignator == null) {
+    		currentDesignator = new Obj(Obj.Var, TrueFactorConst.getT1(), new Struct(Struct.Bool));
+    	}
+    	
+    	if(currentDesignator.getType().getKind() == Struct.Bool) {
+    		report_info("Found TrueFactorConst: " + TrueFactorConst.getT1(), TrueFactorConst); 
+    	}
+    	else {
+    		report_error("Error TrueFactorConst assignment is bad: " + currentDesignator.getName() + " isn't bool", TrueFactorConst);
+    	}
+    	
     }
     
     public void visit(CharFactorConst CharFactorConst) { 
     	
-    	if(currentDesignator.getKind() == Struct.Char && currentDesignator != null) {
+    	if(rightType == null) {
+    		rightType = new Struct(Struct.Char);
+    	}
+    	
+    	if(currentDesignator == null) {
+    		currentDesignator = new Obj(Obj.Var, CharFactorConst.getCharacter().toString(), new Struct(Struct.Char));
+    	}
+    	
+    	if(currentDesignator.getType().getKind() == Struct.Char) {
     		report_info("CharFactorConst: " + CharFactorConst.getCharacter(), CharFactorConst);
     	}
     	else {
@@ -247,33 +321,56 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     
     public void visit(NumFactorConst NumFactorConst) { 
     	
-    	if(currentDesignator != null)
-	    	if(currentDesignator.getType().getKind() == Struct.Int) {
-	    		report_info("NumFactorConst:" + NumFactorConst.getN1(), NumFactorConst);
-	    	}
-	    	else {
-	    		report_error("Error NumFactorConst assignment is bad: " + currentDesignator.getName() + " isn't int", NumFactorConst);
-	    	}
+    	if(rightType == null) {
+    		rightType = new Struct(Struct.Int);
+    	}
+    	
+    	if(currentDesignator == null) {
+    		currentDesignator = new Obj(Obj.Var, NumFactorConst.getN1().toString(), new Struct(Struct.Int));
+    	}
+    	
+    	if(currentDesignator.getType().getKind() == Struct.Int) {
+    		report_info("Good assignment NumFactorConst: " + NumFactorConst.getN1(), NumFactorConst);
+    	}
+    	else {
+    		report_error("Error NumFactorConst assignment is bad: " + currentDesignator.getName() + " isn't int", NumFactorConst);
+    	}
     	
     }
     
-    public void visit(DisgnatorNoPars DisgnatorNoPars) { report_info("DisgnatorNoPars", DisgnatorNoPars); }
-    public void visit(SignleTerm SignleTerm) { report_info("SignleTerm", SignleTerm); }
-    public void visit(TermExpr TermExpr) { report_info("TermExpr", TermExpr); }
-    public void visit(SingleNegativeExpr SingleNegativeExpr) { report_info("SingleNegativeExpr", SingleNegativeExpr); }
-    public void visit(SingleExpr SingleExpr) { report_info("SingleExpr", SingleExpr); }
-    public void visit(PositiveExpr PositiveExpr) { report_info("PositiveExpr", PositiveExpr); }
-    public void visit(SingleDesignatorList SingleDesignatorList) { report_info("SingleDesignatorList", SingleDesignatorList); }
-    public void visit(DesignatorLists DesignatorLists) { report_info("DesignatorLists", DesignatorLists); }
-    public void visit(NoDesignatorListItem NoDesignatorListItem) { report_info("NoDesignatorListItem", NoDesignatorListItem); }
-    public void visit(DesignatorListItem DesignatorListItem) { report_info("DesignatorListItem", DesignatorListItem); }
-    public void visit(DesignatorStatementError DesignatorStatementError) { report_info("DesignatorStatementError", DesignatorStatementError); }
-    public void visit(DesignatorStatementBrackets DesignatorStatementBrackets) { report_info("DesignatorStatementBrackets", DesignatorStatementBrackets); }
+//    public void visit(DisgnatorNoPars DisgnatorNoPars) { report_info("DisgnatorNoPars", DisgnatorNoPars); }
+//    public void visit(SignleTerm SignleTerm) { report_info("SignleTerm", SignleTerm); }
+//    public void visit(TermExpr TermExpr) { report_info("TermExpr", TermExpr); }
+    
+    public void visit(SingleNegativeExpr SingleNegativeExpr) { 
+    	report_info("SingleNegativeExpr", SingleNegativeExpr); 
+    }
+    
+    public void visit(SingleExpr SingleExpr) { 
+    	report_info("SingleExpr", SingleExpr); 
+    }
+    
+//    public void visit(PositiveExpr PositiveExpr) { report_info("PositiveExpr", PositiveExpr); }
+//    public void visit(SingleDesignatorList SingleDesignatorList) { report_info("SingleDesignatorList", SingleDesignatorList); }
+//    public void visit(DesignatorLists DesignatorLists) { report_info("DesignatorLists", DesignatorLists); }
+//    public void visit(NoDesignatorListItem NoDesignatorListItem) { report_info("NoDesignatorListItem", NoDesignatorListItem); }
+//    public void visit(DesignatorListItem DesignatorListItem) { report_info("DesignatorListItem", DesignatorListItem); }
+//    public void visit(DesignatorStatementError DesignatorStatementError) { report_info("DesignatorStatementError", DesignatorStatementError); }
+//    public void visit(DesignatorStatementBrackets DesignatorStatementBrackets) { report_info("DesignatorStatementBrackets", DesignatorStatementBrackets); }
     
     public void visit(DesignatorDEC DesignatorDEC) { 
     	
     	Designator des = DesignatorDEC.getDesignator();
-    	if(des.obj.getType().getKind() == Struct.Int) {
+    	
+    	if(des.obj.getType().getKind() == Struct.Array) {
+    		if(des.obj.getType().getElemType().getKind() == Struct.Int) {
+    			report_info("Found DesignatorDEC that can DEC: " + des.obj.getName(), DesignatorDEC);
+    		}
+    		else {
+    			report_error("Found DesignatorDEC that can't be DEC: " + des.obj.getName(), DesignatorDEC);
+    		}
+    	}
+    	else if(des.obj.getType().getKind() == Struct.Int) {
     		report_info("Found DesignatorDEC that can DEC: " + des.obj.getName(), DesignatorDEC);
     	} else {
     		report_error("Found DesignatorDEC that can't be DEC: " + des.obj.getName(), DesignatorDEC);
@@ -283,7 +380,16 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     public void visit(DesignatorINC DesignatorINC) { 
     	 
     	Designator des = DesignatorINC.getDesignator();
-    	if(des.obj.getType().getKind() == Struct.Int) {
+    	
+    	if(des.obj.getType().getKind() == Struct.Array) {
+    		if(des.obj.getType().getElemType().getKind() == Struct.Int) {
+    			report_info("Found DesignatorINC that can INC: " + des.obj.getName(), DesignatorINC);
+    		}
+    		else {
+    			report_error("Found DesignatorINC that can't be INC: " + des.obj.getName(), DesignatorINC);
+    		}
+    	}
+    	else if(des.obj.getType().getKind() == Struct.Int) {
     		report_info("Found DesignatorINC that can INC: " + des.obj.getName(), DesignatorINC);
     	} else {
     		report_error("Found DesignatorINC that can't be INC: " + des.obj.getName(), DesignatorINC);
@@ -295,9 +401,8 @@ public class SemanticAnalyzer extends VisitorAdaptor {
      * We reset assignments
      */
     public void visit(DesignatorAssign DesignatorAssign) { 
-    	 
-    	if(currentDesignator != null)
-    		report_info("Found DesignatorAssign: " + currentDesignator.getName(), DesignatorAssign);
+    	 	
+		report_info("Found DesignatorAssign: " + currentDesignator.getName(), DesignatorAssign);
     	currentDesignator = null;
     	operation = NOOP;
     	brackets = false;
@@ -305,18 +410,21 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	
     }
     
-    public void visit(NoNumConsts NoNumConsts) { report_info("NoNumConsts", NoNumConsts); }
-    public void visit(NumConsts NumConsts) { report_info("NumConsts", NumConsts); }
+//    public void visit(NoNumConsts NoNumConsts) { report_info("NoNumConsts", NoNumConsts); }
+//    public void visit(NumConsts NumConsts) { report_info("NumConsts", NumConsts); }
     
     public void visit(PrintStmt print) {
 		printCallCount++;
 		{ report_info("PrintStmt", print); }
 	}
     
-    public void visit(ReadStmt ReadStmt) { report_info("ReadStmt", ReadStmt); }
-    public void visit(DesignatorStmt DesignatorStmt) { report_info("DesignatorStmt", DesignatorStmt); }
-    public void visit(NoStmt NoStmt) { report_info("NoStmt", NoStmt); }
-    public void visit(Statements Statements) { report_info("Statements", Statements); }
+    public void visit(ReadStmt ReadStmt) { 
+    	report_info("ReadStmt", ReadStmt); 
+    }
+    
+//    public void visit(DesignatorStmt DesignatorStmt) { report_info("DesignatorStmt", DesignatorStmt); }
+//    public void visit(NoStmt NoStmt) { report_info("NoStmt", NoStmt); }
+//    public void visit(Statements Statements) { report_info("Statements", Statements); }
     
     /**
      * Checks if there is an type in table, if there isn't returns error.
@@ -324,10 +432,6 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     public void visit(Type type) {
     
     	Obj typeNode = Tab.find(type.getTypeName());
-    	
-//    	if(type.getTypeName().equals("bool")) {
-//    		typeNode = Tab.find("int");
-//    	}
     	
     	if(typeNode == Tab.noObj) {
     		report_error("Not found type " + type.getTypeName() + " in symbol table!", null);
@@ -358,13 +462,16 @@ public class SemanticAnalyzer extends VisitorAdaptor {
  
     }
     
-    public void visit(VoidMethodDecl VoidMethodDecl) { report_info("VoidMethodDecl", VoidMethodDecl); }
-    public void visit(NoMethodDecl NoMethodDecl) { report_info("NoMethodDecl", NoMethodDecl); }
-    public void visit(MethodDeclarations MethodDeclarations) { report_info("MethodDeclarations", MethodDeclarations); }
+//    public void visit(VoidMethodDecl VoidMethodDecl) { report_info("VoidMethodDecl", VoidMethodDecl); }
+//    public void visit(NoMethodDecl NoMethodDecl) { report_info("NoMethodDecl", NoMethodDecl); }
+//    public void visit(MethodDeclarations MethodDeclarations) { report_info("MethodDeclarations", MethodDeclarations); }
     
     public void visit(VarBrackets varBrackets) { 
-    	report_info("Declared variable VarBrackets: " + varBrackets.getVarName(), varBrackets); 
-    	Obj varNode = Tab.insert(Obj.Var, varBrackets.getVarName(), typeStruct);
+    	report_info("Declared variable VarBrackets: " + varBrackets.getVarName(), varBrackets);
+    	
+    	Struct temp = new Struct(Struct.Array);
+    	temp.setElementType(typeStruct);
+    	Obj varNode = Tab.insert(Obj.Var, varBrackets.getVarName(), temp);
     	
     	Tab.currentScope.addToLocals(varNode);
     	
@@ -412,12 +519,12 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	}
     }
     
-    public void visit(VarSemiError VarSemiError) { report_info("VarSemiError", VarSemiError); }
-    public void visit(SemiVar SemiVar) { report_info("SemiVar", SemiVar); }
-    public void visit(VarCommaError VarCommaError) { report_info("VarCommaError", VarCommaError); }
-    public void visit(CommaVar CommaVar) { report_info("CommaVar", CommaVar); }
-    public void visit(SingleVar SingleVar) { report_info("SingleVar", SingleVar); }
-    public void visit(VarList VarList) { report_info("VarList", VarList); }
+//    public void visit(VarSemiError VarSemiError) { report_info("VarSemiError", VarSemiError); }
+//    public void visit(SemiVar SemiVar) { report_info("SemiVar", SemiVar); }
+//    public void visit(VarCommaError VarCommaError) { report_info("VarCommaError", VarCommaError); }
+//    public void visit(CommaVar CommaVar) { report_info("CommaVar", CommaVar); }
+//    public void visit(SingleVar SingleVar) { report_info("SingleVar", SingleVar); }
+//    public void visit(VarList VarList) { report_info("VarList", VarList); }
     
     public void visit(VarDeclaration varDeclaration) { 
     	report_info("Type in VarDeclaration " + varDeclaration.getType().getTypeName(), varDeclaration); 
@@ -429,22 +536,38 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     }
     
     public void visit(FalseConst FalseConst) { 
-    	report_info("FalseConst", FalseConst); 
-    	
-    	// check if type is good
-    	
+    	if(typeStruct.getKind() == Struct.Bool) {
+    		report_info("Declared TrueConst!", FalseConst);
+    	} else {
+    		report_info("Error: set value to TrueConst to diffenrent type!", FalseConst);
+    	}
     }
     
     public void visit(TrueConst TrueConst) { 
-    	report_info("TrueConst", TrueConst); 
+    	if(typeStruct.getKind() == Struct.Bool) {
+    		report_info("Declared TrueConst!", TrueConst);
+    	} else {
+    		report_info("Error: set value to TrueConst to diffenrent type!", TrueConst);
+    	}
     }
     
     public void visit(CharConst CharConst) { 
-    	report_info("CharConst", CharConst); 
+    	
+    	if(typeStruct.getKind() == Struct.Char) {
+    		report_info("Declared CharConst!", CharConst);
+    	} else {
+    		report_info("Error: set value to CharConst to diffenrent type!", CharConst);
+    	}
     }
     
     public void visit(NumConst NumConst) { 
-    	report_info("NumConst", NumConst); 
+    	
+    	if(typeStruct.getKind() == Struct.Int) {
+    		report_info("Declared NumConst!", NumConst);
+    	} else {
+    		report_info("Error: set value to NumConst to diffenrent type!", NumConst);
+    	}
+    	 
     }
     
     public void visit(Const Const) { 
@@ -473,16 +596,16 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	
     }
     
-    public void visit(ConstCommaError ConstCommaError) { report_info("ConstCommaError", ConstCommaError); }
-    public void visit(CommaConst CommaConst) { report_info("CommaConst", CommaConst); }
-    public void visit(ConstSemiError ConstSemiError) { report_info("ConstSemiError", ConstSemiError); }
-    public void visit(SemiConst SemiConst) { report_info("SemiConst", SemiConst); }
-    public void visit(SingleConst SingleConst) { report_info("SingleConst", SingleConst); }
-    public void visit(ConstList ConstList) { report_info("ConstList", ConstList); }
-    public void visit(ConstDeclaration ConstDeclaration) { report_info("ConstDeclaration", ConstDeclaration); }
-    public void visit(ParamVarList ParamVarList) { report_info("ParamVarList", ParamVarList); }
-    public void visit(ParamConstList ParamConstList) { report_info("ParamConstList", ParamConstList); }
-    public void visit(NoParamItem NoParamItem) { report_info("NoParamItem", NoParamItem); }
-    public void visit(ParamItemList ParamItemList) { report_info("ParamItemList", ParamItemList); }
+//    public void visit(ConstCommaError ConstCommaError) { report_info("ConstCommaError", ConstCommaError); }
+//    public void visit(CommaConst CommaConst) { report_info("CommaConst", CommaConst); }
+//    public void visit(ConstSemiError ConstSemiError) { report_info("ConstSemiError", ConstSemiError); }
+//    public void visit(SemiConst SemiConst) { report_info("SemiConst", SemiConst); }
+//    public void visit(SingleConst SingleConst) { report_info("SingleConst", SingleConst); }
+//    public void visit(ConstList ConstList) { report_info("ConstList", ConstList); }
+//    public void visit(ConstDeclaration ConstDeclaration) { report_info("ConstDeclaration", ConstDeclaration); }
+//    public void visit(ParamVarList ParamVarList) { report_info("ParamVarList", ParamVarList); }
+//    public void visit(ParamConstList ParamConstList) { report_info("ParamConstList", ParamConstList); }
+//    public void visit(NoParamItem NoParamItem) { report_info("NoParamItem", NoParamItem); }
+//    public void visit(ParamItemList ParamItemList) { report_info("ParamItemList", ParamItemList); }
 	
 }

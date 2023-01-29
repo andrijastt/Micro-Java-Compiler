@@ -45,7 +45,7 @@ public class MJParserTest {
 	        Tab.init();
 	        
 	        Scope universe = Tab.currentScope ;
-	        universe.addToLocals(new Obj(Obj.Type, "bool", new Struct(8)));
+	        universe.addToLocals(new Obj(Obj.Type, "bool", new Struct(Struct.Bool)));
 	        
 			// ispis sintaksnog stabla
 			log.info(prog.toString(""));

@@ -58,8 +58,7 @@ program test301
 		read(bodovi);
 		bodovi = -bodovi + (pet * a / 2 - jedan) * bodovi - (3 % 2 + 3 * 2 - 3); 
 		print(bodovi);
-		bt = true;
-		bt = false;		
+			
 	}
 }
 
