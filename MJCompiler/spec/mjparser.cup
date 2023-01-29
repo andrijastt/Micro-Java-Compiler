@@ -50,8 +50,8 @@ scan with {:
 
 terminal PROG, CONST, CLASS, IF, ELSE, WHILE, BREAK, CONTINUE, NEW;
 terminal PRINT, READ, RETURN, VOID, EXTENDS, FOREACH;
-terminal TRUE, FALSE;
-terminal CHAR;
+terminal String TRUE, FALSE;
+terminal Character CHAR;
 terminal Integer NUMBER;
 terminal String IDENT;
 terminal PLUS, MINUS, MULTIPLY, DIVISION, MOD;
@@ -209,7 +209,7 @@ Factor ::=(DisgnatorNoPars) Designator:d
 		|
 		(NumFactorConst) NUMBER
 		|
-		(CharFactorConst) CHAR
+		(CharFactorConst) CHAR:character
 		|
 		(TrueFactorConst) TRUE
 		|

@@ -1,13 +1,24 @@
 // generated with ast extension for cup
 // version 0.8
-// 27/0/2023 18:15:20
+// 29/0/2023 1:2:48
 
 
 package rs.ac.bg.etf.pp1.ast;
 
 public class FalseConst extends ConstVal {
 
-    public FalseConst () {
+    private String F1;
+
+    public FalseConst (String F1) {
+        this.F1=F1;
+    }
+
+    public String getF1() {
+        return F1;
+    }
+
+    public void setF1(String F1) {
+        this.F1=F1;
     }
 
     public void accept(Visitor visitor) {
@@ -29,6 +40,9 @@ public class FalseConst extends ConstVal {
         StringBuffer buffer=new StringBuffer();
         buffer.append(tab);
         buffer.append("FalseConst(\n");
+
+        buffer.append(" "+tab+F1);
+        buffer.append("\n");
 
         buffer.append(tab);
         buffer.append(") [FalseConst]");

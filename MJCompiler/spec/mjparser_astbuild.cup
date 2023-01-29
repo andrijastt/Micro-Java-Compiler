@@ -50,8 +50,8 @@ scan with {:
 
 terminal PROG, CONST, CLASS, IF, ELSE, WHILE, BREAK, CONTINUE, NEW;
 terminal PRINT, READ, RETURN, VOID, EXTENDS, FOREACH;
-terminal TRUE, FALSE;
-terminal CHAR;
+terminal String TRUE, FALSE;
+terminal Character CHAR;
 terminal Integer NUMBER;
 terminal String IDENT;
 terminal PLUS, MINUS, MULTIPLY, DIVISION, MOD;
@@ -125,11 +125,11 @@ Const ::= (Const) IDENT:constName ASSIGN ConstVal:C1 {: RESULT=new Const(constNa
 			
 ConstVal ::= (NumConst) NUMBER:N1 {: RESULT=new NumConst(N1); RESULT.setLine(N1left); :}
 			|
-			(CharConst) CHAR {: RESULT=new CharConst(); :}
+			(CharConst) CHAR:C1 {: RESULT=new CharConst(C1); RESULT.setLine(C1left); :}
 			|
-			(TrueConst) TRUE {: RESULT=new TrueConst(); :}
+			(TrueConst) TRUE:T1 {: RESULT=new TrueConst(T1); RESULT.setLine(T1left); :}
 			|
-			(FalseConst) FALSE {: RESULT=new FalseConst(); :}
+			(FalseConst) FALSE:F1 {: RESULT=new FalseConst(F1); RESULT.setLine(F1left); :}
 			;
 
 MethodVarDecl ::= (MethodVarDecls) MethodVarDecl:M1 VarDeclList:V2 {: RESULT=new MethodVarDecls(M1, V2); RESULT.setLine(M1left); :}
@@ -227,11 +227,11 @@ Factor ::=(DisgnatorNoPars) Designator:d {: RESULT=new DisgnatorNoPars(d); RESUL
 		|
 		(NumFactorConst) NUMBER:N1 {: RESULT=new NumFactorConst(N1); RESULT.setLine(N1left); :}
 		|
-		(CharFactorConst) CHAR {: RESULT=new CharFactorConst(); :}
+		(CharFactorConst) CHAR:character {: RESULT=new CharFactorConst(character); RESULT.setLine(characterleft); :}
 		|
-		(TrueFactorConst) TRUE {: RESULT=new TrueFactorConst(); :}
+		(TrueFactorConst) TRUE:T1 {: RESULT=new TrueFactorConst(T1); RESULT.setLine(T1left); :}
 		|
-		(FalseFactorConst) FALSE {: RESULT=new FalseFactorConst(); :}
+		(FalseFactorConst) FALSE:F1 {: RESULT=new FalseFactorConst(F1); RESULT.setLine(F1left); :}
 		|
 		(NewFuncExpr) NEW Type:typeName LBRACKET Expr:E1 RBRACKET {: RESULT=new NewFuncExpr(typeName, E1); RESULT.setLine(typeNameleft); :}
 		|

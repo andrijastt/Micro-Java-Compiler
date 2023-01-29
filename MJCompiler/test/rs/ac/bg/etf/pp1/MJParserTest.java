@@ -15,6 +15,9 @@ import org.apache.log4j.xml.DOMConfigurator;
 import rs.ac.bg.etf.pp1.ast.Program;
 import rs.ac.bg.etf.pp1.util.Log4JUtils;
 import rs.etf.pp1.symboltable.Tab;
+import rs.etf.pp1.symboltable.concepts.Obj;
+import rs.etf.pp1.symboltable.concepts.Scope;
+import rs.etf.pp1.symboltable.concepts.Struct;
 
 public class MJParserTest {
 
@@ -40,6 +43,10 @@ public class MJParserTest {
 	        
 	        Program prog = (Program)(s.value); 
 	        Tab.init();
+	        
+	        Scope universe = Tab.currentScope ;
+	        universe.addToLocals(new Obj(Obj.Type, "bool", new Struct(8)));
+	        
 			// ispis sintaksnog stabla
 			log.info(prog.toString(""));
 			log.info("===================================");

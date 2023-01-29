@@ -1,13 +1,24 @@
 // generated with ast extension for cup
 // version 0.8
-// 27/0/2023 18:15:20
+// 29/0/2023 1:2:48
 
 
 package rs.ac.bg.etf.pp1.ast;
 
 public class TrueFactorConst extends Factor {
 
-    public TrueFactorConst () {
+    private String T1;
+
+    public TrueFactorConst (String T1) {
+        this.T1=T1;
+    }
+
+    public String getT1() {
+        return T1;
+    }
+
+    public void setT1(String T1) {
+        this.T1=T1;
     }
 
     public void accept(Visitor visitor) {
@@ -29,6 +40,9 @@ public class TrueFactorConst extends Factor {
         StringBuffer buffer=new StringBuffer();
         buffer.append(tab);
         buffer.append("TrueFactorConst(\n");
+
+        buffer.append(" "+tab+T1);
+        buffer.append("\n");
 
         buffer.append(tab);
         buffer.append(") [TrueFactorConst]");
