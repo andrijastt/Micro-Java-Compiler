@@ -192,6 +192,8 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	brackets = true;
     	designatorBrackets.obj = obj;
     	
+    	rightType = obj.getType();
+    	
     	if(currentDesignator.getType().getKind() == Struct.Array) {
     		if(currentDesignator.getType().getElemType().getKind() != Struct.Int) {
     			report_error("Type in brackets isn't int: " + currentDesignator.getName(), designatorBrackets);
@@ -222,6 +224,16 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	designatorNoBrackets.obj = obj;
     		
 		currentDesignator = obj;
+		if(leftSide) {
+			if(leftType == null) {
+				leftType = currentDesignator.getType();
+			}
+		}
+		else {
+			if(rightType == null) {
+				rightType = currentDesignator.getType();
+			}
+		}
 	
 		if(obj.getType().getKind() == currentDesignator.getType().getKind()) {
 			report_info("Same kind!", designatorNoBrackets);
@@ -242,18 +254,16 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	
     	if(typeNode == Tab.noObj) {
     		report_error("Not found type " + NewFuncExpr.getType().getTypeName() + " in symbol table!", NewFuncExpr);
-    		
     	}
     	else {
     		if(Obj.Type == typeNode.getKind()) {
     			
-    			if(leftType.getKind() == typeNode.getType().getKind()) {
+    			if(leftType.getElemType().getKind() == typeNode.getType().getKind()) {
     				report_info("Found NewFuncExpr: ", NewFuncExpr);
     			}
     			else {
-    				report_error("Wrong NewFuncExpr can't creat diffenrt types", NewFuncExpr);
+    				report_error("Wrong NewFuncExpr can't create diffenrt types", NewFuncExpr);
     			}
-    			
     			
     		} else {
     			report_error("Error: Name " + NewFuncExpr.getType().getTypeName() + " isn't a type!", NewFuncExpr);
@@ -273,10 +283,18 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	}
     	
     	if(currentDesignator.getType().getKind() == Struct.Bool) {
-    		report_info("Found TrueFactorConst: " + FalseFactorConst.getF1(), FalseFactorConst); 
+    		if(currentDesignator.getType().getElemType().getKind() == Struct.Char) {
+        		report_info("Good assignment FalseFactorConst: " + FalseFactorConst.getF1(), FalseFactorConst);
+        	}
+        	else {
+        		report_error("Error FalseFactorConst assignment is bad: " + currentDesignator.getName() + " isn't int", FalseFactorConst);
+        	}
+    	}
+    	else if(currentDesignator.getType().getKind() == Struct.Bool) {
+    		report_info("Found FalseFactorConst: " + FalseFactorConst.getF1(), FalseFactorConst); 
     	}
     	else {
-    		report_error("Error TrueFactorConst assignment is bad: " + currentDesignator.getName() + " isn't bool", FalseFactorConst);
+    		report_error("Error FalseFactorConst assignment is bad: " + currentDesignator.getName() + " isn't bool", FalseFactorConst);
     	} 
     }
     
@@ -291,6 +309,14 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	}
     	
     	if(currentDesignator.getType().getKind() == Struct.Bool) {
+    		if(currentDesignator.getType().getElemType().getKind() == Struct.Char) {
+        		report_info("Good assignment TrueFactorConst: " + TrueFactorConst.getT1(), TrueFactorConst);
+        	}
+        	else {
+        		report_error("Error TrueFactorConst assignment is bad: " + currentDesignator.getName() + " isn't int", TrueFactorConst);
+        	}
+    	}
+    	else if(currentDesignator.getType().getKind() == Struct.Bool) {
     		report_info("Found TrueFactorConst: " + TrueFactorConst.getT1(), TrueFactorConst); 
     	}
     	else {
@@ -309,7 +335,15 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     		currentDesignator = new Obj(Obj.Var, CharFactorConst.getCharacter().toString(), new Struct(Struct.Char));
     	}
     	
-    	if(currentDesignator.getType().getKind() == Struct.Char) {
+    	if(currentDesignator.getType().getKind() == Struct.Array) {
+    		if(currentDesignator.getType().getElemType().getKind() == Struct.Char) {
+        		report_info("Good assignment CharFactorConst: " + CharFactorConst.getCharacter(), CharFactorConst);
+        	}
+        	else {
+        		report_error("Error CharFactorConst assignment is bad: " + currentDesignator.getName() + " isn't int", CharFactorConst);
+        	}
+    	}
+    	else if(currentDesignator.getType().getKind() == Struct.Char) {
     		report_info("CharFactorConst: " + CharFactorConst.getCharacter(), CharFactorConst);
     	}
     	else {
@@ -325,16 +359,25 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     		rightType = new Struct(Struct.Int);
     	}
     	
-    	if(currentDesignator == null) {
+		if(currentDesignator == null) {
     		currentDesignator = new Obj(Obj.Var, NumFactorConst.getN1().toString(), new Struct(Struct.Int));
     	}
     	
-    	if(currentDesignator.getType().getKind() == Struct.Int) {
+    	if(currentDesignator.getType().getKind() == Struct.Array) {
+    		if(currentDesignator.getType().getElemType().getKind() == Struct.Int) {
+        		report_info("Good assignment NumFactorConst: " + NumFactorConst.getN1(), NumFactorConst);
+        	}
+        	else {
+        		report_error("Error NumFactorConst assignment is bad: " + currentDesignator.getName() + " isn't int", NumFactorConst);
+        	}
+    	}
+    	else if(currentDesignator.getType().getKind() == Struct.Int) {
     		report_info("Good assignment NumFactorConst: " + NumFactorConst.getN1(), NumFactorConst);
     	}
     	else {
     		report_error("Error NumFactorConst assignment is bad: " + currentDesignator.getName() + " isn't int", NumFactorConst);
     	}
+	
     	
     }
     
@@ -403,6 +446,27 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     public void visit(DesignatorAssign DesignatorAssign) { 
     	 	
 		report_info("Found DesignatorAssign: " + currentDesignator.getName(), DesignatorAssign);
+		
+//		int temp0, temp1;
+//		
+//		if(leftType.getKind() == Struct.Array) {
+//			temp0 = leftType.getElemType().getKind();
+//		} else {
+//			temp0 = leftType.getKind();
+//		}
+//		
+//		if(rightType.getKind() == Struct.Array) {
+//			temp1 = rightType.getElemType().getKind();
+//		} else {
+//			temp1 = rightType.getKind();
+//		}
+//		
+//		if(temp1 == temp0) {
+//			report_info("Good Assignment!", DesignatorAssign);
+//		} else {
+//			report_error("Bad Assignment!", DesignatorAssign);
+//		}
+		
     	currentDesignator = null;
     	operation = NOOP;
     	brackets = false;
@@ -536,37 +600,48 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     }
     
     public void visit(FalseConst FalseConst) { 
+    	
+    	if(rightType == null) {
+    		rightType = new Struct(Struct.Bool);
+    	}
+    	
     	if(typeStruct.getKind() == Struct.Bool) {
     		report_info("Declared TrueConst!", FalseConst);
-    	} else {
-    		report_info("Error: set value to TrueConst to diffenrent type!", FalseConst);
-    	}
+    	} 
     }
     
     public void visit(TrueConst TrueConst) { 
+    	
+    	if(rightType == null) {
+    		rightType = new Struct(Struct.Bool);
+    	}
+    	
     	if(typeStruct.getKind() == Struct.Bool) {
     		report_info("Declared TrueConst!", TrueConst);
-    	} else {
-    		report_info("Error: set value to TrueConst to diffenrent type!", TrueConst);
-    	}
+    	} 
     }
     
     public void visit(CharConst CharConst) { 
     	
+    	if(rightType == null) {
+    		rightType = new Struct(Struct.Char);
+    	}
+    	
     	if(typeStruct.getKind() == Struct.Char) {
     		report_info("Declared CharConst!", CharConst);
-    	} else {
-    		report_info("Error: set value to CharConst to diffenrent type!", CharConst);
-    	}
+    	} 
+    	
     }
     
     public void visit(NumConst NumConst) { 
     	
+    	if(rightType == null) {
+    		rightType = new Struct(Struct.Int);
+    	}
+    	
     	if(typeStruct.getKind() == Struct.Int) {
     		report_info("Declared NumConst!", NumConst);
-    	} else {
-    		report_info("Error: set value to NumConst to diffenrent type!", NumConst);
-    	}
+    	} 
     	 
     }
     
