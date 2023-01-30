@@ -52,18 +52,29 @@ public class CodeGenerator extends VisitorAdaptor {
 	
 //    public void visit(Expression Expression) { visit(); }
 //    public void visit(NewFuncExpr NewFuncExpr) { visit(); }
-//    public void visit(FalseFactorConst FalseFactorConst) { visit(); }
-//    public void visit(TrueFactorConst TrueFactorConst) { visit(); }
-//    public void visit(CharFactorConst CharFactorConst) { visit(); }
+    
+	public void visit(FalseFactorConst FalseFactorConst) { 
+		Obj con = Tab.insert(Obj.Con, "$", FalseFactorConst.struct); // Ako je struct stavi bool
+    	Code.load(con); 
+    }
+    
+    public void visit(TrueFactorConst TrueFactorConst) { 
+    	Obj con = Tab.insert(Obj.Con, "$", TrueFactorConst.struct); // Ako je struct stavi bool
+    	Code.load(con);
+    }
+    
+    public void visit(CharFactorConst CharFactorConst) { 
+		Obj con = Tab.insert(Obj.Con, "$", CharFactorConst.struct); // Ako je struct stavi char
+//	   	con.setLevel(0);
+//	   	con.setAdr(CharFactorConst.getCharacter());
+	   	Code.load(con); 
+    }
 	
     public void visit(NumFactorConst NumFactorConst) { 
-    	 Obj con = Tab.insert(Obj.Con, "$", NumFactorConst.struct);
-    	 
-    	 con.setLevel(0);
-    	 con.setAdr(NumFactorConst.getN1());
-    	 
+    	 Obj con = Tab.insert(Obj.Con, "$", NumFactorConst.struct); // Ako je struct stavi int
+//    	 con.setLevel(0);
+//    	 con.setAdr(NumFactorConst.getN1());
     	 Code.load(con);
-    	 
     }
     
 //    public void visit(DisgnatorNoPars DisgnatorNoPars) { visit(); }
@@ -152,7 +163,13 @@ public class CodeGenerator extends VisitorAdaptor {
 //    public void visit(TrueConst TrueConst) { visit(); }
 //    public void visit(CharConst CharConst) { visit(); }
 //    public void visit(NumConst NumConst) { visit(); }
-//    public void visit(Const Const) { visit(); }
+    
+//    public void visit(Const Const) { 
+//    	
+//    	Const.getConstName();
+//    	
+//    }
+    
 //    public void visit(ConstCommaError ConstCommaError) { visit(); }
 //    public void visit(CommaConst CommaConst) { visit(); }
 //    public void visit(ConstSemiError ConstSemiError) { visit(); }
