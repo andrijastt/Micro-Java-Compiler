@@ -523,6 +523,10 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	
     	Struct temp = new Struct(Struct.Array);
     	temp.setElementType(typeStruct);
+    	
+    	if(Tab.find(varBrackets.getVarName()) != Tab.noObj) {
+    		report_error("Constant already declared!" + varBrackets.getVarName(), varBrackets);
+    	}
     	Obj varNode = Tab.insert(Obj.Var, varBrackets.getVarName(), temp);
     	
     	Tab.currentScope.addToLocals(varNode);
@@ -548,8 +552,11 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     
     public void visit(VarNoBrackets varNoBrackets) { 
     	report_info("Declared variable VarNoBrackets: " + varNoBrackets.getVarName(), varNoBrackets); 
-    	Obj varNode = Tab.insert(Obj.Var, varNoBrackets.getVarName(), typeStruct);
     	
+    	if(Tab.find(varNoBrackets.getVarName()) != Tab.noObj) {
+    		report_error("Constant already declared!" + varNoBrackets.getVarName(), varNoBrackets);
+    	}
+    	Obj varNode = Tab.insert(Obj.Var, varNoBrackets.getVarName(), typeStruct);
     	Tab.currentScope.addToLocals(varNode);
     	
     	if(varNode.getLevel() > 0) {
@@ -635,6 +642,11 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     
     public void visit(Const Const) { 
     	report_info("Declared constant Const: " + Const.getConstName(), Const);
+    	
+    	if(Tab.find(Const.getConstName()) != Tab.noObj) {
+    		report_error("Constant already declared!" + Const.getConstName(), Const);
+    	}
+    	
     	Obj constNode = Tab.insert(Obj.Con, Const.getConstName(), typeStruct);
     	
     	Tab.currentScope.addToLocals(constNode);
