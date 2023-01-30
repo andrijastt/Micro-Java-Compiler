@@ -86,8 +86,10 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     }
 
     public void visit(Program program) {
+    	localVariablesCount = Tab.currentScope.getnVars();
     	Tab.chainLocalSymbols(program.getProgName().obj);
     	Tab.closeScope();
+    	globalVaribalesCount = Tab.currentScope.getnVars();
     	
     	if(!foundMain) {
     		report_error("No main function!", program);
@@ -449,6 +451,18 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 //    public void visit(NumConsts NumConsts) { report_info("NumConsts", NumConsts); }
     
     public void visit(PrintStmt print) {
+    	
+    	if(leftType.getKind() == Struct.Array) {
+    		if(leftType.getElemType().getKind() != Struct.Int && leftType.getElemType().getKind() != Struct.Char) {
+    			report_error("Wrong type in PrintStmt, only int and char can be printed!", print);
+    		}
+    	} else {
+    		if(leftType.getKind() != Struct.Int && leftType.getKind() != Struct.Char) {
+    			report_error("Wrong type in PrintStmt, only int and char can be printed!", print);
+    		}
+    	}
+    	
+    	
     	currentDesignator = null;
     	prevDesignator = null;
     	leftSide = true;
@@ -525,7 +539,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	temp.setElementType(typeStruct);
     	
     	if(Tab.find(varBrackets.getVarName()) != Tab.noObj) {
-    		report_error("Constant already declared!" + varBrackets.getVarName(), varBrackets);
+    		report_error("VarBrackets already declared!" + varBrackets.getVarName(), varBrackets);
     	}
     	Obj varNode = Tab.insert(Obj.Var, varBrackets.getVarName(), temp);
     	
@@ -538,7 +552,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     		else {
     			report_info("Current scope: " + varNode.getLevel() + ", variable count: " + Tab.currentScope.getnVars(), varBrackets);
     		}
-    		localVariablesCount++;
+    		
     	} else {
     		if(Tab.currentScope.getnVars() > 65536) {
     			report_error("Global varibale count > 65536: " + Tab.currentScope.getnVars(), varBrackets);
@@ -546,7 +560,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     		else {
     			report_info("Current scope: " + varNode.getLevel() + ", variable count: " + Tab.currentScope.getnVars(), varBrackets);
     		}
-    		globalVaribalesCount++;
+    		
     	}
     }
     
@@ -554,7 +568,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	report_info("Declared variable VarNoBrackets: " + varNoBrackets.getVarName(), varNoBrackets); 
     	
     	if(Tab.find(varNoBrackets.getVarName()) != Tab.noObj) {
-    		report_error("Constant already declared!" + varNoBrackets.getVarName(), varNoBrackets);
+    		report_error("VarNoBrackets already declared!" + varNoBrackets.getVarName(), varNoBrackets);
     	}
     	Obj varNode = Tab.insert(Obj.Var, varNoBrackets.getVarName(), typeStruct);
     	Tab.currentScope.addToLocals(varNode);
@@ -566,7 +580,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     		else {
     			report_info("Current scope: " + varNode.getLevel() + ", variable count: " + Tab.currentScope.getnVars(), varNoBrackets);
     		}
-    		localVariablesCount++;
+    		
     	} else {
     		if(Tab.currentScope.getnVars() > 65536) {
     			report_error("Global varibale count > 65536: " + Tab.currentScope.getnVars(), varNoBrackets);
@@ -574,7 +588,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     		else {
     			report_info("Current scope: " + varNode.getLevel() + ", variable count: " + Tab.currentScope.getnVars(), varNoBrackets);
     		}
-    		globalVaribalesCount++;
+    		
     	}
     }
     
