@@ -9,22 +9,10 @@ import rs.etf.pp1.symboltable.concepts.Struct;
 
 public class SemanticAnalyzer extends VisitorAdaptor {
 
-	int printCallCount = 0;
 	int localVariablesCount = 0;
 	int globalVaribalesCount = 0;
 	int temp = 0;
 	
-	final private int NOOP = -1;
-	final private int ASSIGN = 0;
-	final private int ADD = 1;
-	final private int MINUS = 2;
-	final private int DIV = 3;
-	final private int MOD = 4;
-	final private int MUL = 5;
-	
-	private int operation = NOOP;
-	
-	boolean brackets = false;
 	boolean foundMain = false;
 	boolean leftSide = true;
 	
@@ -36,9 +24,10 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 	Struct typeStruct = null;
 	
 	// We use this to check if expression is good
-	Struct leftType = new Struct(Struct.Array, new Struct(-1)), rightType = new Struct(Struct.Array, new Struct(-1));
+	Struct leftType = null, rightType = null;
 	
 	Obj currentDesignator = null;
+	Obj prevDesignator = null;
 	
 	public void report_error(String message, SyntaxNode info) {
 		errorDetected = true;
@@ -57,6 +46,37 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			msg.append(" on line ").append(line);
 		}
 		log.info(msg.toString());
+	}
+	
+	private void setCurrentAndPrevMethod(Obj obj, SyntaxNode node) {
+		
+		if(currentDesignator == null) currentDesignator = obj;
+    	else {
+    		prevDesignator = currentDesignator;
+    		currentDesignator = obj;
+    		
+    		int temp0, temp1;
+    		
+    		if(prevDesignator.getType().getKind() == Struct.Array) {
+    			temp0 = prevDesignator.getType().getElemType().getKind();
+    		}
+    		else {
+    			temp0 = prevDesignator.getType().getKind();
+    		}
+    		
+    		if(currentDesignator.getType().getKind() == Struct.Array) {
+    			temp1 = currentDesignator.getType().getElemType().getKind();
+    		}
+    		else {
+    			temp1 = currentDesignator.getType().getKind();
+    		}
+    		
+    		if(temp0 != temp1) {
+    			report_error("Different type in expression!", node);
+    		}
+    		
+    	}
+		
 	}
     
     public void visit(ProgName progName) {
@@ -104,9 +124,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     }
     
 //    public void visit(Factor factor) { report_info("Factor: ", factor); }
-    
 //    public void visit(DesignatorStatement designatorStatement) { report_info("DesignatorStatement finished!", designatorStatement); }
-    
 //    public void visit(MethodVarDecl methodVarDecl) { report_info("MethodVarDecl: ", methodVarDecl); }
 //    public void visit(Var var) { report_info("Var: ", var); }
 //    public void visit(ConstDecl constDecl) { report_info("ConstDecl", constDecl); }
@@ -134,7 +152,6 @@ public class SemanticAnalyzer extends VisitorAdaptor {
      */
     public void visit(Modop Modop) { 
     	report_info("Modop", Modop);
-    	operation = MOD;
     }
     
     /**
@@ -142,7 +159,6 @@ public class SemanticAnalyzer extends VisitorAdaptor {
      */
     public void visit(Divop Divop) { 
     	report_info("Divop", Divop);
-    	operation = DIV;
     }
     
     /**
@@ -150,7 +166,6 @@ public class SemanticAnalyzer extends VisitorAdaptor {
      */
     public void visit(Mulop Mulop) { 
     	report_info("Found Mulop:", Mulop);
-    	operation = MUL;
     }
     
     /**
@@ -158,7 +173,6 @@ public class SemanticAnalyzer extends VisitorAdaptor {
      */
     public void visit(Minusop Minusop) { 
     	report_info("Found Minusop:", Minusop);
-    	operation = MINUS;
     }
     
     /**
@@ -166,7 +180,6 @@ public class SemanticAnalyzer extends VisitorAdaptor {
      */
     public void visit(Addop Addop) { 
     	report_info("Found Addop:", Addop); 
-    	operation = ADD; 
     }
     
     /**
@@ -174,10 +187,10 @@ public class SemanticAnalyzer extends VisitorAdaptor {
      */
     public void visit(Assignop Assignop) { 
     	report_info("Found Assignop:", Assignop); 
-    	operation = ASSIGN;
     	leftSide = false;
     	currentDesignator = null;
-    	
+    	prevDesignator = null;
+    	rightType = null;
     }
     
     public void visit(DesignatorBrackets designatorBrackets) { 
@@ -211,14 +224,6 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			rightType = currentDesignator.getType();
 		}
 		
-//		if(obj.getType().getElemType().getKind() == currentDesignator.getType().getKind()) {
-//			report_info("Same kind!", designatorBrackets);
-//		} else {
-//			if(!brackets)
-//				report_error("Error name: " + designatorBrackets.getName() + " not same type as: " + currentDesignator.getName(), null);
-//		}
-    	
-    	
     	report_info("DesignatorBrackets found: " + designatorBrackets.getName(), designatorBrackets);
     }
     
@@ -230,34 +235,17 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	}
     	designatorNoBrackets.obj = obj;
     		
-		currentDesignator = obj;
+    	setCurrentAndPrevMethod(obj, designatorNoBrackets);
+    	
 		if(leftSide) {
-			if(leftType.getElemType().getKind() == -1) {
-				leftType = currentDesignator.getType();
-			} else {
-				if(leftType.getKind() != currentDesignator.getType().getKind()) {
-					report_error("DesignatorNoBrackets: Different Types in expression!", designatorNoBrackets);
-				}
-			}
+			if(leftType == null) leftType = currentDesignator.getType();
 		}
 		else {
-			if(rightType.getElemType().getKind() == -1) {
+			if(rightType == null) {
 				rightType = currentDesignator.getType();
-			} else {
-				if(rightType.getKind() != currentDesignator.getType().getKind()) {
-					report_error("DesignatorNoBrackets: Different Types in expression!", designatorNoBrackets);
-				}
-			}
+			} 
 		}
-	
-//		if(obj.getType().getKind() == currentDesignator.getType().getKind()) {
-//			report_info("Same kind!", designatorNoBrackets);
-//		} else {
-//			if(!brackets)
-//				report_error("Error name: " + designatorNoBrackets.getName() + " not same type as: " + currentDesignator.getName(), null);
-//		}
-	
-    	
+			
     	report_info("DesignatorNoBrackets found: " + designatorNoBrackets.getName(), designatorNoBrackets);
     }
     
@@ -273,14 +261,19 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	else {
     		if(Obj.Type == typeNode.getKind()) {
     			
-    			if(leftType.getElemType().getKind() == typeNode.getType().getKind()) {
-    				report_info("Found NewFuncExpr: ", NewFuncExpr);
-    				rightType = new Struct(leftType.getElemType().getKind());
+    			if(leftType.getKind() == Struct.Array) {
+    				
+	    			if(leftType.getElemType().getKind() == typeNode.getType().getKind()) {
+	    				report_info("Found NewFuncExpr: ", NewFuncExpr);
+	    				rightType = new Struct(leftType.getElemType().getKind());
+	    			}
+	    			else {
+	    				report_error("Wrong NewFuncExpr can't create diffenrt types", NewFuncExpr);
+	    			}
+    			} else {
+    				report_error("Left side isn't Array type!", NewFuncExpr);
     			}
-    			else {
-    				report_error("Wrong NewFuncExpr can't create diffenrt types", NewFuncExpr);
-    			}
-    			
+	    			
     		} else {
     			report_error("Error: Name " + NewFuncExpr.getType().getTypeName() + " isn't a type!", NewFuncExpr);
     			
@@ -291,148 +284,88 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     
     public void visit(FalseFactorConst FalseFactorConst) { 
     	
-    	if(rightType == null) {
-    		rightType = new Struct(Struct.Bool);
-    	}
-    	if(currentDesignator == null) {
-    		currentDesignator = new Obj(Obj.Var, FalseFactorConst.getF1(), new Struct(Struct.Bool));
-    	}
+    	Obj temp = new Obj(Obj.Var, FalseFactorConst.getF1(), new Struct(Struct.Bool));
+    	setCurrentAndPrevMethod(temp, FalseFactorConst);
     	
-    	if(currentDesignator.getType().getKind() == Struct.Bool) {
-    		if(currentDesignator.getType().getElemType().getKind() == Struct.Char) {
-        		report_info("Good assignment FalseFactorConst: " + FalseFactorConst.getF1(), FalseFactorConst);
-        	}
-        	else {
-        		report_error("Error FalseFactorConst assignment is bad: " + currentDesignator.getName() + " isn't int", FalseFactorConst);
-        	}
-    	}
-    	else if(currentDesignator.getType().getKind() == Struct.Bool) {
-    		report_info("Found FalseFactorConst: " + FalseFactorConst.getF1(), FalseFactorConst); 
-    	}
-    	else {
-    		report_error("Error FalseFactorConst assignment is bad: " + currentDesignator.getName() + " isn't bool", FalseFactorConst);
-    	} 
+    	if(leftSide) {
+			if(leftType == null) {
+				leftType = new Struct(Struct.Bool);
+			} 
+		}
+		else {
+			if(rightType == null) {
+				rightType = new Struct(Struct.Bool);
+			} 
+		}
+    	
+		report_info("CharFactorConst: " + FalseFactorConst.getF1(), FalseFactorConst);
     }
     
     public void visit(TrueFactorConst TrueFactorConst) {
     	
-    	if(rightType == null) {
-    		rightType = new Struct(Struct.Bool);
-    	}
+    	Obj temp = new Obj(Obj.Var, TrueFactorConst.getT1(), new Struct(Struct.Bool));
+    	setCurrentAndPrevMethod(temp, TrueFactorConst);
     	
-    	if(currentDesignator == null) {
-    		currentDesignator = new Obj(Obj.Var, TrueFactorConst.getT1(), new Struct(Struct.Bool));
-    	}
+    	if(leftSide) {
+			if(leftType == null) {
+				leftType = new Struct(Struct.Bool);
+			} 
+		}
+		else {
+			if(rightType == null) {
+				rightType = new Struct(Struct.Bool);
+			} 
+		}
     	
-    	if(currentDesignator.getType().getKind() == Struct.Bool) {
-    		if(currentDesignator.getType().getElemType().getKind() == Struct.Char) {
-        		report_info("Good assignment TrueFactorConst: " + TrueFactorConst.getT1(), TrueFactorConst);
-        	}
-        	else {
-        		report_error("Error TrueFactorConst assignment is bad: " + currentDesignator.getName() + " isn't int", TrueFactorConst);
-        	}
-    	}
-    	else if(currentDesignator.getType().getKind() == Struct.Bool) {
-    		report_info("Found TrueFactorConst: " + TrueFactorConst.getT1(), TrueFactorConst); 
-    	}
-    	else {
-    		report_error("Error TrueFactorConst assignment is bad: " + currentDesignator.getName() + " isn't bool", TrueFactorConst);
-    	}
+		report_info("CharFactorConst: " + TrueFactorConst.getT1(), TrueFactorConst);
     	
     }
     
     public void visit(CharFactorConst CharFactorConst) { 
     	
-    	if(rightType == null) {
-    		rightType = new Struct(Struct.Char);
-    	}
+    	Obj temp = new Obj(Obj.Var, CharFactorConst.getCharacter().toString(), new Struct(Struct.Char));
+    	setCurrentAndPrevMethod(temp, CharFactorConst);
     	
-    	if(currentDesignator == null) {
-    		currentDesignator = new Obj(Obj.Var, CharFactorConst.getCharacter().toString(), new Struct(Struct.Char));
-    	}
+    	if(leftSide) {
+			if(leftType == null) {
+				leftType = new Struct(Struct.Char);
+			} 
+		}
+		else {
+			if(rightType == null) {
+				rightType = new Struct(Struct.Char);
+			} 
+		}
     	
-    	if(currentDesignator.getType().getKind() == Struct.Array) {
-    		if(currentDesignator.getType().getElemType().getKind() == Struct.Char) {
-        		report_info("Good assignment CharFactorConst: " + CharFactorConst.getCharacter(), CharFactorConst);
-        	}
-        	else {
-        		report_error("Error CharFactorConst assignment is bad: " + currentDesignator.getName() + " isn't int", CharFactorConst);
-        	}
-    	}
-    	else if(currentDesignator.getType().getKind() == Struct.Char) {
-    		report_info("CharFactorConst: " + CharFactorConst.getCharacter(), CharFactorConst);
-    	}
-    	else {
-    		report_error("Error CharFactorConst assignment is bad: " + currentDesignator.getName() + " isn't char", CharFactorConst);
-    	}
+		report_info("CharFactorConst: " + CharFactorConst.getCharacter(), CharFactorConst);
     	
     }
     
     public void visit(NumFactorConst NumFactorConst) { 
     	
-    	if(currentDesignator == null) {
-    		currentDesignator = new Obj(Obj.Var, NumFactorConst.getN1().toString(), new Struct(Struct.Int));
-    	}
+    	Obj temp = new Obj(Obj.Var, NumFactorConst.getN1().toString(), new Struct(Struct.Int));
+    	setCurrentAndPrevMethod(temp, NumFactorConst);
     	
     	if(leftSide) {
-			if(leftType.getElemType().getKind() == -1) {
+			if(leftType == null) {
 				leftType = new Struct(Struct.Int);
-			} else {
-				if(leftType.getKind() == Struct.Array) {
-					if(leftType.getElemType().getKind() != currentDesignator.getType().getKind()) {
-						report_error("NumFactorConst: Different Types in expression!", NumFactorConst);
-					}
-				} else if(leftType.getKind() != currentDesignator.getType().getKind()) {
-					report_error("NumFactorConst: Different Types in expression!", NumFactorConst);
-				}
-			}
+			} 
 		}
 		else {
-			if(rightType.getElemType().getKind() == -1) {
+			if(rightType == null) {
 				rightType = new Struct(Struct.Int);
-			} else {
-				if(rightType.getKind() == Struct.Array) {
-					if(rightType.getElemType().getKind() != currentDesignator.getType().getKind()) {
-						report_error("NumFactorConst: Different Types in expression!", NumFactorConst);
-					}
-				} else if(rightType.getKind() != currentDesignator.getType().getKind()) {
-					report_error("NumFactorConst: Different Types in expression!", NumFactorConst);
-				}
-			}
+			} 
 		}
     	
-		report_info("Good assignment NumFactorConst: " + NumFactorConst.getN1(), NumFactorConst);
-		
-//    	if(currentDesignator.getType().getKind() == Struct.Array) {
-//    		if(currentDesignator.getType().getElemType().getKind() == Struct.Int) {
-//        		report_info("Good assignment NumFactorConst: " + NumFactorConst.getN1(), NumFactorConst);
-//        	}
-//        	else {
-//        		report_error("Error NumFactorConst assignment is bad: " + currentDesignator.getName() + " isn't int", NumFactorConst);
-//        	}
-//    	}
-//    	else if(currentDesignator.getType().getKind() == Struct.Int) {
-//    		report_info("Good assignment NumFactorConst: " + NumFactorConst.getN1(), NumFactorConst);
-//    	}
-//    	else {
-//    		report_error("Error NumFactorConst assignment is bad: " + currentDesignator.getName() + " isn't int", NumFactorConst);
-//    	}
-	
+		report_info("NumFactorConst: " + NumFactorConst.getN1(), NumFactorConst);
     	
     }
     
 //    public void visit(DisgnatorNoPars DisgnatorNoPars) { report_info("DisgnatorNoPars", DisgnatorNoPars); }
 //    public void visit(SignleTerm SignleTerm) { report_info("SignleTerm", SignleTerm); }
 //    public void visit(TermExpr TermExpr) { report_info("TermExpr", TermExpr); }
-    
-    public void visit(SingleNegativeExpr SingleNegativeExpr) { 
-    	report_info("SingleNegativeExpr", SingleNegativeExpr); 
-    }
-    
-    public void visit(SingleExpr SingleExpr) { 
-    	report_info("SingleExpr", SingleExpr); 
-    }
-    
+//    public void visit(SingleNegativeExpr SingleNegativeExpr) { 	report_info("SingleNegativeExpr", SingleNegativeExpr); }
+//    public void visit(SingleExpr SingleExpr) { report_info("SingleExpr", SingleExpr); }
 //    public void visit(PositiveExpr PositiveExpr) { report_info("PositiveExpr", PositiveExpr); }
 //    public void visit(SingleDesignatorList SingleDesignatorList) { report_info("SingleDesignatorList", SingleDesignatorList); }
 //    public void visit(DesignatorLists DesignatorLists) { report_info("DesignatorLists", DesignatorLists); }
@@ -516,22 +449,30 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 //    public void visit(NumConsts NumConsts) { report_info("NumConsts", NumConsts); }
     
     public void visit(PrintStmt print) {
-		printCallCount++;
-		{ report_info("PrintStmt", print); }
+    	currentDesignator = null;
+    	prevDesignator = null;
+    	leftSide = true;
+    	rightType = null;
+    	leftType = null;
+		{ report_info("PrintStmt!", print); }
 	}
     
     public void visit(ReadStmt ReadStmt) { 
-    	report_info("ReadStmt", ReadStmt); 
+    	currentDesignator = null;
+    	prevDesignator = null;
+    	leftSide = true;
+    	rightType = null;
+    	leftType = null;
+    	report_info("ReadStmt!", ReadStmt); 
     }
     
     public void visit(DesignatorStmt DesignatorStmt) { 
     	report_info("DesignatorStmt finished!", DesignatorStmt);
-    	
     	currentDesignator = null;
-    	operation = NOOP;
+    	prevDesignator = null;
     	leftSide = true;
-    	rightType.setElementType(new Struct(-1));
-    	leftType.setElementType(new Struct(-1));
+    	rightType = null;
+    	leftType = null;
     }
     
 //    public void visit(NoStmt NoStmt) { report_info("NoStmt", NoStmt); }
