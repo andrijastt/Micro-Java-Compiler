@@ -83,12 +83,15 @@ public class CodeGenerator extends VisitorAdaptor {
     	}
 
 		if(TermExpr.getMulop().getClass() == ModOper.class) {
-//			Code.put(Code.);
+			Code.put(Code.rem);
 		}
     	
     }
     
-//    public void visit(SingleNegativeExpr SingleNegativeExpr) { visit(); }
+    public void visit(SingleNegativeExpr SingleNegativeExpr) { 
+    	Code.put(Code.neg);
+    }
+    
 //    public void visit(SingleExpr SingleExpr) { visit(); }
     
     public void visit(PositiveExpr PositiveExpr) { 
