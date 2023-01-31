@@ -121,7 +121,19 @@ public class CodeGenerator extends VisitorAdaptor {
 //    public void visit(DesignatorStatementError DesignatorStatementError) { visit(); }
 //    public void visit(DesignatorStatementBrackets DesignatorStatementBrackets) { visit(); }
 //    public void visit(DesignatorDEC DesignatorDEC) { visit(); }
-//    public void visit(DesignatorINC DesignatorINC) { visit(); }
+    
+    public void visit(DesignatorINC DesignatorINC) { 
+    	
+    	Designator designator = DesignatorINC.getDesignator();
+    	
+    	
+    	
+    	Code.load(designator.obj);
+    	Code.loadConst(1);
+    	Code.put(Code.add);
+    	Code.store(designator.obj);
+    	
+    }
     
     public void visit(DesignatorAssign DesignatorAssign) { 
     	Code.store(DesignatorAssign.getDesignator().obj);
