@@ -368,9 +368,6 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     
 //    public void visit(TermExpr TermExpr) { 
 //    	report_info("TermExpr", TermExpr);
-//    	
-//    	report_info("AAAAAAAAAAAAAAAAAa " + (TermExpr.getMulop().getClass() == MulOper.class), TermExpr);
-//    	
 //    }
     
 //    public void visit(SingleNegativeExpr SingleNegativeExpr) { 	report_info("SingleNegativeExpr", SingleNegativeExpr); }
@@ -676,6 +673,8 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	if(Tab.find(Const.getConstName()) != Tab.noObj) {
     		report_error("Constant already declared!" + Const.getConstName(), Const);
     	}
+    	
+    	report_info("ConstVal " + (Const.getConstVal().getClass() == NumConst.class), Const); 
     	
     	Obj constNode = Tab.insert(Obj.Con, Const.getConstName(), typeStruct);
     	Const.struct = typeStruct;

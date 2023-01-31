@@ -51,7 +51,15 @@ public class CodeGenerator extends VisitorAdaptor {
 	}
 	
 //    public void visit(Expression Expression) { visit(); }
-//    public void visit(NewFuncExpr NewFuncExpr) { visit(); }
+	
+    public void visit(NewFuncExpr NewFuncExpr) {
+    	
+    	// provereno da su dobri tipovi
+    	// samo dodajemo na heap len 
+    	// razlicito za Char i Int
+    	
+    	 
+    }
     
 	public void visit(FalseFactorConst FalseFactorConst) { 
 		Code.loadConst(0);		// 0 - false
@@ -170,18 +178,34 @@ public class CodeGenerator extends VisitorAdaptor {
 //    public void visit(FalseConst FalseConst) { visit(); }
 //    public void visit(TrueConst TrueConst) { visit(); }
 //    public void visit(CharConst CharConst) { visit(); }
+//    public void visit(NumConst NumConst) { visit(); }
     
-//    public void visit(NumConst NumConst) { 
-//    	 
-//    }
-    
-//    public void visit(Const Const) { 
-//    	
-//    	Obj con = Tab.insert(Obj.Con, Const.getConstName(), Const.struct);
-//    	
-//    	Code.load(con);
-//    	
-//    }
+    public void visit(Const Const) { 
+    	
+    	Obj con = Tab.insert(Obj.Con, Const.getConstName(), Const.struct);
+    	
+    	if(Const.getConstVal().getClass() == NumConst.class) {			// Tab.intType
+    		NumConst temp = (NumConst)Const.getConstVal();
+    		con.setAdr(temp.getN1());
+    	} 
+    	else if(Const.getConstVal().getClass() == CharConst.class) {	// Tab.charType
+    		CharConst temp = (CharConst)Const.getConstVal();
+    		con.setAdr(temp.getC1());
+    	}
+    	else if(Const.getConstVal().getClass() == TrueConst.class) {	// Tab.boolType	TRUE
+//    		TrueConst temp = (TrueConst)Const.getConstVal();
+//    		con.setAdr(temp.getT1());
+    		con.setAdr(1);
+    	} 
+    	else if(Const.getConstVal().getClass() == FalseConst.class) {	// Tab.boolType	FALSE
+//    		FalseConst temp = (FalseConst)Const.getConstVal();
+//    		con.setAdr(temp.getF1());
+    		con.setAdr(0);
+    	}
+    		
+    	Code.load(con);
+    	
+    }
     
 //    public void visit(ConstCommaError ConstCommaError) { visit(); }
 //    public void visit(CommaConst CommaConst) { visit(); }
