@@ -152,42 +152,42 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     /**
      * Set what opertaion is currently
      */
-    public void visit(Modop Modop) { 
+    public void visit(ModOper Modop) { 
     	report_info("Modop", Modop);
     }
     
     /**
      * Set what opertaion is currently
      */
-    public void visit(Divop Divop) { 
+    public void visit(DivOper Divop) { 
     	report_info("Divop", Divop);
     }
     
     /**
      * Set what opertaion is currently
      */
-    public void visit(Mulop Mulop) { 
+    public void visit(MulOper Mulop) { 
     	report_info("Found Mulop:", Mulop);
     }
     
     /**
      * Set what opertaion is currently
      */
-    public void visit(Minusop Minusop) { 
+    public void visit(MinusOper Minusop) { 
     	report_info("Found Minusop:", Minusop);
     }
     
     /**
      * Set what opertaion is currently
      */
-    public void visit(Addop Addop) { 
+    public void visit(AddOper Addop) { 
     	report_info("Found Addop:", Addop); 
     }
     
     /**
      * Set what opertaion is currently
      */
-    public void visit(Assignop Assignop) { 
+    public void visit(AssignOper Assignop) { 
     	report_info("Found Assignop:", Assignop); 
     	leftSide = false;
     	currentDesignator = null;
@@ -365,7 +365,14 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     
 //    public void visit(DisgnatorNoPars DisgnatorNoPars) { report_info("DisgnatorNoPars", DisgnatorNoPars); }
 //    public void visit(SignleTerm SignleTerm) { report_info("SignleTerm", SignleTerm); }
-//    public void visit(TermExpr TermExpr) { report_info("TermExpr", TermExpr); }
+    
+//    public void visit(TermExpr TermExpr) { 
+//    	report_info("TermExpr", TermExpr);
+//    	
+//    	report_info("AAAAAAAAAAAAAAAAAa " + (TermExpr.getMulop().getClass() == MulOper.class), TermExpr);
+//    	
+//    }
+    
 //    public void visit(SingleNegativeExpr SingleNegativeExpr) { 	report_info("SingleNegativeExpr", SingleNegativeExpr); }
 //    public void visit(SingleExpr SingleExpr) { report_info("SingleExpr", SingleExpr); }
 //    public void visit(PositiveExpr PositiveExpr) { report_info("PositiveExpr", PositiveExpr); }
@@ -542,7 +549,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     		report_error("VarBrackets already declared!" + varBrackets.getVarName(), varBrackets);
     	}
     	Obj varNode = Tab.insert(Obj.Var, varBrackets.getVarName(), temp);
-    	
+    	varBrackets.obj = varNode;
     	Tab.currentScope.addToLocals(varNode);
     	
     	if(varNode.getLevel() > 0) {
@@ -571,6 +578,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     		report_error("VarNoBrackets already declared!" + varNoBrackets.getVarName(), varNoBrackets);
     	}
     	Obj varNode = Tab.insert(Obj.Var, varNoBrackets.getVarName(), typeStruct);
+    	varNoBrackets.obj = varNode;
     	Tab.currentScope.addToLocals(varNode);
     	
     	if(varNode.getLevel() > 0) {
@@ -615,8 +623,10 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	}
     	
     	if(typeStruct.getKind() == Struct.Bool) {
-    		report_info("Declared TrueConst!", FalseConst);
-    	} 
+    		report_info("Declared FalseConst!", FalseConst);
+    	} else {
+    		report_error("Bad declaration! FalseConst isn't good type!", FalseConst);
+    	}
     }
     
     public void visit(TrueConst TrueConst) { 
@@ -627,7 +637,9 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	
     	if(typeStruct.getKind() == Struct.Bool) {
     		report_info("Declared TrueConst!", TrueConst);
-    	} 
+    	} else {
+    		report_error("Bad declaration! TrueConst isn't good type!", TrueConst);
+    	}
     }
     
     public void visit(CharConst CharConst) { 
@@ -638,7 +650,9 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	
     	if(typeStruct.getKind() == Struct.Char) {
     		report_info("Declared CharConst!", CharConst);
-    	} 
+    	} else {
+    		report_error("Bad declaration! CharConst isn't good type!", CharConst);
+    	}
     	
     }
     
@@ -650,7 +664,9 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	
     	if(typeStruct.getKind() == Struct.Int) {
     		report_info("Declared NumConst!", NumConst);
-    	} 
+    	}  else {
+    		report_error("Bad declaration! NumConst isn't good type!", NumConst);
+    	}
     	 
     }
     
@@ -662,6 +678,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	}
     	
     	Obj constNode = Tab.insert(Obj.Con, Const.getConstName(), typeStruct);
+    	Const.struct = typeStruct;
     	
     	Tab.currentScope.addToLocals(constNode);
     	
@@ -672,7 +689,6 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     		else {
     			report_info("Current scope: " + constNode.getLevel() + ", variable count: " + Tab.currentScope.getnVars(), Const);
     		}
-//    		localVariablesCount++; // Not sure if i need this for constants
     	} else {
     		if(Tab.currentScope.getnVars() > 65536) {
     			report_error("Global varibale count > 65536: " + Tab.currentScope.getnVars(), Const);
@@ -680,7 +696,6 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     		else {
     			report_info("Current scope: " + constNode.getLevel() + ", variable count: " + Tab.currentScope.getnVars(), Const);
     		}
-//    		globalVaribalesCount++; // Not sure if i need this for constants
     	}
     	
     }

@@ -1,6 +1,6 @@
 // generated with ast extension for cup
 // version 0.8
-// 30/0/2023 15:23:53
+// 31/0/2023 15:34:29
 
 
 package rs.ac.bg.etf.pp1.ast;
@@ -10,6 +10,8 @@ public interface Visitor {
     public void visit(Designator Designator);
     public void visit(MethodDecl MethodDecl);
     public void visit(Factor Factor);
+    public void visit(Assignop Assignop);
+    public void visit(Mulop Mulop);
     public void visit(DesignatorStatement DesignatorStatement);
     public void visit(MethodVarDecl MethodVarDecl);
     public void visit(Var Var);
@@ -23,6 +25,7 @@ public interface Visitor {
     public void visit(DesignatorTemp DesignatorTemp);
     public void visit(VarDecl VarDecl);
     public void visit(ConstDeclList ConstDeclList);
+    public void visit(Addop Addop);
     public void visit(MethodDeclList MethodDeclList);
     public void visit(Statement Statement);
     public void visit(ConstComma ConstComma);
@@ -32,12 +35,12 @@ public interface Visitor {
     public void visit(ConstSemi ConstSemi);
     public void visit(VarComma VarComma);
     public void visit(StatementList StatementList);
-    public void visit(Modop Modop);
-    public void visit(Divop Divop);
-    public void visit(Mulop Mulop);
-    public void visit(Minusop Minusop);
-    public void visit(Addop Addop);
-    public void visit(Assignop Assignop);
+    public void visit(ModOper ModOper);
+    public void visit(DivOper DivOper);
+    public void visit(MulOper MulOper);
+    public void visit(MinusOper MinusOper);
+    public void visit(AddOper AddOper);
+    public void visit(AssignOper AssignOper);
     public void visit(DesignatorBrackets DesignatorBrackets);
     public void visit(DesignatorNoBrackets DesignatorNoBrackets);
     public void visit(Expression Expression);
@@ -69,6 +72,8 @@ public interface Visitor {
     public void visit(NoStmt NoStmt);
     public void visit(Statements Statements);
     public void visit(Type Type);
+    public void visit(SingleMethodVarDecl SingleMethodVarDecl);
+    public void visit(MethodVarDecls MethodVarDecls);
     public void visit(MethodType MethodType);
     public void visit(VoidMethodDecl VoidMethodDecl);
     public void visit(NoMethodDecl NoMethodDecl);
@@ -82,8 +87,6 @@ public interface Visitor {
     public void visit(SingleVar SingleVar);
     public void visit(VarList VarList);
     public void visit(VarDeclaration VarDeclaration);
-    public void visit(SingleMethodVarDecl SingleMethodVarDecl);
-    public void visit(MethodVarDecls MethodVarDecls);
     public void visit(FalseConst FalseConst);
     public void visit(TrueConst TrueConst);
     public void visit(CharConst CharConst);

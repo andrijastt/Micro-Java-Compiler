@@ -3,7 +3,7 @@ package rs.ac.bg.etf.pp1;
 import rs.ac.bg.etf.pp1.ast.*;
 import rs.etf.pp1.mj.runtime.*;
 import rs.etf.pp1.symboltable.Tab;
-import rs.etf.pp1.symboltable.concepts.Obj;
+import rs.etf.pp1.symboltable.concepts.*;
 
 public class CodeGenerator extends VisitorAdaptor {
 
@@ -54,35 +54,55 @@ public class CodeGenerator extends VisitorAdaptor {
 //    public void visit(NewFuncExpr NewFuncExpr) { visit(); }
     
 	public void visit(FalseFactorConst FalseFactorConst) { 
-		Obj con = Tab.insert(Obj.Con, "$", FalseFactorConst.struct); // Ako je struct stavi bool
-    	Code.load(con); 
+		Code.loadConst(0);		// 0 - false
     }
     
     public void visit(TrueFactorConst TrueFactorConst) { 
-    	Obj con = Tab.insert(Obj.Con, "$", TrueFactorConst.struct); // Ako je struct stavi bool
-    	Code.load(con);
+    	Code.loadConst(1);		// 1 - true
     }
     
     public void visit(CharFactorConst CharFactorConst) { 
-		Obj con = Tab.insert(Obj.Con, "$", CharFactorConst.struct); // Ako je struct stavi char
-//	   	con.setLevel(0);
-//	   	con.setAdr(CharFactorConst.getCharacter());
-	   	Code.load(con); 
+    	Code.loadConst(CharFactorConst.getCharacter());
     }
 	
-    public void visit(NumFactorConst NumFactorConst) { 
-    	 Obj con = Tab.insert(Obj.Con, "$", NumFactorConst.struct); // Ako je struct stavi int
-//    	 con.setLevel(0);
-//    	 con.setAdr(NumFactorConst.getN1());
-    	 Code.load(con);
+    public void visit(NumFactorConst NumFactorConst) {  
+    	 Code.loadConst(NumFactorConst.getN1()); 
     }
     
 //    public void visit(DisgnatorNoPars DisgnatorNoPars) { visit(); }
 //    public void visit(SignleTerm SignleTerm) { visit(); }
-//    public void visit(TermExpr TermExpr) { visit(); }
+    
+    public void visit(TermExpr TermExpr) { 
+    	
+    	if(TermExpr.getMulop().getClass() == MulOper.class) {
+    		Code.put(Code.mul);
+    	}
+    	
+    	if(TermExpr.getMulop().getClass() == DivOper.class) {
+    		Code.put(Code.div);
+    	}
+
+		if(TermExpr.getMulop().getClass() == ModOper.class) {
+//			Code.put(Code.);
+		}
+    	
+    }
+    
 //    public void visit(SingleNegativeExpr SingleNegativeExpr) { visit(); }
 //    public void visit(SingleExpr SingleExpr) { visit(); }
-//    public void visit(PositiveExpr PositiveExpr) { visit(); }
+    
+    public void visit(PositiveExpr PositiveExpr) { 
+    	
+    	if(PositiveExpr.getAddop().getClass() == AddOper.class) {
+    		Code.put(Code.add);
+    	}
+    	
+    	if(PositiveExpr.getAddop().getClass() == MinusOper.class) {
+    		Code.put(Code.sub);
+    	}
+    	
+    }
+    
 //    public void visit(SingleDesignatorList SingleDesignatorList) { visit(); }
 //    public void visit(DesignatorLists DesignatorLists) { visit(); }
 //    public void visit(NoDesignatorListItem NoDesignatorListItem) { visit(); }
@@ -123,28 +143,13 @@ public class CodeGenerator extends VisitorAdaptor {
     		mainPc = Code.pc;
     	}
     	MethodType.obj.setAdr(Code.pc);
-    	
-    	// collect arguments
-    	SyntaxNode methodName = MethodType.getParent();
-    	
-    	/*
-    	 * VarCounter varCnt = new VarCounter();
-    	 * methondName.traverseTopDown(varCnt);
-    	 * 
-    	 * 
-    	 * */
-    	
-    	Code.put(Code.enter);
-//    	Code.put(varCnt.getCount());
-    	
-    	
+    	Code.put(MethodType.obj.getLevel());		// ako zeza stavi 0 jer nema formal params
+    	Code.put(MethodType.obj.getLocalSymbols().size());
     }
     
     public void visit(VoidMethodDecl VoidMethodDecl) { 
-    	
     	Code.put(Code.exit);
-//    	Code.put(Code.return_); mozda ne treba jer nema return
-    	
+    	Code.put(Code.return_);
     }
 //    public void visit(NoMethodDecl NoMethodDecl) { visit(); }
 //    public void visit(MethodDeclarations MethodDeclarations) { visit(); }
@@ -162,11 +167,16 @@ public class CodeGenerator extends VisitorAdaptor {
 //    public void visit(FalseConst FalseConst) { visit(); }
 //    public void visit(TrueConst TrueConst) { visit(); }
 //    public void visit(CharConst CharConst) { visit(); }
-//    public void visit(NumConst NumConst) { visit(); }
+    
+//    public void visit(NumConst NumConst) { 
+//    	 
+//    }
     
 //    public void visit(Const Const) { 
 //    	
-//    	Const.getConstName();
+//    	Obj con = Tab.insert(Obj.Con, Const.getConstName(), Const.struct);
+//    	
+//    	Code.load(con);
 //    	
 //    }
     

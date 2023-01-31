@@ -1,13 +1,13 @@
 // generated with ast extension for cup
 // version 0.8
-// 30/0/2023 15:23:53
+// 31/0/2023 15:34:29
 
 
 package rs.ac.bg.etf.pp1.ast;
 
-public class Minusop extends Addop {
+public class AssignOper extends Assignop {
 
-    public Minusop () {
+    public AssignOper () {
     }
 
     public void accept(Visitor visitor) {
@@ -28,10 +28,10 @@ public class Minusop extends Addop {
     public String toString(String tab) {
         StringBuffer buffer=new StringBuffer();
         buffer.append(tab);
-        buffer.append("Minusop(\n");
+        buffer.append("AssignOper(\n");
 
         buffer.append(tab);
-        buffer.append(") [Minusop]");
+        buffer.append(") [AssignOper]");
         return buffer.toString();
     }
 }

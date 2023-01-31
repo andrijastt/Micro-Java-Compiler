@@ -62,14 +62,14 @@ terminal LPAREN, RPAREN, LBRACKET, RBRACKET, LBRACE, RBRACE;
 terminal POINTER_LIKE;
 
 nonterminal ParamList, ParamItem, MethodDeclList; 
-nonterminal ConstDecl, ConstDeclList, Const, ConstVal, ConstComma, ConstSemi; 
-nonterminal VarDeclList, VarDecl, VarSemi, VarComma, Var, MethodVarDecl;
+nonterminal ConstDecl, ConstDeclList, ConstVal, ConstComma, ConstSemi; 
+nonterminal VarDeclList, VarDecl, VarSemi, VarComma, MethodVarDecl;
 nonterminal StatementList, Statement;
 nonterminal Assignop, Addop, Mulop;
 nonterminal DesignatorStatement, DesignatorList, DesignatorTemp, NumConstList;
 
-nonterminal rs.etf.pp1.symboltable.concepts.Obj ProgName, Program, MethodDecl, MethodType, Designator;
-nonterminal rs.etf.pp1.symboltable.concepts.Struct Type, Term, Factor, Expr;
+nonterminal rs.etf.pp1.symboltable.concepts.Obj ProgName, Program, MethodDecl, MethodType, Designator, Var;
+nonterminal rs.etf.pp1.symboltable.concepts.Struct Type, Term, Factor, Expr, Const;
 
 Program ::= (Program) PROG ProgName:p ParamList LBRACE MethodDeclList RBRACE;
 
@@ -114,11 +114,6 @@ ConstVal ::= (NumConst) NUMBER
 			(FalseConst) FALSE
 			;
 
-MethodVarDecl ::= (MethodVarDecls) MethodVarDecl VarDeclList
-		|
-		(SingleMethodVarDecl) VarDeclList
-		;
-
 VarDeclList ::= (VarDeclaration) Type:varType VarDecl;
 
 VarDecl ::= (VarList) VarComma VarDecl
@@ -151,6 +146,11 @@ MethodDeclList ::= (MethodDeclarations) MethodDeclList MethodDecl /* mozda nepot
 MethodDecl ::= (VoidMethodDecl) MethodType LPAREN RPAREN MethodVarDecl LBRACE StatementList RBRACE;
 
 MethodType ::= (MethodType) VOID IDENT:methName;
+
+MethodVarDecl ::= (MethodVarDecls) MethodVarDecl VarDeclList
+		|
+		(SingleMethodVarDecl) VarDeclList
+		;
 
 Type ::= (Type) IDENT:typeName;
 
@@ -225,17 +225,17 @@ Designator ::= (DesignatorNoBrackets) IDENT:name
 			(DesignatorBrackets) IDENT:name LBRACKET Expr RBRACKET 
 			;
 	
-Assignop ::= (Assignop) ASSIGN;
+Assignop ::= (AssignOper) ASSIGN;
 
-Addop ::= (Addop) PLUS
+Addop ::= (AddOper) PLUS
 		|
-		(Minusop) MINUS
+		(MinusOper) MINUS
 		;
 		
-Mulop ::= (Mulop) MULTIPLY
+Mulop ::= (MulOper) MULTIPLY
 		|
-		(Divop) DIVISION
+		(DivOper) DIVISION
 		|
-		(Modop) MOD
+		(ModOper) MOD
 		;
 			
