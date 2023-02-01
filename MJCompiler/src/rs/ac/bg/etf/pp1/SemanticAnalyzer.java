@@ -207,7 +207,10 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     		report_error("Deisgnator: " + designatorBrackets.getName() + " isn't an Array", designatorBrackets);
     	}
     	
-    	designatorBrackets.obj = obj;
+    	Obj temp = new Obj(Obj.Elem, designatorBrackets.getName(), obj.getType().getElemType());
+    	
+//    	report_info("TEMP je Obj.Elem " + (temp.getKind() == Obj.Elem) + " TEMP nije array " + (temp.getType().getKind() != Struct.Array), designatorBrackets);
+    	designatorBrackets.obj = temp;
     	
     	if(currentDesignator.getType().getKind() == Struct.Array) {
     		if(currentDesignator.getType().getElemType().getKind() != Struct.Int) {
