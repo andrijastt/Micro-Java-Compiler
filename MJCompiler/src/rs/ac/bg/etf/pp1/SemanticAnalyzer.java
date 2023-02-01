@@ -568,7 +568,9 @@ public class SemanticAnalyzer extends VisitorAdaptor {
  
     }
     
-//    public void visit(VoidMethodDecl VoidMethodDecl) { report_info("VoidMethodDecl", VoidMethodDecl); }
+//    public void visit(VoidMethodDecl VoidMethodDecl) { 
+//    	report_info("VoidMethodDecl", VoidMethodDecl); 
+//    }
 //    public void visit(NoMethodDecl NoMethodDecl) { report_info("NoMethodDecl", NoMethodDecl); }
 //    public void visit(MethodDeclarations MethodDeclarations) { report_info("MethodDeclarations", MethodDeclarations); }
     

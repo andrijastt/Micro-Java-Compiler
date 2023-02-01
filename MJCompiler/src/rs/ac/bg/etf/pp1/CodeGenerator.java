@@ -45,12 +45,12 @@ public class CodeGenerator extends VisitorAdaptor {
 //    public void visit(Addop Addop) { visit(); }
 //    public void visit(Assignop Assignop) { visit(); }
 	
-	public void visit(DesignatorBracketsName DesignatorBracketsName) { visit(); }
+	public void visit(DesignatorBracketsName DesignatorBracketsName) {
+		DesignatorBrackets temp =(DesignatorBrackets) DesignatorBracketsName.getParent();
+		Code.load(temp.obj);
+	}
 	
-    public void visit(DesignatorBrackets DesignatorBrackets) { 
-    	Code.load(DesignatorBrackets.obj); 
-    }
-	
+//    public void visit(DesignatorBrackets DesignatorBrackets) { visit(); }
 //  public void visit(DesignatorNoBrackets DesignatorNoBrackets) { visit(); }
 //    public void visit(Expression Expression) { visit(); }
 	
@@ -86,7 +86,7 @@ public class CodeGenerator extends VisitorAdaptor {
     	 Code.loadConst(NumFactorConst.getN1()); 
     }
     
-    public void visit(DesignatorNoPars DisgnatorNoPars) { 
+    public void visit(DesignatorNoPars DisgnatorNoPars) { 	// TODO za niz
     	Code.load(DisgnatorNoPars.getDesignator().obj);
     }
     
@@ -173,8 +173,15 @@ public class CodeGenerator extends VisitorAdaptor {
     }
     
     public void visit(ReadStmt ReadStmt) { 
-    	 
+    	if(ReadStmt.getDesignator().obj.getType() == Tab.charType) {
+    		Code.put(Code.bread);
+    	} else {
+    		Code.put(Code.read);
+    		
+    	}
+    	Code.load(ReadStmt.getDesignator().obj);
     }
+    
 //    public void visit(DesignatorStmt DesignatorStmt) { visit(); }
 //    public void visit(NoStmt NoStmt) { visit(); }
 //    public void visit(Statements Statements) { visit(); }
@@ -186,8 +193,12 @@ public class CodeGenerator extends VisitorAdaptor {
     		mainPc = Code.pc;
     	}
     	MethodType.obj.setAdr(Code.pc);
-    	Code.put(MethodType.obj.getLevel());		// ako zeza stavi 0 jer nema formal params
-    	Code.put(MethodType.obj.getLocalSymbols().size());
+    	
+//    	System.out.println(MethodType.obj.getLevel());
+//    	System.out.println(MethodType.obj.getLocalSymbols().size());
+    	
+//    	Code.put(MethodType.obj.getLevel());		// ako zeza stavi 0 jer nema formal params
+//    	Code.put(MethodType.obj.getLocalSymbols().size());
     }
     
     public void visit(VoidMethodDecl VoidMethodDecl) { 
