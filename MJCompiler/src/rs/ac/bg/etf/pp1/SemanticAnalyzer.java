@@ -195,21 +195,25 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	rightType = null;
     }
     
+//    public void visit(DesignatorBracketsName DesignatorBracketsName) { visit(); }
+    
     public void visit(DesignatorBrackets designatorBrackets) { 
     	
-    	Obj obj = Tab.find(designatorBrackets.getName());
+    	String name = designatorBrackets.getDesignatorBracketsName().getName();
+    	Obj obj = Tab.find(name);
     	
     	if(obj == Tab.noObj) {
-    		report_error("Error on line " + designatorBrackets.getLine() + " name: " + designatorBrackets.getName() + "not declared! ", null);
+    		report_error("Error on line " + designatorBrackets.getLine() + " name: " + name + "not declared! ", null);
     	}
     	
     	if(obj.getType().getKind() != Struct.Array) {
-    		report_error("Deisgnator: " + designatorBrackets.getName() + " isn't an Array", designatorBrackets);
+    		report_error("Deisgnator: " + name + " isn't an Array", designatorBrackets);
     	}
     	
-    	Obj temp = new Obj(Obj.Elem, designatorBrackets.getName(), obj.getType().getElemType());
+    	Obj temp = new Obj(Obj.Elem, name, obj.getType().getElemType());
     	
 //    	report_info("TEMP je Obj.Elem " + (temp.getKind() == Obj.Elem) + " TEMP nije array " + (temp.getType().getKind() != Struct.Array), designatorBrackets);
+//    	report_info("TEMP: " + obj.getKind(), designatorBrackets);
     	designatorBrackets.obj = temp;
     	
     	if(currentDesignator.getType().getKind() == Struct.Array) {
@@ -229,12 +233,13 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			rightType = currentDesignator.getType();
 		}
 		
-    	report_info("DesignatorBrackets found: " + designatorBrackets.getName(), designatorBrackets);
+    	report_info("DesignatorBrackets found: " + name, designatorBrackets);
     }
     
     public void visit(DesignatorNoBrackets designatorNoBrackets) {
     	
     	Obj obj = Tab.find(designatorNoBrackets.getName());  
+//    	report_info("TEMP NOBRACKETS: " + obj.getKind(), designatorNoBrackets);
     	if(obj == Tab.noObj) {
     		report_error("Error on line " + designatorNoBrackets.getLine() + " name: " + designatorNoBrackets.getName() + "not declared! ", null);
     	}
@@ -292,6 +297,8 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	Obj temp = new Obj(Obj.Var, FalseFactorConst.getF1(), new Struct(Struct.Bool));
     	setCurrentAndPrevMethod(temp, FalseFactorConst);
     	
+    	FalseFactorConst.struct = new Struct(Struct.Bool);
+    	
     	if(leftSide) {
 			if(leftType == null) {
 				leftType = new Struct(Struct.Bool);
@@ -303,7 +310,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			} 
 		}
     	
-		report_info("CharFactorConst: " + FalseFactorConst.getF1(), FalseFactorConst);
+		report_info("FalseFactorConst: " + FalseFactorConst.getF1(), FalseFactorConst);
     }
     
     public void visit(TrueFactorConst TrueFactorConst) {
@@ -311,6 +318,8 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	Obj temp = new Obj(Obj.Var, TrueFactorConst.getT1(), new Struct(Struct.Bool));
     	setCurrentAndPrevMethod(temp, TrueFactorConst);
     	
+    	TrueFactorConst.struct = new Struct(Struct.Bool);
+    	
     	if(leftSide) {
 			if(leftType == null) {
 				leftType = new Struct(Struct.Bool);
@@ -322,7 +331,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 			} 
 		}
     	
-		report_info("CharFactorConst: " + TrueFactorConst.getT1(), TrueFactorConst);
+		report_info("TrueFactorConst: " + TrueFactorConst.getT1(), TrueFactorConst);
     	
     }
     
@@ -330,6 +339,8 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	
     	Obj temp = new Obj(Obj.Var, CharFactorConst.getCharacter().toString(), new Struct(Struct.Char));
     	setCurrentAndPrevMethod(temp, CharFactorConst);
+    	
+    	CharFactorConst.struct = Tab.charType;
     	
     	if(leftSide) {
 			if(leftType == null) {
@@ -351,6 +362,8 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	Obj temp = new Obj(Obj.Var, NumFactorConst.getN1().toString(), new Struct(Struct.Int));
     	setCurrentAndPrevMethod(temp, NumFactorConst);
     	
+    	NumFactorConst.struct = Tab.intType;
+    	
     	if(leftSide) {
 			if(leftType == null) {
 				leftType = new Struct(Struct.Int);
@@ -366,15 +379,30 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	
     }
     
-//    public void visit(DisgnatorNoPars DisgnatorNoPars) { report_info("DisgnatorNoPars", DisgnatorNoPars); }
-//    public void visit(SignleTerm SignleTerm) { report_info("SignleTerm", SignleTerm); }
+    public void visit(DesignatorNoPars DisgnatorNoPars) { 	// TODO ako dodje niz
+    	DisgnatorNoPars.struct = DisgnatorNoPars.getDesignator().obj.getType();
+    }
+    
+    /**
+     * Sets what kind of struct it is for 4th phase
+     */
+    public void visit(SingleTerm SignleTerm) { 
+    	SignleTerm.struct = SignleTerm.getFactor().struct;
+    }
     
 //    public void visit(TermExpr TermExpr) { 
 //    	report_info("TermExpr", TermExpr);
 //    }
     
-//    public void visit(SingleNegativeExpr SingleNegativeExpr) { 	report_info("SingleNegativeExpr", SingleNegativeExpr); }
-//    public void visit(SingleExpr SingleExpr) { report_info("SingleExpr", SingleExpr); }
+    public void visit(SingleNegativeExpr SingleNegativeExpr) { 
+    	SingleNegativeExpr.struct = SingleNegativeExpr.getTerm().struct; 
+    }
+    
+    public void visit(SingleExpr SingleExpr) { 
+    	SingleExpr.struct = SingleExpr.getTerm().struct;
+//    	report_info("SingleExpr: " + SingleExpr.struct, SingleExpr);
+    }
+    
 //    public void visit(PositiveExpr PositiveExpr) { report_info("PositiveExpr", PositiveExpr); }
 //    public void visit(SingleDesignatorList SingleDesignatorList) { report_info("SingleDesignatorList", SingleDesignatorList); }
 //    public void visit(DesignatorLists DesignatorLists) { report_info("DesignatorLists", DesignatorLists); }
@@ -448,6 +476,10 @@ public class SemanticAnalyzer extends VisitorAdaptor {
 		
 		if(temp1 == temp0) {
 			report_info("Good Assignment!", DesignatorAssign);
+			
+			report_info("Designator: " + DesignatorAssign.getDesignator().obj.getName(), DesignatorAssign);
+//			report_info("Designator: " + DesignatorAssign.getExpr().struct, DesignatorAssign);
+			
 		} else {
 			report_error("Bad Assignment!", DesignatorAssign);
 		}
@@ -469,7 +501,8 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     		}
     	}
     	
-    	
+//    	report_info("PRINTSTMT: " + (print.getNumConstList().getClass() == NoNumConsts.class), print);
+//    	report_info("PRINTSTMT: " + print.getExpr().struct, print);
     	currentDesignator = null;
     	prevDesignator = null;
     	leftSide = true;
@@ -683,6 +716,21 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	Const.struct = typeStruct;
     	
     	Tab.currentScope.addToLocals(constNode);
+    	
+    	if(Const.getConstVal().getClass() == NumConst.class) {			// Tab.intType
+    		NumConst temp = (NumConst)Const.getConstVal();
+    		constNode.setAdr(temp.getN1());
+    	} 
+    	else if(Const.getConstVal().getClass() == CharConst.class) {	// Tab.charType
+    		CharConst temp = (CharConst)Const.getConstVal();
+    		constNode.setAdr(temp.getC1());
+    	}
+    	else if(Const.getConstVal().getClass() == TrueConst.class) {	// Tab.boolType	TRUE
+    		constNode.setAdr(1);
+    	} 
+    	else if(Const.getConstVal().getClass() == FalseConst.class) {	// Tab.boolType	FALSE
+    		constNode.setAdr(0);
+    	}
     	
     	if(constNode.getLevel() > 0) {
     		if(Tab.currentScope.getnVars() > 256) {

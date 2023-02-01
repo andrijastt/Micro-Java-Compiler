@@ -1,27 +1,28 @@
 // generated with ast extension for cup
 // version 0.8
-// 31/0/2023 15:34:29
+// 1/1/2023 18:32:49
 
 
 package rs.ac.bg.etf.pp1.ast;
 
 public class DesignatorBrackets extends Designator {
 
-    private String name;
+    private DesignatorBracketsName DesignatorBracketsName;
     private Expr Expr;
 
-    public DesignatorBrackets (String name, Expr Expr) {
-        this.name=name;
+    public DesignatorBrackets (DesignatorBracketsName DesignatorBracketsName, Expr Expr) {
+        this.DesignatorBracketsName=DesignatorBracketsName;
+        if(DesignatorBracketsName!=null) DesignatorBracketsName.setParent(this);
         this.Expr=Expr;
         if(Expr!=null) Expr.setParent(this);
     }
 
-    public String getName() {
-        return name;
+    public DesignatorBracketsName getDesignatorBracketsName() {
+        return DesignatorBracketsName;
     }
 
-    public void setName(String name) {
-        this.name=name;
+    public void setDesignatorBracketsName(DesignatorBracketsName DesignatorBracketsName) {
+        this.DesignatorBracketsName=DesignatorBracketsName;
     }
 
     public Expr getExpr() {
@@ -37,15 +38,18 @@ public class DesignatorBrackets extends Designator {
     }
 
     public void childrenAccept(Visitor visitor) {
+        if(DesignatorBracketsName!=null) DesignatorBracketsName.accept(visitor);
         if(Expr!=null) Expr.accept(visitor);
     }
 
     public void traverseTopDown(Visitor visitor) {
         accept(visitor);
+        if(DesignatorBracketsName!=null) DesignatorBracketsName.traverseTopDown(visitor);
         if(Expr!=null) Expr.traverseTopDown(visitor);
     }
 
     public void traverseBottomUp(Visitor visitor) {
+        if(DesignatorBracketsName!=null) DesignatorBracketsName.traverseBottomUp(visitor);
         if(Expr!=null) Expr.traverseBottomUp(visitor);
         accept(visitor);
     }
@@ -55,7 +59,10 @@ public class DesignatorBrackets extends Designator {
         buffer.append(tab);
         buffer.append("DesignatorBrackets(\n");
 
-        buffer.append(" "+tab+name);
+        if(DesignatorBracketsName!=null)
+            buffer.append(DesignatorBracketsName.toString("  "+tab));
+        else
+            buffer.append(tab+"  null");
         buffer.append("\n");
 
         if(Expr!=null)

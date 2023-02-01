@@ -66,7 +66,7 @@ nonterminal ConstDecl, ConstDeclList, ConstVal, ConstComma, ConstSemi;
 nonterminal VarDeclList, VarDecl, VarSemi, VarComma, MethodVarDecl;
 nonterminal StatementList, Statement;
 nonterminal Assignop, Addop, Mulop;
-nonterminal DesignatorStatement, DesignatorList, DesignatorTemp, NumConstList;
+nonterminal DesignatorStatement, DesignatorList, DesignatorTemp, NumConstList, DesignatorBracketsName;
 
 nonterminal rs.etf.pp1.symboltable.concepts.Obj ProgName, Program, MethodDecl, MethodType, Designator, Var;
 nonterminal rs.etf.pp1.symboltable.concepts.Struct Type, Term, Factor, Expr, Const;
@@ -202,10 +202,10 @@ Expr ::= (PositiveExpr) Expr:t0 Addop Term:t1
 
 Term ::= (TermExpr) Term:t0 Mulop Factor:t1
 		|
-		(SignleTerm) Factor:t0
+		(SingleTerm) Factor:t0
 		;
 				
-Factor ::=(DisgnatorNoPars) Designator:d
+Factor ::=(DesignatorNoPars) Designator:d
 		|
 		(NumFactorConst) NUMBER
 		|
@@ -222,9 +222,11 @@ Factor ::=(DisgnatorNoPars) Designator:d
 
 Designator ::= (DesignatorNoBrackets) IDENT:name
 			|
-			(DesignatorBrackets) IDENT:name LBRACKET Expr RBRACKET 
+			(DesignatorBrackets) DesignatorBracketsName LBRACKET Expr RBRACKET 
 			;
 	
+DesignatorBracketsName ::= (DesignatorBracketsName) IDENT:name;
+
 Assignop ::= (AssignOper) ASSIGN;
 
 Addop ::= (AddOper) PLUS

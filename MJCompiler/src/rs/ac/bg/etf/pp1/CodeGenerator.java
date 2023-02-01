@@ -44,14 +44,14 @@ public class CodeGenerator extends VisitorAdaptor {
 //    public void visit(Minusop Minusop) { visit(); }
 //    public void visit(Addop Addop) { visit(); }
 //    public void visit(Assignop Assignop) { visit(); }
-//    public void visit(DesignatorBrackets DesignatorBrackets) { visit(); }
-    
-	public void visit(DesignatorNoBrackets DesignatorNoBrackets) { 
-		
-		
-		
-	}
 	
+	public void visit(DesignatorBracketsName DesignatorBracketsName) { visit(); }
+	
+    public void visit(DesignatorBrackets DesignatorBrackets) { 
+    	Code.load(DesignatorBrackets.obj); 
+    }
+	
+//  public void visit(DesignatorNoBrackets DesignatorNoBrackets) { visit(); }
 //    public void visit(Expression Expression) { visit(); }
 	
     public void visit(NewFuncExpr NewFuncExpr) {
@@ -86,7 +86,10 @@ public class CodeGenerator extends VisitorAdaptor {
     	 Code.loadConst(NumFactorConst.getN1()); 
     }
     
-//    public void visit(DisgnatorNoPars DisgnatorNoPars) { visit(); }
+    public void visit(DesignatorNoPars DisgnatorNoPars) { 
+    	Code.load(DisgnatorNoPars.getDesignator().obj);
+    }
+    
 //    public void visit(SignleTerm SignleTerm) { visit(); }
     
     public void visit(TermExpr TermExpr) { 
@@ -146,8 +149,8 @@ public class CodeGenerator extends VisitorAdaptor {
     	
     }
     
-    public void visit(DesignatorAssign DesignatorAssign) { 
-    	Code.store(DesignatorAssign.getDesignator().obj);
+    public void visit(DesignatorAssign DesignatorAssign) {
+    	Code.store(DesignatorAssign.getDesignator().obj);   	
     }
     
 //    public void visit(NoNumConsts NoNumConsts) { visit(); }
@@ -155,7 +158,7 @@ public class CodeGenerator extends VisitorAdaptor {
 	
     public void visit(PrintStmt PrintStmt) {
     	
-    	if(PrintStmt.getExpr().struct == Tab.intType) {
+    	if(PrintStmt.getExpr().struct == Tab.intType || PrintStmt.getExpr().struct.getKind() == Struct.Bool) {
     		Code.loadConst(5);
     		Code.put(Code.print);
     	}
@@ -163,9 +166,15 @@ public class CodeGenerator extends VisitorAdaptor {
     		Code.loadConst(1);
     		Code.put(Code.bprint);
     	}
+    	
+//    	if(PrintStmt.getNumConstList().getClass() != NoNumConsts.class) {
+//    		TODO	
+//    	}
     }
     
-//    public void visit(ReadStmt ReadStmt) { visit(); }
+    public void visit(ReadStmt ReadStmt) { 
+    	 
+    }
 //    public void visit(DesignatorStmt DesignatorStmt) { visit(); }
 //    public void visit(NoStmt NoStmt) { visit(); }
 //    public void visit(Statements Statements) { visit(); }
@@ -202,34 +211,7 @@ public class CodeGenerator extends VisitorAdaptor {
 //    public void visit(TrueConst TrueConst) { visit(); }
 //    public void visit(CharConst CharConst) { visit(); }
 //    public void visit(NumConst NumConst) { visit(); }
-    
-//    public void visit(Const Const) { 
-//    	
-//    	Obj con = Tab.insert(Obj.Con, Const.getConstName(), Const.struct);
-//    	
-//    	if(Const.getConstVal().getClass() == NumConst.class) {			// Tab.intType
-//    		NumConst temp = (NumConst)Const.getConstVal();
-//    		con.setAdr(temp.getN1());
-//    	} 
-//    	else if(Const.getConstVal().getClass() == CharConst.class) {	// Tab.charType
-//    		CharConst temp = (CharConst)Const.getConstVal();
-//    		con.setAdr(temp.getC1());
-//    	}
-//    	else if(Const.getConstVal().getClass() == TrueConst.class) {	// Tab.boolType	TRUE
-////    		TrueConst temp = (TrueConst)Const.getConstVal();
-////    		con.setAdr(temp.getT1());
-//    		con.setAdr(1);
-//    	} 
-//    	else if(Const.getConstVal().getClass() == FalseConst.class) {	// Tab.boolType	FALSE
-////    		FalseConst temp = (FalseConst)Const.getConstVal();
-////    		con.setAdr(temp.getF1());
-//    		con.setAdr(0);
-//    	}
-//    		
-//    	Code.load(con);
-//    	
-//    }
-    
+//    public void visit(Const Const) { visit(); }
 //    public void visit(ConstCommaError ConstCommaError) { visit(); }
 //    public void visit(CommaConst CommaConst) { visit(); }
 //    public void visit(ConstSemiError ConstSemiError) { visit(); }

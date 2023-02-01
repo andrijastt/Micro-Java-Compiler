@@ -83,6 +83,7 @@ nonterminal DesignatorStatement DesignatorStatement;
 nonterminal DesignatorList DesignatorList;
 nonterminal DesignatorTemp DesignatorTemp;
 nonterminal NumConstList NumConstList;
+nonterminal DesignatorBracketsName DesignatorBracketsName;
 
 nonterminal rs.etf.pp1.symboltable.concepts.Obj ProgName, Program, MethodDecl, MethodType, Designator, Var;
 nonterminal rs.etf.pp1.symboltable.concepts.Struct Type, Term, Factor, Expr, Const;
@@ -218,10 +219,10 @@ Expr ::= (PositiveExpr) Expr:t0 Addop:A1 Term:t1 {: RESULT=new PositiveExpr(t0, 
 
 Term ::= (TermExpr) Term:t0 Mulop:M1 Factor:t1 {: RESULT=new TermExpr(t0, M1, t1); RESULT.setLine(t0left); :}
 		|
-		(SignleTerm) Factor:t0 {: RESULT=new SignleTerm(t0); RESULT.setLine(t0left); :}
+		(SingleTerm) Factor:t0 {: RESULT=new SingleTerm(t0); RESULT.setLine(t0left); :}
 		;
 				
-Factor ::=(DisgnatorNoPars) Designator:d {: RESULT=new DisgnatorNoPars(d); RESULT.setLine(dleft); :}
+Factor ::=(DesignatorNoPars) Designator:d {: RESULT=new DesignatorNoPars(d); RESULT.setLine(dleft); :}
 		|
 		(NumFactorConst) NUMBER:N1 {: RESULT=new NumFactorConst(N1); RESULT.setLine(N1left); :}
 		|
@@ -238,9 +239,11 @@ Factor ::=(DisgnatorNoPars) Designator:d {: RESULT=new DisgnatorNoPars(d); RESUL
 
 Designator ::= (DesignatorNoBrackets) IDENT:name {: RESULT=new DesignatorNoBrackets(name); RESULT.setLine(nameleft); :}
 			|
-			(DesignatorBrackets) IDENT:name LBRACKET Expr:E1 RBRACKET {: RESULT=new DesignatorBrackets(name, E1); RESULT.setLine(nameleft); :} 
+			(DesignatorBrackets) DesignatorBracketsName:D1 LBRACKET Expr:E2 RBRACKET {: RESULT=new DesignatorBrackets(D1, E2); RESULT.setLine(D1left); :} 
 			;
 	
+DesignatorBracketsName ::= (DesignatorBracketsName) IDENT:name {: RESULT=new DesignatorBracketsName(name); RESULT.setLine(nameleft); :};
+
 Assignop ::= (AssignOper) ASSIGN {: RESULT=new AssignOper(); :};
 
 Addop ::= (AddOper) PLUS {: RESULT=new AddOper(); :}

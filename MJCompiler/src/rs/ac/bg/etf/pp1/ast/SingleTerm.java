@@ -1,15 +1,15 @@
 // generated with ast extension for cup
 // version 0.8
-// 31/0/2023 15:34:29
+// 1/1/2023 18:32:49
 
 
 package rs.ac.bg.etf.pp1.ast;
 
-public class SignleTerm extends Term {
+public class SingleTerm extends Term {
 
     private Factor Factor;
 
-    public SignleTerm (Factor Factor) {
+    public SingleTerm (Factor Factor) {
         this.Factor=Factor;
         if(Factor!=null) Factor.setParent(this);
     }
@@ -43,7 +43,7 @@ public class SignleTerm extends Term {
     public String toString(String tab) {
         StringBuffer buffer=new StringBuffer();
         buffer.append(tab);
-        buffer.append("SignleTerm(\n");
+        buffer.append("SingleTerm(\n");
 
         if(Factor!=null)
             buffer.append(Factor.toString("  "+tab));
@@ -52,7 +52,7 @@ public class SignleTerm extends Term {
         buffer.append("\n");
 
         buffer.append(tab);
-        buffer.append(") [SignleTerm]");
+        buffer.append(") [SingleTerm]");
         return buffer.toString();
     }
 }
