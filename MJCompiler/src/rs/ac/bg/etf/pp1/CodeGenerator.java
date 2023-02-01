@@ -47,18 +47,27 @@ public class CodeGenerator extends VisitorAdaptor {
 //    public void visit(DesignatorBrackets DesignatorBrackets) { visit(); }
     
 	public void visit(DesignatorNoBrackets DesignatorNoBrackets) { 
-//		 Synt
+		
+		
+		
 	}
 	
 //    public void visit(Expression Expression) { visit(); }
 	
     public void visit(NewFuncExpr NewFuncExpr) {
     	
-    	// provereno da su dobri tipovi
-    	// samo dodajemo na heap len 
-    	// razlicito za Char i Int
-    	
-    	 
+    	Code.put(Code.newarray);
+    	Obj temp = Tab.find(NewFuncExpr.getType().getTypeName());
+    	if(temp.getType() == Tab.intType) {
+    		Code.put(1);	// b == 1
+    	} 
+    	else if(temp.getType() == Tab.charType) {
+    		Code.put(0);	// b == 0
+    	}
+    	else {
+    		Code.put(1);	// b == 1, za bool
+    	}
+    		  	 
     }
     
 	public void visit(FalseFactorConst FalseFactorConst) { 
@@ -120,18 +129,20 @@ public class CodeGenerator extends VisitorAdaptor {
 //    public void visit(DesignatorListItem DesignatorListItem) { visit(); }
 //    public void visit(DesignatorStatementError DesignatorStatementError) { visit(); }
 //    public void visit(DesignatorStatementBrackets DesignatorStatementBrackets) { visit(); }
-//    public void visit(DesignatorDEC DesignatorDEC) { visit(); }
+    
+    public void visit(DesignatorDEC DesignatorDEC) { 
+    	Code.load(DesignatorDEC.getDesignator().obj);
+    	Code.loadConst(1);
+    	Code.put(Code.sub);
+    	Code.store(DesignatorDEC.getDesignator().obj); 
+    }
     
     public void visit(DesignatorINC DesignatorINC) { 
     	
-    	Designator designator = DesignatorINC.getDesignator();
-    	
-    	
-    	
-    	Code.load(designator.obj);
+    	Code.load(DesignatorINC.getDesignator().obj);
     	Code.loadConst(1);
     	Code.put(Code.add);
-    	Code.store(designator.obj);
+    	Code.store(DesignatorINC.getDesignator().obj);
     	
     }
     
@@ -192,32 +203,32 @@ public class CodeGenerator extends VisitorAdaptor {
 //    public void visit(CharConst CharConst) { visit(); }
 //    public void visit(NumConst NumConst) { visit(); }
     
-    public void visit(Const Const) { 
-    	
-    	Obj con = Tab.insert(Obj.Con, Const.getConstName(), Const.struct);
-    	
-    	if(Const.getConstVal().getClass() == NumConst.class) {			// Tab.intType
-    		NumConst temp = (NumConst)Const.getConstVal();
-    		con.setAdr(temp.getN1());
-    	} 
-    	else if(Const.getConstVal().getClass() == CharConst.class) {	// Tab.charType
-    		CharConst temp = (CharConst)Const.getConstVal();
-    		con.setAdr(temp.getC1());
-    	}
-    	else if(Const.getConstVal().getClass() == TrueConst.class) {	// Tab.boolType	TRUE
-//    		TrueConst temp = (TrueConst)Const.getConstVal();
-//    		con.setAdr(temp.getT1());
-    		con.setAdr(1);
-    	} 
-    	else if(Const.getConstVal().getClass() == FalseConst.class) {	// Tab.boolType	FALSE
-//    		FalseConst temp = (FalseConst)Const.getConstVal();
-//    		con.setAdr(temp.getF1());
-    		con.setAdr(0);
-    	}
-    		
-    	Code.load(con);
-    	
-    }
+//    public void visit(Const Const) { 
+//    	
+//    	Obj con = Tab.insert(Obj.Con, Const.getConstName(), Const.struct);
+//    	
+//    	if(Const.getConstVal().getClass() == NumConst.class) {			// Tab.intType
+//    		NumConst temp = (NumConst)Const.getConstVal();
+//    		con.setAdr(temp.getN1());
+//    	} 
+//    	else if(Const.getConstVal().getClass() == CharConst.class) {	// Tab.charType
+//    		CharConst temp = (CharConst)Const.getConstVal();
+//    		con.setAdr(temp.getC1());
+//    	}
+//    	else if(Const.getConstVal().getClass() == TrueConst.class) {	// Tab.boolType	TRUE
+////    		TrueConst temp = (TrueConst)Const.getConstVal();
+////    		con.setAdr(temp.getT1());
+//    		con.setAdr(1);
+//    	} 
+//    	else if(Const.getConstVal().getClass() == FalseConst.class) {	// Tab.boolType	FALSE
+////    		FalseConst temp = (FalseConst)Const.getConstVal();
+////    		con.setAdr(temp.getF1());
+//    		con.setAdr(0);
+//    	}
+//    		
+//    	Code.load(con);
+//    	
+//    }
     
 //    public void visit(ConstCommaError ConstCommaError) { visit(); }
 //    public void visit(CommaConst CommaConst) { visit(); }
