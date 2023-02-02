@@ -11,6 +11,7 @@ import rs.etf.pp1.symboltable.concepts.*;
 public class CodeGenerator extends VisitorAdaptor {
 
 	private int mainPc;
+	private boolean traverseDesignatorBracketsStatement = false;
 	
 	public int getMainPc() {
 		return mainPc;
@@ -48,11 +49,18 @@ public class CodeGenerator extends VisitorAdaptor {
 //    public void visit(Addop Addop) { visit(); }
 //    public void visit(Assignop Assignop) { visit(); }
 	
-	public void visit(DesignatorBracketsName DesignatorBracketsName) {
-		Code.load(DesignatorBracketsName.obj);
+	public void visit(DesignatorBracketsName DesignatorBracketsName) {	
+		
+		if(!traverseDesignatorBracketsStatement) {
+			Code.load(DesignatorBracketsName.obj);
+		}	
 	}
 	
-//    public void visit(DesignatorBrackets DesignatorBrackets) { visit(); }
+    public void visit(DesignatorBrackets DesignatorBrackets) { 
+    	if(DesignatorBrackets.getParent().getClass() == DesignatorListItem.class) {
+			traverseDesignatorBracketsStatement = true;
+		} 
+    }
 //  public void visit(DesignatorNoBrackets DesignatorNoBrackets) { visit(); }
 //    public void visit(Expression Expression) { visit(); }
 	
@@ -85,11 +93,13 @@ public class CodeGenerator extends VisitorAdaptor {
     }
 	
     public void visit(NumFactorConst NumFactorConst) {  
-    	 Code.loadConst(NumFactorConst.getN1()); 
+    	if(!traverseDesignatorBracketsStatement) 
+    		Code.loadConst(NumFactorConst.getN1()); 
     }
     
     public void visit(DesignatorNoPars DisgnatorNoPars) { 	// TODO za niz
-    	Code.load(DisgnatorNoPars.getDesignator().obj);
+    	if(!traverseDesignatorBracketsStatement) 
+    		Code.load(DisgnatorNoPars.getDesignator().obj);
     }
     
 //    public void visit(SignleTerm SignleTerm) { visit(); }
@@ -138,59 +148,48 @@ public class CodeGenerator extends VisitorAdaptor {
     	
     	Obj rightSideItem;
     	int index;
+    	int counter = 0;
     	
     	public ListVisitor(Obj rightSideItem){
     		this.rightSideItem = rightSideItem;
     		this.index = 0;
     	}
     	
-    	public void visit(DesignatorNoBrackets item) {
-    		if(item.getParent().getClass() == DesignatorListItem.class) {
-    			System.out.println("Dva "+ item.getName());
-    			Code.load(rightSideItem);
-	    		Code.loadConst(index);
-	    		Code.put(Code.aload);
-	    		Code.store(item.obj);
-    		} else {
-    			if(item.getParent().getClass() == DesignatorNoPars.class) {
-    				Code.load(item.obj);
-    				System.out.println("Tri "+ rightSideItem.getName());
-    			}
-    		}
-    			
-    	}
-    	
     	public void visit(NoDesignatorListItem item) {
-    		System.out.println("Cetiri "+ rightSideItem.getName());
     		index++;
     	}
     	
     	public void visit(DesignatorBracketsName item) {
-    		System.out.println("Pet "+ item.getName());
     		Code.load(item.obj);
+    		counter++;
     	}
     	
-    	public void visit(DesignatorBrackets item) {
-    		System.out.println("Sest "+ rightSideItem.getName());
-    		Code.put(Code.aload);
+    	public void visit(DesignatorNoPars item) {   		
+    		if(counter > 1) {
+    			counter--;
+    			Code.put(Code.aload);
+    		}
     	}
     	
     	public void visit(NumFactorConst num) {
-    		System.out.println("Sedam "+ num.getN1());
-    		Code.put(num.getN1());
+    		Code.loadConst(num.getN1());
     	}
     	
     	public void visit(DesignatorListItem item) {
-    		System.out.println("Osam "+ rightSideItem.getName());
+    		Code.load(rightSideItem);
+    		Code.loadConst(index);
+    		Code.put(Code.aload);
+    		Code.store(item.getDesignator().obj);  
+    		counter = 0;
     		index++;
     	}
     }
     
     public void visit(DesignatorStatementBrackets DesignatorStatementBrackets) {
     	Obj rightSideItem = DesignatorStatementBrackets.getDesignator().obj;
-    	System.out.println("Jedan "+ rightSideItem.getName());
     	ListVisitor visitor = new ListVisitor(rightSideItem);
     	DesignatorStatementBrackets.traverseBottomUp(visitor);
+    	traverseDesignatorBracketsStatement = false;
     }
     
     public void visit(DesignatorDEC DesignatorDEC) { 

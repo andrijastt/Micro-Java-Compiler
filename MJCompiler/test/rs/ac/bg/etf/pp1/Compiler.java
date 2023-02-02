@@ -65,7 +65,7 @@ public class Compiler {
 				
 				CodeGenerator codeGenerator = new CodeGenerator();
 				prog.traverseBottomUp(codeGenerator);
-				Code.dataSize = v.localVariablesCount;
+				Code.dataSize = v.globalVaribalesCount;
 				Code.mainPc = codeGenerator.getMainPc();
 				Code.write(new FileOutputStream(objFile));
 				
