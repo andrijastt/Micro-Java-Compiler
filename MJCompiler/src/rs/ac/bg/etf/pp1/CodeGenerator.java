@@ -51,16 +51,18 @@ public class CodeGenerator extends VisitorAdaptor {
 	
 	public void visit(DesignatorBracketsName DesignatorBracketsName) {	
 		
+		DesignatorBrackets temp0 = (DesignatorBrackets) DesignatorBracketsName.getParent();
+		
+		if(temp0.getParent().getClass() == DesignatorListItem.class) {
+			traverseDesignatorBracketsStatement = true;
+		}
+		
 		if(!traverseDesignatorBracketsStatement) {
 			Code.load(DesignatorBracketsName.obj);
 		}	
 	}
 	
-    public void visit(DesignatorBrackets DesignatorBrackets) { 
-    	if(DesignatorBrackets.getParent().getClass() == DesignatorListItem.class) {
-			traverseDesignatorBracketsStatement = true;
-		} 
-    }
+//    public void visit(DesignatorBrackets DesignatorBrackets) { visit(); }
 //  public void visit(DesignatorNoBrackets DesignatorNoBrackets) { visit(); }
 //    public void visit(Expression Expression) { visit(); }
 	
@@ -94,7 +96,7 @@ public class CodeGenerator extends VisitorAdaptor {
 	
     public void visit(NumFactorConst NumFactorConst) {  
     	if(!traverseDesignatorBracketsStatement) 
-    		Code.loadConst(NumFactorConst.getN1()); 
+	Code.loadConst(NumFactorConst.getN1()); 
     }
     
     public void visit(DesignatorNoPars DisgnatorNoPars) { 	// TODO za niz
@@ -167,6 +169,7 @@ public class CodeGenerator extends VisitorAdaptor {
     	public void visit(DesignatorNoPars item) {   		
     		if(counter > 1) {
     			counter--;
+    			Code.load(item.getDesignator().obj);
     			Code.put(Code.aload);
     		}
     	}
