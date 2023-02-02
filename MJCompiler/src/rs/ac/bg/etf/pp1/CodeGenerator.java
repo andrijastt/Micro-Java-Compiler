@@ -1,5 +1,8 @@
 package rs.ac.bg.etf.pp1;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import rs.ac.bg.etf.pp1.ast.*;
 import rs.etf.pp1.mj.runtime.*;
 import rs.etf.pp1.symboltable.Tab;
@@ -131,10 +134,62 @@ public class CodeGenerator extends VisitorAdaptor {
 //    public void visit(DesignatorListItem DesignatorListItem) { visit(); }
 //    public void visit(DesignatorStatementError DesignatorStatementError) { visit(); }
     
+    private class ListVisitor extends VisitorAdaptor{
+    	
+    	Obj rightSideItem;
+    	int index = 0;
+    	
+    	public ListVisitor(Obj rightSideItem){
+    		this.rightSideItem = rightSideItem;
+    	}
+    	
+    	public void visit(DesignatorNoBrackets item) {
+    		if(item.getParent().getClass() == DesignatorListItem.class) {
+    			System.out.println("Dva "+ item.getName());
+    			Code.load(rightSideItem);
+	    		Code.put(index);
+	    		Code.put(Code.aload);
+	    		Code.store(item.obj);
+    		} else {
+    			if(item.getParent().getClass() == DesignatorNoPars.class) {
+    				Code.load(item.obj);
+    				System.out.println("Tri "+ rightSideItem.getName());
+    			}
+    		}
+    			
+    	}
+    	
+    	public void visit(NoDesignatorListItem item) {
+    		System.out.println("Cetiri "+ rightSideItem.getName());
+    		index++;
+    	}
+    	
+    	public void visit(DesignatorBracketsName item) {
+    		System.out.println("Pet "+ item.getName());
+    		Code.load(item.obj);
+    	}
+    	
+    	public void visit(DesignatorBrackets item) {
+    		System.out.println("Sest "+ rightSideItem.getName());
+    		Code.put(Code.aload);
+    	}
+    	
+    	public void visit(NumFactorConst num) {
+    		System.out.println("Sedam "+ num.getN1());
+    		Code.put(num.getN1());
+    	}
+    	
+    	public void visit(DesignatorListItem item) {
+    		System.out.println("Osam "+ rightSideItem.getName());
+    		index++;
+    	}
+    }
+    
     public void visit(DesignatorStatementBrackets DesignatorStatementBrackets) {
-    	
-    	
-    	 
+    	Obj rightSideItem = DesignatorStatementBrackets.getDesignator().obj;
+    	System.out.println("Jedan "+ rightSideItem.getName());
+    	ListVisitor visitor = new ListVisitor(rightSideItem);
+    	DesignatorStatementBrackets.traverseBottomUp(visitor);
     }
     
     public void visit(DesignatorDEC DesignatorDEC) { 

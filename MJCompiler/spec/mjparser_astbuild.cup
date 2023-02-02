@@ -1,5 +1,3 @@
-
-
 package rs.ac.bg.etf.pp1;
 
 import java_cup.runtime.*;
@@ -204,11 +202,9 @@ DesignatorTemp ::= (DesignatorListItem) Designator:D1 {: RESULT=new DesignatorLi
 				(NoDesignatorListItem) {: RESULT=new NoDesignatorListItem(); :}
 				;
 				
-DesignatorList ::= (DesignatorLists) DesignatorList:D1 COMMA {: RESULT=new DesignatorLists(D1); RESULT.setLine(D1left); :}
+DesignatorList ::= (DesignatorLists) DesignatorList:D1 COMMA DesignatorTemp:D2 {: RESULT=new DesignatorLists(D1, D2); RESULT.setLine(D1left); :}
 				|
-				(SingleDesignatorItem) Designator:D1 {: RESULT=new SingleDesignatorItem(D1); RESULT.setLine(D1left); :}
-				|
-				(NoDesignatorItem) {: RESULT=new NoDesignatorItem(); :}
+				(SingleDesignatorList) DesignatorTemp:D1 {: RESULT=new SingleDesignatorList(D1); RESULT.setLine(D1left); :}
 				;		
 
 Expr ::= (PositiveExpr) Expr:t0 Addop:A1 Term:t1 {: RESULT=new PositiveExpr(t0, A1, t1); RESULT.setLine(t0left); :}
@@ -258,4 +254,5 @@ Mulop ::= (MulOper) MULTIPLY {: RESULT=new MulOper(); :}
 		|
 		(ModOper) MOD {: RESULT=new ModOper(); :}
 		;
-			
+		
+		

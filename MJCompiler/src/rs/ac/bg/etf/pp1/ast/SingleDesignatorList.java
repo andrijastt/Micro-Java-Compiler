@@ -5,24 +5,13 @@
 
 package rs.ac.bg.etf.pp1.ast;
 
-public class DesignatorLists extends DesignatorList {
+public class SingleDesignatorList extends DesignatorList {
 
-    private DesignatorList DesignatorList;
     private DesignatorTemp DesignatorTemp;
 
-    public DesignatorLists (DesignatorList DesignatorList, DesignatorTemp DesignatorTemp) {
-        this.DesignatorList=DesignatorList;
-        if(DesignatorList!=null) DesignatorList.setParent(this);
+    public SingleDesignatorList (DesignatorTemp DesignatorTemp) {
         this.DesignatorTemp=DesignatorTemp;
         if(DesignatorTemp!=null) DesignatorTemp.setParent(this);
-    }
-
-    public DesignatorList getDesignatorList() {
-        return DesignatorList;
-    }
-
-    public void setDesignatorList(DesignatorList DesignatorList) {
-        this.DesignatorList=DesignatorList;
     }
 
     public DesignatorTemp getDesignatorTemp() {
@@ -38,18 +27,15 @@ public class DesignatorLists extends DesignatorList {
     }
 
     public void childrenAccept(Visitor visitor) {
-        if(DesignatorList!=null) DesignatorList.accept(visitor);
         if(DesignatorTemp!=null) DesignatorTemp.accept(visitor);
     }
 
     public void traverseTopDown(Visitor visitor) {
         accept(visitor);
-        if(DesignatorList!=null) DesignatorList.traverseTopDown(visitor);
         if(DesignatorTemp!=null) DesignatorTemp.traverseTopDown(visitor);
     }
 
     public void traverseBottomUp(Visitor visitor) {
-        if(DesignatorList!=null) DesignatorList.traverseBottomUp(visitor);
         if(DesignatorTemp!=null) DesignatorTemp.traverseBottomUp(visitor);
         accept(visitor);
     }
@@ -57,13 +43,7 @@ public class DesignatorLists extends DesignatorList {
     public String toString(String tab) {
         StringBuffer buffer=new StringBuffer();
         buffer.append(tab);
-        buffer.append("DesignatorLists(\n");
-
-        if(DesignatorList!=null)
-            buffer.append(DesignatorList.toString("  "+tab));
-        else
-            buffer.append(tab+"  null");
-        buffer.append("\n");
+        buffer.append("SingleDesignatorList(\n");
 
         if(DesignatorTemp!=null)
             buffer.append(DesignatorTemp.toString("  "+tab));
@@ -72,7 +52,7 @@ public class DesignatorLists extends DesignatorList {
         buffer.append("\n");
 
         buffer.append(tab);
-        buffer.append(") [DesignatorLists]");
+        buffer.append(") [SingleDesignatorList]");
         return buffer.toString();
     }
 }
