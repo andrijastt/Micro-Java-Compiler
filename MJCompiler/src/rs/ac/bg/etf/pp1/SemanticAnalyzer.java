@@ -484,17 +484,15 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     public void visit(PrintStmt print) {
     	
     	if(leftType.getKind() == Struct.Array) {
-    		if(leftType.getElemType().getKind() != Struct.Int && leftType.getElemType().getKind() != Struct.Char) {
+    		if(leftType.getElemType().getKind() != Struct.Int && leftType.getElemType().getKind() != Struct.Char && leftType.getElemType().getKind() != Struct.Bool) {
     			report_error("Wrong type in PrintStmt, only int and char can be printed!", print);
     		}
     	} else {
-    		if(leftType.getKind() != Struct.Int && leftType.getKind() != Struct.Char) {
+    		if(leftType.getKind() != Struct.Int && leftType.getKind() != Struct.Char && leftType.getKind() != Struct.Bool) {
     			report_error("Wrong type in PrintStmt, only int and char can be printed!", print);
     		}
     	}
     	
-//    	report_info("PRINTSTMT: " + (print.getNumConstList().getClass() == NoNumConsts.class), print);
-//    	report_info("PRINTSTMT: " + print.getExpr().struct, print);
     	currentDesignator = null;
     	prevDesignator = null;
     	leftSide = true;

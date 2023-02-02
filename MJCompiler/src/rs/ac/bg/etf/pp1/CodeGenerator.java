@@ -12,6 +12,7 @@ public class CodeGenerator extends VisitorAdaptor {
 
 	private int mainPc;
 	private boolean traverseDesignatorBracketsStatement = false;
+	private ArrayList<Integer> printNumbers = new ArrayList<Integer>();
 	
 	public int getMainPc() {
 		return mainPc;
@@ -216,7 +217,10 @@ public class CodeGenerator extends VisitorAdaptor {
     }
     
 //    public void visit(NoNumConsts NoNumConsts) { visit(); }
-//    public void visit(NumConsts NumConsts) { visit(); }
+    
+    public void visit(NumConsts NumConsts) { 
+    	printNumbers.add(NumConsts.getN2());
+    }
 	
     public void visit(PrintStmt PrintStmt) {
     	
@@ -229,9 +233,12 @@ public class CodeGenerator extends VisitorAdaptor {
     		Code.put(Code.bprint);
     	}
     	
-//    	if(PrintStmt.getNumConstList().getClass() != NoNumConsts.class) {
-//    		TODO	
-//    	}
+    	while(printNumbers.size() > 0) {
+    		Code.loadConst(printNumbers.get(0));
+    		Code.loadConst(5);
+    		Code.put(Code.print);
+    		printNumbers.remove(0);
+    	}
     }
     
     public void visit(ReadStmt ReadStmt) { 
