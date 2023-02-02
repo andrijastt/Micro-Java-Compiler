@@ -137,17 +137,18 @@ public class CodeGenerator extends VisitorAdaptor {
     private class ListVisitor extends VisitorAdaptor{
     	
     	Obj rightSideItem;
-    	int index = 0;
+    	int index;
     	
     	public ListVisitor(Obj rightSideItem){
     		this.rightSideItem = rightSideItem;
+    		this.index = 0;
     	}
     	
     	public void visit(DesignatorNoBrackets item) {
     		if(item.getParent().getClass() == DesignatorListItem.class) {
     			System.out.println("Dva "+ item.getName());
     			Code.load(rightSideItem);
-	    		Code.put(index);
+	    		Code.loadConst(index);
 	    		Code.put(Code.aload);
 	    		Code.store(item.obj);
     		} else {
