@@ -46,8 +46,7 @@ public class CodeGenerator extends VisitorAdaptor {
 //    public void visit(Assignop Assignop) { visit(); }
 	
 	public void visit(DesignatorBracketsName DesignatorBracketsName) {
-		DesignatorBrackets temp =(DesignatorBrackets) DesignatorBracketsName.getParent();
-		Code.load(temp.obj);
+		Code.load(DesignatorBracketsName.obj);
 	}
 	
 //    public void visit(DesignatorBrackets DesignatorBrackets) { visit(); }
@@ -57,14 +56,14 @@ public class CodeGenerator extends VisitorAdaptor {
     public void visit(NewFuncExpr NewFuncExpr) {
     	
     	Code.put(Code.newarray);
-    	Obj temp = Tab.find(NewFuncExpr.getType().getTypeName());
+    	Obj temp = Tab.find(NewFuncExpr.getType().getTypeName());    	
     	if(temp.getType() == Tab.intType) {
     		Code.put(1);	// b == 1
     	} 
-    	else if(temp.getType() == Tab.charType) {
+    	else if(temp.getType() == Tab.charType) {    		
     		Code.put(0);	// b == 0
     	}
-    	else {
+    	else {    		
     		Code.put(1);	// b == 1, za bool
     	}
     		  	 
@@ -131,7 +130,12 @@ public class CodeGenerator extends VisitorAdaptor {
 //    public void visit(NoDesignatorListItem NoDesignatorListItem) { visit(); }
 //    public void visit(DesignatorListItem DesignatorListItem) { visit(); }
 //    public void visit(DesignatorStatementError DesignatorStatementError) { visit(); }
-//    public void visit(DesignatorStatementBrackets DesignatorStatementBrackets) { visit(); }
+    
+    public void visit(DesignatorStatementBrackets DesignatorStatementBrackets) {
+    	
+    	
+    	 
+    }
     
     public void visit(DesignatorDEC DesignatorDEC) { 
     	Code.load(DesignatorDEC.getDesignator().obj);
@@ -149,7 +153,7 @@ public class CodeGenerator extends VisitorAdaptor {
     	
     }
     
-    public void visit(DesignatorAssign DesignatorAssign) {
+    public void visit(DesignatorAssign DesignatorAssign) {	
     	Code.store(DesignatorAssign.getDesignator().obj);   	
     }
     
@@ -177,7 +181,6 @@ public class CodeGenerator extends VisitorAdaptor {
     		Code.put(Code.bread);
     	} else {
     		Code.put(Code.read);
-    		
     	}
     	Code.load(ReadStmt.getDesignator().obj);
     }
@@ -193,12 +196,10 @@ public class CodeGenerator extends VisitorAdaptor {
     		mainPc = Code.pc;
     	}
     	MethodType.obj.setAdr(Code.pc);
-    	
-//    	System.out.println(MethodType.obj.getLevel());
-//    	System.out.println(MethodType.obj.getLocalSymbols().size());
-    	
-//    	Code.put(MethodType.obj.getLevel());		// ako zeza stavi 0 jer nema formal params
-//    	Code.put(MethodType.obj.getLocalSymbols().size());
+ 
+    	Code.put(Code.enter);
+    	Code.put(MethodType.obj.getLevel());		
+    	Code.put(MethodType.obj.getLocalSymbols().size());
     }
     
     public void visit(VoidMethodDecl VoidMethodDecl) { 

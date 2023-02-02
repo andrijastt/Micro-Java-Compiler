@@ -66,9 +66,9 @@ nonterminal ConstDecl, ConstDeclList, ConstVal, ConstComma, ConstSemi;
 nonterminal VarDeclList, VarDecl, VarSemi, VarComma, MethodVarDecl;
 nonterminal StatementList, Statement;
 nonterminal Assignop, Addop, Mulop;
-nonterminal DesignatorStatement, DesignatorList, DesignatorTemp, NumConstList, DesignatorBracketsName;
+nonterminal DesignatorStatement, DesignatorList, DesignatorTemp, NumConstList;
 
-nonterminal rs.etf.pp1.symboltable.concepts.Obj ProgName, Program, MethodDecl, MethodType, Designator, Var;
+nonterminal rs.etf.pp1.symboltable.concepts.Obj ProgName, Program, MethodDecl, MethodType, Designator, Var, DesignatorBracketsName;
 nonterminal rs.etf.pp1.symboltable.concepts.Struct Type, Term, Factor, Expr, Const;
 
 Program ::= (Program) PROG ProgName:p ParamList LBRACE MethodDeclList RBRACE;
@@ -188,9 +188,11 @@ DesignatorTemp ::= (DesignatorListItem) Designator
 				(NoDesignatorListItem)
 				;
 				
-DesignatorList ::= (DesignatorLists) DesignatorList COMMA DesignatorTemp
+DesignatorList ::= (DesignatorLists) DesignatorList COMMA
 				|
-				(SingleDesignatorList) DesignatorTemp
+				(SingleDesignatorItem) Designator
+				|
+				(NoDesignatorItem)
 				;		
 
 Expr ::= (PositiveExpr) Expr:t0 Addop Term:t1
