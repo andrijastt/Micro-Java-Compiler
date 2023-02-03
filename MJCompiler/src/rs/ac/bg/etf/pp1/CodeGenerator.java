@@ -181,13 +181,23 @@ public class CodeGenerator extends VisitorAdaptor {
     	
     	public void visit(DesignatorListItem item) {
     		// trap part
-//    		Code.load(rightSideItem);
-//    		Code.put(Code.arraylength);
-//    		Code.loadConst(index);
-//    		Code.put(Code.jcc + Code.gt);
-//    		Code.put2(6);
+    		Code.load(rightSideItem);
+    		Code.put(Code.arraylength);
+    		Code.loadConst(index);
+    		
+    		// trap part 1
+    		Code.put(Code.jcc + Code.gt);
+    		Code.put2(6);
+    		Code.put(Code.trap);
+    		Code.put2(index);
+    		
+    		// trap part 2
+//    		Code.putFalseJump(Code.lt, 0);
+//    		int temp = Code.pc - 2;
 //    		Code.put(Code.trap);
 //    		Code.put2(index);
+//    		Code.fixup(temp);
+    		
     		// not trap part
     		Code.load(rightSideItem);
     		Code.loadConst(index);
