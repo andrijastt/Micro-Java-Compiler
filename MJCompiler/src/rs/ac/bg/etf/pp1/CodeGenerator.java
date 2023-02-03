@@ -100,7 +100,7 @@ public class CodeGenerator extends VisitorAdaptor {
 	Code.loadConst(NumFactorConst.getN1()); 
     }
     
-    public void visit(DesignatorNoPars DisgnatorNoPars) { 	// TODO za niz
+    public void visit(DesignatorNoPars DisgnatorNoPars) { 
     	if(!traverseDesignatorBracketsStatement) 
     		Code.load(DisgnatorNoPars.getDesignator().obj);
     }
@@ -180,6 +180,15 @@ public class CodeGenerator extends VisitorAdaptor {
     	}
     	
     	public void visit(DesignatorListItem item) {
+    		// trap part
+//    		Code.load(rightSideItem);
+//    		Code.put(Code.arraylength);
+//    		Code.loadConst(index);
+//    		Code.put(Code.jcc + Code.gt);
+//    		Code.put2(6);
+//    		Code.put(Code.trap);
+//    		Code.put2(index);
+    		// not trap part
     		Code.load(rightSideItem);
     		Code.loadConst(index);
     		Code.put(Code.aload);

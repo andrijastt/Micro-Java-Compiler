@@ -371,7 +371,7 @@ public class SemanticAnalyzer extends VisitorAdaptor {
     	
     }
     
-    public void visit(DesignatorNoPars DisgnatorNoPars) { 	// TODO ako dodje niz
+    public void visit(DesignatorNoPars DisgnatorNoPars) {
     	DisgnatorNoPars.struct = DisgnatorNoPars.getDesignator().obj.getType();
     }
     
